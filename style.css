@@ -717,12 +717,12 @@ margin: 37%;
 
   #progress-bar {
     position: fixed;
-    top: 0; /* Juste en dessous de la barre de recherche */
+    top: 0; 
     left: 0;
-    width: 0; /* La barre commence à 0 */
-    height: 6px; /* Hauteur de la barre */
-    background-color: #000000; /* Couleur de la barre */
-    z-index: 9999; /* Au-dessus de tout */
-    transition: width 0.5s ease-out; /* Transition fluide pour l'effet de progression */
+    width: 0; 
+    height: 6px;
+    background-color: #000000;
+    z-index: 9999;
+    transition: width 0.5s ease-out;
   }
   

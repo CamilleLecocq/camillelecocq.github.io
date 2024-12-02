@@ -68,34 +68,26 @@
       });
     });
 
-    // Sélection de la barre de progression
     const progressBar = document.getElementById("progress-bar");
 
-    // Fonction pour démarrer la barre de progression
     function startLoading() {
-      progressBar.style.width = "0"; // Réinitialise
+      progressBar.style.width = "0"; 
       setTimeout(() => {
-        progressBar.style.width = "100%"; // Charge jusqu'à 100%
+        progressBar.style.width = "100%";
       }, 50);
     }
 
-    // Gestion des clics sur les liens
     document.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", (e) => {
-        // Empêche la navigation immédiate
         e.preventDefault();
 
-        // Commence la barre de chargement
         startLoading();
 
-        // Redirige après un délai (500ms pour coïncider avec l'animation)
         setTimeout(() => {
           window.location.href = link.href;
         }, 600);
       });
     });
-
-
 
   </script>
 </body>
