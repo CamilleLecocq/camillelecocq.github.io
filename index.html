@@ -14,6 +14,7 @@
 
 <body>
   <header class="header">
+
     <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
 
     <nav class="header-nav">
@@ -22,8 +23,9 @@
       <a href="a-propos.html">À PROPOS</a>
     </nav>
   </header>
+  <div id="progress-bar"></div>
 
-  <h1 class="portfolio-title">PORTFOLIO</h1>  
+  <h1 class="portfolio-title">PORTFOLIO</h1>
 
   <div class="projets">
 
@@ -63,6 +65,27 @@
       });
       projet.addEventListener('mouseout', () => {
         projets.forEach(p => p.classList.remove('unactive'));
+      });
+    });
+
+    const progressBar = document.getElementById("progress-bar");
+
+    function startLoading() {
+      progressBar.style.width = "0"; 
+      setTimeout(() => {
+        progressBar.style.width = "100%";
+      }, 50);
+    }
+
+    document.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        startLoading();
+
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 600);
       });
     });
 
