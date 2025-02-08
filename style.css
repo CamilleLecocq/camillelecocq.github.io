@@ -231,68 +231,30 @@ color: #000; /* Couleur du texte */
 }
 
 
+
+.conteneur-dessins {
+  height: 90vh; /* Hauteur ajustable */
+  overflow-y: auto; /* Active le défilement vertical */
+  padding: 70px 50px 0px 50px; /* 12px à gauche/droite, 6px en haut, 0px en bas */
+}
+
 .images-dessins {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* Colonnes flexibles */
-  gap: 6px;
-  padding: 50px;
-  grid-auto-rows: auto; /* Permet aux images de déterminer leur propre hauteur */
+  column-count: 3; /* 3 colonnes automatiques */
+  column-gap: 9px; /* Espacement entre les colonnes (6px au lieu de 10px) */
 }
 
-/* Applique à toutes les images */
 .images-dessins img {
-  width: 100%;
-  height: auto; /* Permet de conserver le ratio */
-  object-fit: cover; /* Assure un bon cadrage */
-}
-
-/* Images horizontales prennent 2 lignes */
-.images-dessins img.horizontal {
-  grid-column: span 2;
-}
-
-/* Images verticales restent sur 1 ligne */
-.images-dessins img.vertical {
-  max-width: 95%;
-  max-height: 95%;
-  margin: 6px;
-  padding: 0px;
+  width: 100%; /* Ajuste l’image à la colonne */
+  break-inside: avoid; /* Empêche les coupures d’images entre colonnes */
+  margin: 0 0 6px 0; /* 6px d'espacement entre les images, mais rien en bas */
 }
 
 
 
 
 
-.galerie img {
-max-width: 95%;
-max-height: 95%;
-margin: 0px;
-padding: 0px;
-}
 
-.galerie .photographies.paysage {
-grid-column: span 2;
-}
 
-.galerie .photographies.paysage img {
-object-fit: cover; /* L'image remplira tout l'espace disponible sans déformation */
-}
-
-.double {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 40px;
-padding: 10px;
-justify-content: center;
-margin: 24px;
-}
-
-.double .img {
-max-width: 100%;
-max-height: 100%;
-object-fit: cover;
-grid-column: span 1;
-}
 
 
 
