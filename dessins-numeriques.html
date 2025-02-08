@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAM</title>
   <link rel="icon" type="image/png" href="logo-moi.png">
-  <meta name="description" content="Portfolio de Camille Lecocq, galerie de dessins.">
+  <meta name="description" content="Portfolio de Camille Lecocq, galerie de dessins numériques.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,13 +18,15 @@
     </nav>
   </header>
 
-  <div class="conteneur-dessins">
+
+  <a onclick="window.history.back();" class="retour">← Retour</a>
+
     <div class="images-dessins">
 
 
         <!-- Image 1 -->
         <label for="modal1">
-            <img src="img/Dessin/Touquette illu.jpg" alt="À trois" class="horizontal">
+            <img src="img/Dessin/Touquette illu.jpg" alt="Bord de mer" class="horizontal">
         </label>
         <input type="checkbox" id="modal1" class="modal-toggle">
 
@@ -32,44 +34,36 @@
             <label for="modal1" class="modal-background"></label>
             <div class="modal-content horizontal">
                 <label for="modal1" class="close">&times;</label>
-                <img src="img/Dessin/Touquette illu.jpg" alt="À trois">
+                <img src="img/Dessin/Touquette illu.jpg" alt="Bord de mer">
             </div>
         </div>
 
 
           <!-- Image 2 -->
           <label for="modal2">
-            <img src="img/Dessin/Touquette illu.jpg" alt="À trois" class="horizontal">
+            <img src="img/Dessin/Méduse.jpg" alt="Méduse" class="vertical">
         </label>
         <input type="checkbox" id="modal2" class="modal-toggle">
 
         <div class="modal">
             <label for="modal2" class="modal-background"></label>
-            <div class="modal-content horizontal">
-                <label for="modal2" class="close">&times;</label>
-                <img src="img/Dessin/Touquette illu.jpg" alt="À trois">
-            </div>
-        </div>
-
-
-        <!-- Image 3 -->
-        <label for="modal3">
-            <img src="img/Dessin/Méduse.jpg" alt="Méduse2" class="vertical">
-        </label>
-        <input type="checkbox" id="modal3" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal3" class="modal-background"></label>
             <div class="modal-content vertical">
-                <label for="modal3" class="close">&times;</label>
+                <label for="modal2" class="close">&times;</label>
                 <img src="img/Dessin/Méduse.jpg" alt="Méduse">
             </div>
         </div>
 
 
+        <!-- Image 3 - Carrousel automatique -->
+        <a href="en-societe.html" class="sous-dessins">
+            <img id="carrousel-img-societe" src="img/Dessin/critique/buy.jpg" alt="En société">
+            <h2>En société</h2>
+        </a>
+
+
         <!-- Image 4 -->
         <label for="modal4">
-            <img src="img/Dessin/Méduse.jpg" alt="Méduse2" class="vertical">
+            <img src="img/Dessin/matinale.jpg" alt="Matinale" class="vertical">
         </label>
         <input type="checkbox" id="modal4" class="modal-toggle">
 
@@ -77,44 +71,35 @@
             <label for="modal4" class="modal-background"></label>
             <div class="modal-content vertical">
                 <label for="modal4" class="close">&times;</label>
-                <img src="img/Dessin/Méduse.jpg" alt="Méduse2">
+                <img src="img/Dessin/matinale.jpg" alt="Matinale">
             </div>
         </div>
 
 
-          <!-- Image 5 -->
+        <!-- Image 5 -->
           <label for="modal5">
-            <img src="img/Dessin/Touquette illu.jpg" alt="À trois" class="horizontal">
+            <img src="img/Dessin/ensemble.jpg" alt="Ensemble" class="vertical">
         </label>
         <input type="checkbox" id="modal5" class="modal-toggle">
 
         <div class="modal">
             <label for="modal5" class="modal-background"></label>
-            <div class="modal-content horizontal">
-                <label for="modal5" class="close">&times;</label>
-                <img src="img/Dessin/Touquette illu.jpg" alt="À trois">
-            </div>
-        </div>
-
-
-         <!-- Image 6 -->
-         <label for="modal6">
-            <img src="img/Dessin/Méduse.jpg" alt="Méduse3" class="vertical">
-        </label>
-        <input type="checkbox" id="modal6" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal6" class="modal-background"></label>
             <div class="modal-content vertical">
-                <label for="modal6" class="close">&times;</label>
-                <img src="img/Dessin/Méduse.jpg" alt="Méduse3">
+                <label for="modal5" class="close">&times;</label>
+                <img src="img/Dessin/ensemble.jpg" alt="Ensemble">
             </div>
         </div>
 
 
-         <!-- Image 7 -->
+       <!-- Image 6 - Carrousel automatique -->
+        <a href="tenues.html" class="sous-dessins">
+            <img id="carrousel-img" src="img/Dessin/tenues/helena.jpg" alt="Tenues">
+            <h2>Tenues</h2>
+        </a>
+
+        <!-- Image 7 -->
          <label for="modal7">
-            <img src="img/Dessin/Méduse.jpg" alt="Méduse4" class="vertical">
+            <img src="img/Dessin/dream.jpg" alt="Dream" class="vertical">
         </label>
         <input type="checkbox" id="modal7" class="modal-toggle">
 
@@ -122,11 +107,98 @@
             <label for="modal7" class="modal-background"></label>
             <div class="modal-content vertical">
                 <label for="modal7" class="close">&times;</label>
-                <img src="img/Dessin/Méduse.jpg" alt="Méduse4">
+                <img src="img/Dessin/dream.jpg" alt="Dream">
             </div>
         </div>
+
+        <!-- Image 8 - Carrousel automatique -->
+        <a href="ptites-tetes.html" class="sous-dessins">
+            <img id="carrousel-img-tetes" src="img/Dessin/maximilien.jpg" alt="Ptites têtes">
+            <h2>Ptites têtes</h2>
+        </a>
 
     
         </div>
     </div>
 </div>
+
+
+<script>
+    // Liste des images à afficher dans le carrousel
+    const images = [
+      "img/Dessin/tenues/helena.jpg",
+      "img/Dessin/tenues/jean.jpg",
+      "img/Dessin/tenues/louise.jpg",
+      "img/Dessin/tenues/richardis.jpg",
+      "img/Dessin/tenues/hugo.jpg",
+      "img/Dessin/tenues/nawell.jpg",
+      "img/Dessin/tenues/debbie.jpg",
+      "img/Dessin/tenues/lea.jpg",
+      "img/Dessin/tenues/malik.jpg"
+    ];
+  
+    let index = 0; // Image actuelle
+  
+    function changerImage() {
+      index = (index + 1) % images.length; // Passe à l'image suivante, boucle au début après la dernière
+      document.getElementById("carrousel-img").src = images[index];
+    }
+  
+    // Change d'image toutes les 3 secondes
+    setInterval(changerImage, 700);
+</script>
+
+
+
+
+
+<script>
+    // Liste des images à afficher dans le carrousel "En société"
+    const imagesSociete = [
+      "img/Dessin/critique/buy.jpg",
+      "img/Dessin/critique/drink.jpg",
+      "img/Dessin/critique/smile.jpg",
+      "img/Dessin/critique/smoke.jpg"
+    ];
+  
+    let indexSociete = 0; // Image actuelle
+  
+    function changerImageSociete() {
+      indexSociete = (indexSociete + 1) % imagesSociete.length; // Passe à l'image suivante, boucle au début après la dernière
+      document.getElementById("carrousel-img-societe").src = imagesSociete[indexSociete];
+    }
+  
+    // Change d'image toutes les 3 secondes
+    setInterval(changerImageSociete, 700);
+  </script>
+  
+  
+
+
+  <script>
+    // Liste des images à afficher dans le carrousel "En société"
+    const imagesTetes = [
+      "img/Dessin/ptites-tetes/maximilien.jpg",
+      "img/Dessin/ptites-tetes/margot.jpg",
+      "img/Dessin/ptites-tetes/fernand.jpg",
+      "img/Dessin/ptites-tetes/beatrice.jpg",
+      "img/Dessin/ptites-tetes/jan.jpg",
+      "img/Dessin/ptites-tetes/vivien.jpg", 
+      "img/Dessin/ptites-tetes/regis.jpg", 
+      "img/Dessin/ptites-tetes/andre.jpg",
+      "img/Dessin/ptites-tetes/roland.jpg", 
+      "img/Dessin/ptites-tetes/eug.jpg",
+      "img/Dessin/ptites-tetes/kant.jpg",
+      "img/Dessin/ptites-tetes/robert.jpg",
+    ];
+  
+    let indexTetes = 0; // Image actuelle
+  
+    function changerImageTetes() {
+      indexTetes = (indexTetes + 1) % imagesTetes.length; // Passe à l'image suivante, boucle au début après la dernière
+      document.getElementById("carrousel-img-tetes").src = imagesTetes[indexTetes];
+    }
+  
+    // Change d'image toutes les 3 secondes
+    setInterval(changerImageTetes, 700);
+  </script>
