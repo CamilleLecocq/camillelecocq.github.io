@@ -60,10 +60,11 @@ figure {
 
 
 .header h1 a img {
-  width: 50px;
+  width: 55px;
   /* pour définir la largeur du logo */
   height: auto;
   margin-left: 0px;
+  margin-top: 10px;
 }
 
 .header h1:hover {
@@ -310,9 +311,6 @@ color: #000; /* Couleur du texte */
   break-inside: avoid;
   margin: 0 0 6px 0; /* 6px entre les images */
 }
-
-
-
 
 
 

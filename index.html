@@ -21,6 +21,7 @@
       <a href="a-propos.html">À PROPOS</a>
     </nav>
   </header>
+  
   <div id="progress-bar"></div>
 
   <h1 class="portfolio-title">PORTFOLIO</h1>  
@@ -42,6 +43,11 @@
       <img src="img/Typo/Magazine/couv-index.jpg" alt="Microscope">
       <h2>Microscope</h2>
     </a>
+
+    <!--  <a href="dessins-traditionnels.html" class="projet">
+      <img src="img/Design/la-disparition/oreille.jpg" alt="La délicatesse">
+      <h2>Dessins traditionnels</h2>
+    </a>   -->
 
     <a href="dessins-numeriques.html" class="projet">
       <img src="img/Dessin/Touquette illu.jpg" alt="Bord de mer">
@@ -92,43 +98,35 @@
   </div>
 
   <script>
-    const projets = document.querySelectorAll('.projet');
-    projets.forEach(projet => {
-      projet.addEventListener('mouseover', () => {
-        projets.forEach(p => p.classList.add('unactive'));
-        projet.classList.remove('unactive');
-      });
-      projet.addEventListener('mouseout', () => {
-        projets.forEach(p => p.classList.remove('unactive'));
-      });
-    });
+  const progressBar = document.getElementById("progress-bar");
 
-     // Sélection de la barre de progression
-     const progressBar = document.getElementById("progress-bar");
-
-// Fonction pour démarrer la barre de progression
 function startLoading() {
-  progressBar.style.width = "0"; // Réinitialise
+  progressBar.style.width = "0"; // Réinitialise la barre
   setTimeout(() => {
     progressBar.style.width = "100%"; // Charge jusqu'à 100%
   }, 50);
 }
 
-// Gestion des clics sur les liens
 document.querySelectorAll("a").forEach(link => {
   link.addEventListener("click", (e) => {
-    // Empêche la navigation immédiate
+    // Vérifie si le lien a target="_blank"
+    if (link.target === "_blank") {
+      return; // Ne bloque pas l'ouverture d'un nouvel onglet
+    }
+
+    // Empêche la navigation immédiate pour les autres liens
     e.preventDefault();
 
-    // Commence la barre de chargement
+    // Démarre la barre de progression
     startLoading();
 
-    // Redirige après un délai (500ms pour coïncider avec l'animation)
+    // Redirige après un court délai
     setTimeout(() => {
       window.location.href = link.href;
     }, 600);
   });
 });
+
 
   </script>
 </body>
