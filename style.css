@@ -250,6 +250,7 @@ color: #000; /* Couleur du texte */
 
 
 
+
 .retour {
   display: inline-block;
   text-decoration: none;
@@ -300,7 +301,6 @@ color: #000; /* Couleur du texte */
 }
 
 .sous-dessins:hover img {
-  /*filter: blur(5px);*/
   opacity: 0.15;
 }
 
@@ -312,6 +312,29 @@ color: #000; /* Couleur du texte */
 .images-dessins img:hover {
   cursor: pointer;
 }
+
+/* Adaptation pour les écrans de téléphone (moins de 768px) */
+@media screen and (max-width: 768px) {
+  .images-dessins {
+    column-count: 1; /* Met les images en une seule colonne */
+    padding: 0 20px; /* Réduit les marges à gauche et à droite */
+  }
+
+  .images-dessins img {
+    margin: 0 0 8px 0; /* Ajoute un espacement entre les images */
+  }
+
+  /* S'assurer que les images sont bien centrées et ont une marge */
+  .sous-dessins {
+    width: 100%; /* Remplir la largeur */
+    margin-bottom: 0px; /* Ajoute de l'espace en dessous */
+  }
+
+  .sous-dessins img {
+    width: 100%; /* Les images prennent toute la largeur */
+  }
+}
+
 
 
 
