@@ -640,33 +640,31 @@ margin: 33.5%;
 
 
 
-
-
 .description {
   width: 40%;
   position: fixed;
   right: 0;
   top: 0;
-  height: 100vh; 
+  height: 100vh;
   margin-top: 9%;
+  padding-right: 20px;
 }
 
 .description a {
   text-decoration: none;
   transition: all 0.2s;
   color: #7a7a7a;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px); /* Texte responsive */
   padding-left: 20px;
 }
 
 .description a:hover {
- color: #000000;
+  color: #000000;
 }
 
-
-.description h2{
+.description h2 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 29px;
+  font-size: clamp(20px, 4vw, 29px); /* Texte responsive */
   font-weight: 500;
   margin: 0;
   margin-top: 40px;
@@ -675,9 +673,8 @@ margin: 33.5%;
 }
 
 .description h3 {
-
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px;
+  font-size: clamp(14px, 2vw, 16px); /* Texte responsive */
   font-weight: lighter;
   color: #7a7a7a;
   padding-left: 20px;
@@ -685,7 +682,7 @@ margin: 33.5%;
 
 .description p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px;
+  font-size: clamp(14px, 2.5vw, 16px); /* Texte responsive */
   margin-top: 30px;
   margin-bottom: 50px;
   padding-left: 20px;
@@ -695,94 +692,66 @@ margin: 33.5%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   padding-bottom: 20px;
-  font-size: 19px;
+  font-size: clamp(16px, 3vw, 19px); /* Texte responsive */
   margin: 0;
   padding-left: 20px;
 }
 
 .description li {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 17px;
+  font-size: clamp(14px, 2vw, 17px); /* Texte responsive */
   font-weight: lighter;
   padding-bottom: none;
-  padding-left: 10px ;
+  padding-left: 10px;
   border-left: solid 1.5px #000000;
   list-style-type: none;
   margin-left: -20px;
   margin-bottom: 10px;
 }
 
-
 .page-projets .description {
   max-width: 480px;
 }
 
-
-
+/* Responsive adjustments */
 @media screen and (max-width: 768px) {
   .description {
     margin-top: 15%;
     margin-right: 10px;
-
+    width: 80%; /* Augmenter la largeur */
+    position: relative; /* Modifier la position pour éviter les problèmes de scroll */
+    height: auto; /* Permet à la description de s'ajuster */
+  }
 }
-}
-
 
 @media screen and (max-width: 550px) {
-  
   .description {
     margin-top: 27%;
     margin-right: 12px;
+    width: 90%; /* Encore plus large sur très petits écrans */
+  }
 
+  .description h2 {
+    font-size: clamp(20px, 4vw, 23px); /* Texte légèrement plus grand sur mobile */
   }
-  .description h2{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 23px;
-    font-weight: 500;
-    margin: 0;
-    margin-top: 40px;
-    margin-bottom: 15px;
-    padding-left: 20px;
-  }
-  
+
   .description h3 {
-  
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 15px;
-    font-weight: lighter;
-    color: #7a7a7a;
-    padding-left: 20px;
+    font-size: clamp(14px, 2vw, 15px);
   }
-  
+
   .description p {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-    margin-top: 30px;
-    margin-bottom: 50px;
-    padding-left: 20px;
+    font-size: clamp(14px, 2vw, 14px);
   }
-  
+
   .description h4 {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: bold;
-    padding-bottom: 20px;
-    font-size: 16px;
-    margin: 0;
-    padding-left: 20px;
+    font-size: clamp(16px, 3vw, 16px);
   }
-  
+
   .description li {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
-    font-weight: lighter;
-    padding-bottom: none;
-    padding-left: 10px ;
-    border-left: solid 1.5px #000000;
-    list-style-type: none;
-    margin-left: -20px;
-    margin-bottom: 10px;
+    font-size: clamp(14px, 2vw, 14px);
   }
 }
+
 
 
 
