@@ -640,6 +640,8 @@ margin: 33.5%;
 
 
 
+
+
 .description {
   width: 40%;
   position: fixed;
@@ -732,25 +734,35 @@ margin: 33.5%;
   }
 
   .description h2 {
-    font-size: clamp(20px, 4vw, 23px); /* Texte légèrement plus grand sur mobile */
+    font-size: clamp(15px, 4vw, 23px); /* Texte légèrement plus grand sur mobile */
   }
 
   .description h3 {
-    font-size: clamp(14px, 2vw, 15px);
+    font-size: clamp(12px, 2vw, 15px);
   }
 
   .description p {
-    font-size: clamp(14px, 2vw, 14px);
+    font-size: clamp(13px, 2vw, 14px);
   }
 
   .description h4 {
-    font-size: clamp(16px, 3vw, 16px);
+    font-size: clamp(14px, 3vw, 16px);
   }
 
   .description li {
-    font-size: clamp(14px, 2vw, 14px);
+    font-size: clamp(12px, 2vw, 14px);
+  }
+
+  /* Masquer le h4 et la liste sur les petits écrans */
+  .description h4,
+  .description ul {
+    display: none; /* Masque le h4 et la liste */
   }
 }
+
+
+
+
 
 
 
