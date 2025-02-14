@@ -9,6 +9,8 @@ body {
   font-weight: normal;
   padding-top: 85px;
   margin: 0px; /* Réduit les marges du body */
+  width: 100%; /* Assure que la largeur du body est de 100% */
+  overflow-x: hidden; /* Empêche le défilement horizontal */
 }
 
 .grid {
@@ -45,7 +47,7 @@ figure {
   /* pour que le header reste en haut de la page */
   top: 0;
   /* pour que le header reste en haut de la page */
-  background-color: #f3f3f3;;
+  background-color: #f3f3f3;
   border-bottom-width: 1px; /* Ajoute une largeur de bordure inférieure */
   z-index: 999;
   /* repeindre */
@@ -71,6 +73,7 @@ figure {
   transform: scale(1.1);
   /* Animation continue pendant le hover */
 }
+
 
 
 
