@@ -403,6 +403,18 @@ color: #000; /* Couleur du texte */
   font-weight: bolder;
 }
 
+@media screen and (max-width: 768px) {
+  .àpropos p2 {
+    margin-top: 40px;
+    margin-bottom: 5px; /* Augmente la marge sous le p3 pour les écrans plus petits */
+  }
+
+  .àpropos p3 {
+    margin-top: -10px;
+    margin-bottom: 80px; /* Augmente la marge sous le p3 pour les écrans plus petits */
+  }
+}
+
 
 
 
