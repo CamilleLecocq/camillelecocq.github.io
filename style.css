@@ -323,7 +323,7 @@ color: #000; /* Couleur du texte */
 
 /* À PROPOS */
 
-.àpropos{
+.àpropos {
   display: grid;
   grid-gap: 20px;
   margin-top: 0px;
@@ -333,14 +333,14 @@ color: #000; /* Couleur du texte */
 }
 
 .àpropos p {
-    justify-items: center;
-    font-size: 17px;
-    margin-bottom: -20px;
+  justify-items: center;
+  font-size: 17px;
+  margin-bottom: -20px;
 }
 
-.àpropos li{
-   justify-items: center;
-   font-size: 16px;
+.àpropos li {
+  justify-items: center;
+  font-size: 16px;
 }
 
 .àpropos p2 {
@@ -351,12 +351,22 @@ color: #000; /* Couleur du texte */
 .àpropos p3 {
   margin-top: -5px;
   font-weight: bolder;
+  /* Valeur initiale de la marge inférieure */
+  margin-bottom: 20px;
+}
+
+/* Media query pour ajuster la marge inférieure de p3 sur les petits écrans */
+@media screen and (max-width: 768px) {
+  .àpropos p3 {
+    margin-bottom: 40px; /* Augmenter la marge inférieure sur les petits écrans */
+  }
 }
 
 .àpropos p4 {
   margin-top: 20px;
   font-weight: bolder;
 }
+
 
 
 
