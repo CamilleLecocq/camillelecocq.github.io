@@ -337,8 +337,6 @@ color: #000; /* Couleur du texte */
 
 
 
-
-
 .images-societe {
   column-count: 4; /* 4 colonnes */
   column-gap: 9px; /* Espacement entre les colonnes */
@@ -351,6 +349,20 @@ color: #000; /* Couleur du texte */
   break-inside: avoid;
   margin: 0 0 6px 0; /* 6px entre les images */
 }
+
+/* Adaptation pour les écrans de téléphone (moins de 768px) */
+@media screen and (max-width: 768px) {
+  .images-societe {
+    column-count: 1; /* Met les images en une seule colonne */
+    padding: 0 20px; /* Réduit les marges à gauche et à droite */
+  }
+
+  .images-societe img {
+    margin: 0 0 20px 0; /* Ajoute un espacement entre les images */
+  }
+}
+
+
 
 
 
