@@ -323,7 +323,7 @@ color: #000; /* Couleur du texte */
 
 /* À PROPOS */
 
-.àpropos {
+.àpropos{
   display: grid;
   grid-gap: 20px;
   margin-top: 0px;
@@ -333,14 +333,14 @@ color: #000; /* Couleur du texte */
 }
 
 .àpropos p {
-  justify-items: center;
-  font-size: 17px;
-  margin-bottom: -20px;
+    justify-items: center;
+    font-size: 17px;
+    margin-bottom: -20px;
 }
 
-.àpropos li {
-  justify-items: center;
-  font-size: 16px;
+.àpropos li{
+   justify-items: center;
+   font-size: 16px;
 }
 
 .àpropos p2 {
@@ -351,22 +351,12 @@ color: #000; /* Couleur du texte */
 .àpropos p3 {
   margin-top: -5px;
   font-weight: bolder;
-  /* Valeur initiale de la marge inférieure */
-  margin-bottom: 20px;
-}
-
-/* Media query pour ajuster la marge inférieure de p3 sur les petits écrans */
-@media screen and (max-width: 768px) {
-  .àpropos p3 {
-    margin-bottom: 40px; /* Augmenter la marge inférieure sur les petits écrans */
-  }
 }
 
 .àpropos p4 {
   margin-top: 20px;
   font-weight: bolder;
 }
-
 
 
 
@@ -509,8 +499,6 @@ margin-top: -10px;
 
 
 
-
-
 .page-projet {
   display: grid;
   grid-template-columns: 60% 40%;
@@ -518,6 +506,7 @@ margin-top: -10px;
   margin: 40px;
 }
 
+/* Partie sous-projet */
 .sous-projet {
   position: relative;
   display: grid;
@@ -525,10 +514,8 @@ margin-top: -10px;
   grid-template-columns: 1fr; /* Deux colonnes pour les images */
   grid-template-rows: auto auto;
   max-height: 80vh; /* Limite la hauteur de la section */
-  position: relative;
   margin-right: 0px; /* Ajustez selon la largeur de la barre de défilement */
 }
-
 
 .vertical {
   width: 100%;
@@ -542,36 +529,6 @@ margin-top: -10px;
   height: auto;
   object-fit: cover;
 }
-
-
-/*.info-défilement {
-  position: fixed;
-  top: 90%;
-  left: 25%;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  background-color: #00000082;
-  padding: 10px 15px;
-  font-size: 16px;
-  text-align: center;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-  z-index: 1;
-  user-select: none; Empêche la sélection du texte
-} */
-
-/* Affichage au survol */
-.sous-projet:hover .info-défilement {
-  opacity: 1;
-}
-
-
-body.scrolled .info-défilement {
-  opacity: 0; /* Rendre l'élément transparent après avoir fait défiler la page */
-  pointer-events: none; /* Optionnel: pour empêcher de cliquer sur l'élément lorsque masqué */
-}
-
-
 
 /* Cache les checkboxes par défaut */
 .modal-toggle {
@@ -605,20 +562,18 @@ body.scrolled .info-défilement {
   display: flex;
 }
 
-
 .modal-content img {
   max-width: 100%;
   max-height: 100%;
 }
 
 .modal .vertical {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-margin: 33.5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  margin: 33.5%;
   position: relative;
   max-width: 100%;
 }
-
 
 .modal .horizontal {
   position: relative;
@@ -648,10 +603,7 @@ margin: 33.5%;
   color: #202020;
 }
 
-
-
-
-
+/* Description */
 .description {
   width: 40%;
   position: fixed;
@@ -666,7 +618,7 @@ margin: 33.5%;
   text-decoration: none;
   transition: all 0.2s;
   color: #7a7a7a;
-  font-size: clamp(14px, 2vw, 16px); /* Texte responsive */
+  font-size: 16px; /* Fixe la taille du texte */
   padding-left: 20px;
 }
 
@@ -676,7 +628,7 @@ margin: 33.5%;
 
 .description h2 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: clamp(20px, 4vw, 29px); /* Texte responsive */
+  font-size: 29px; /* Fixe la taille du texte */
   font-weight: 500;
   margin: 0;
   margin-top: 40px;
@@ -686,7 +638,7 @@ margin: 33.5%;
 
 .description h3 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: clamp(14px, 2vw, 16px); /* Texte responsive */
+  font-size: 16px; /* Fixe la taille du texte */
   font-weight: lighter;
   color: #7a7a7a;
   padding-left: 20px;
@@ -694,7 +646,7 @@ margin: 33.5%;
 
 .description p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: clamp(14px, 2.5vw, 16px); /* Texte responsive */
+  font-size: 16px; /* Fixe la taille du texte */
   margin-top: 30px;
   margin-bottom: 50px;
   padding-left: 20px;
@@ -704,14 +656,14 @@ margin: 33.5%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   padding-bottom: 20px;
-  font-size: clamp(16px, 3vw, 19px); /* Texte responsive */
+  font-size: 19px; /* Fixe la taille du texte */
   margin: 0;
   padding-left: 20px;
 }
 
 .description li {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: clamp(14px, 2vw, 17px); /* Texte responsive */
+  font-size: 17px; /* Fixe la taille du texte */
   font-weight: lighter;
   padding-bottom: none;
   padding-left: 10px;
@@ -727,46 +679,76 @@ margin: 33.5%;
 
 /* Responsive adjustments */
 @media screen and (max-width: 768px) {
+  /* Modification de la description pour qu'elle occupe tout l'espace sur mobile */
   .description {
-    margin-top: 15%;
-    margin-right: 10px;
-    width: 80%; /* Augmenter la largeur */
-    position: relative; /* Modifier la position pour éviter les problèmes de scroll */
-    height: auto; /* Permet à la description de s'ajuster */
+    margin-top: 0; /* Déplace le texte en haut de la page */
+    margin-right: 0;
+    width: 100%; /* Prend toute la largeur de l'écran */
+    position: relative; /* Modifie la position fixe pour relative */
+    height: auto; /* Laisse la description s'ajuster au contenu */
+    order: -1; /* Passe la div description avant les images */
+  }
+
+  /* Retirer h4 et li */
+  .description h4,
+  .description li {
+    display: none;
+  }
+
+  /* Pour que les images soient centrées et agrandies sur mobile */
+  .description img {
+    max-width: 90%; /* Ajuste la taille des images */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Centre les images */
+  }
+
+  /* Les autres éléments de la page-projet */
+  .page-projet {
+    display: flex;
+    flex-direction: column; /* Modifie la disposition pour une colonne */
   }
 }
 
 @media screen and (max-width: 550px) {
   .description {
-    margin-top: 27%;
-    margin-right: 12px;
-    width: 90%; /* Encore plus large sur très petits écrans */
+    margin-top: 10px; /* Place la description encore plus haut */
+    margin-right: 0;
+    width: 100%; /* Prend toute la largeur sur petits écrans */
   }
 
   .description h2 {
-    font-size: clamp(15px, 4vw, 23px); /* Texte légèrement plus grand sur mobile */
+    font-size: 23px; /* Fixe la taille du texte */
   }
 
   .description h3 {
-    font-size: clamp(12px, 2vw, 15px);
+    font-size: 15px; /* Fixe la taille du texte */
   }
 
   .description p {
-    font-size: clamp(13px, 2vw, 14px);
+    font-size: 14px; /* Fixe la taille du texte */
   }
 
   .description h4 {
-    font-size: clamp(14px, 3vw, 16px);
+    font-size: 16px; /* Fixe la taille du texte */
   }
 
   .description li {
-    font-size: clamp(12px, 2vw, 14px);
+    font-size: 14px; /* Fixe la taille du texte */
   }
 
-  /* Masquer le h4 et la liste sur les petits écrans */
-  .description h4,
+  /* Centrage et ajustement des images pour très petits écrans */
+  .description img {
+    max-width: 100%; /* Agrandir encore pour prendre toute la largeur */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Pour éviter une mise en page trop dense, on laisse la liste en une seule colonne */
   .description ul {
-    display: none; /* Masque le h4 et la liste */
+    column-count: 1; /* Liste en une seule colonne */
+    column-gap: 15px;
   }
 }
 
