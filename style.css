@@ -78,10 +78,21 @@ figure {
 font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
 text-align: center; /* Centre le texte */
 margin-bottom: 10px;
-font-size: clamp(20px, 8vw, 80px);
 font-weight: 700; /* Épaisseur de la police */
 color: #000; /* Couleur du texte */
 }
+
+.portfolio-title {
+  font-size: clamp(30px, 8vw, 80px);
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 550px) {
+  .portfolio-title {
+      font-size: 40px !important; /* Taille fixe sur très petits écrans */
+  }
+}
+
 
 .experiences-pro {
 font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
@@ -163,10 +174,6 @@ color: #000; /* Couleur du texte */
     padding: 8px px; /* Espacement plus petit */
   }
 
-  .portfolio-title {
-    margin-top: 20px;
-    font-size: 4rem; /* Encore plus petit sur mobiles */
-  }
 }
 
 
