@@ -78,7 +78,7 @@ figure {
 font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
 text-align: center; /* Centre le texte */
 margin-bottom: 10px;
-font-size: 80px; /* Taille de police pour le titre */
+font-size: clamp(20px, 8vw, 80px);
 font-weight: 700; /* Épaisseur de la police */
 color: #000; /* Couleur du texte */
 }
