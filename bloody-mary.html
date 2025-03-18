@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAM</title>
+  <link rel="icon" type="image/png" href="logo-moi.png">
+  <meta name="description" content="Portfolio de Camille Lecocq, Bloody Mary, le générique.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
+
+    <nav class="header-nav">
+      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
+      <a href="a-propos.html">À PROPOS</a>
+    </nav>
+  </header>
+
+  <div class="page-projet">
+    <div class="sous-projet">
+      <!--<span class="info-défilement">↓ Défiler pour voir la suite ↓</span>-->
+
+
+  
+      
+
+      <!-- Vidéo -->
+      <video controls width="100%" 
+        poster="img/Workshop/b-m-miniature.jpg">
+        <source src="img/Workshop/bloody-mary.mov" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture vidéo.
+      </video>
+
+      
+
+    <div class="description">
+      <a onclick="window.history.back();" style="cursor: pointer;">← Retour</a>
+      <h2>BLOODY MARY</h2>
+      <h3>2024</h3>
+      <p>Imagination d'une série et réalisation de son générique.</p>
+      <p>Suivez les enquêtes d'une inspectrice qui traque une mystérieuse meurtière dont on ne sait qu'une chose : elle tue des femmes lors de soirées mondaines en plongeant un poison dans leur verre.</p>
+      <p>Scénario original pensé et tourné en collaboration avec Estelle Fradin et Agathe Meslem.</p>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Sélectionnez l'élément qui doit être défilé
+    const sousProjet = document.querySelector('.sous-projet');
+    
+    // Sélectionnez le texte "Défiler pour voir la suite"
+    const infoDefilement = document.querySelector('.info-défilement');
+    
+    // Variable pour savoir si l'utilisateur a défilé ou pas
+    let isScrolled = false;
+    
+    // Écoutez l'événement de défilement sur `.sous-projet`
+    sousProjet.addEventListener('scroll', function() {
+      // Si le défilement est supérieur à 10 pixels, cacher l'info
+      if (sousProjet.scrollTop > 10 && !isScrolled) {
+        infoDefilement.style.opacity = '0'; // Masquer le texte
+        isScrolled = true; // Marquer comme ayant été défilé
+      } else if (sousProjet.scrollTop === 0) {
+        // Si on revient tout en haut, réafficher le texte
+        infoDefilement.style.opacity = '1';
+        isScrolled = false; // Réinitialiser l'état
+      }
+    });
+  </script>
+
+</body>
+</html>
