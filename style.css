@@ -624,12 +624,13 @@ margin-top: -10px;
   max-height: 100%;
 }
 
-.modal .vertical {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  margin: 33.5%;
-  position: relative;
-  max-width: 100%;
+.modal .vertical{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%; /* Ajuste selon ton besoin */
+  max-width: 460px;
 }
 
 .modal .horizontal {
