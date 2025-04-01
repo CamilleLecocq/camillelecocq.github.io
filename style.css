@@ -19,12 +19,12 @@ body {
 }
 
 .projet img {
-  max-width: 100%; /* S'assure que l'image ne dépasse pas la largeur de son conteneur */
+  width: 100%;
+  break-inside: avoid;
+  column-count: 4; /* 3 colonnes */
+  column-gap: 9px; /* Espacement entre les colonnes */
   filter: grayscale(100%);
-  height: auto;
-  width: 600px;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  display: block;
 }
 
 .projet:hover img {
@@ -181,11 +181,10 @@ color: #000; /* Couleur du texte */
 
 
 
-
-
 .projet {
   position: relative;
   overflow: hidden;
+  display: inline-block; /* Assure que le conteneur prend bien la taille de l'image */
 }
 
 .projet h2 {
@@ -196,7 +195,10 @@ color: #000; /* Couleur du texte */
   color: rgb(0, 0, 0);
   display: none;
   padding: 0px;
+  text-align: center;
+  width: 100%; /* Assure un centrage correct */
 }
+
 
 .projet:hover {
   transform: scale(1);
@@ -420,34 +422,14 @@ color: #000; /* Couleur du texte */
 
 
 .projets {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
-  /* 
-  - auto-fit : remplit l'espace avec autant de colonnes que possible.
-  - minmax(200px, 1fr) : chaque colonne a une largeur minimale de 200px et peut grandir jusqu'à occuper l'espace disponible.
-  */
-  gap: 0px 0px; /* Espace entre les éléments de la grille */
-  padding: 50px; /* Espacement autour de la grille */
-  justify-content: center; /* Centre les éléments horizontalement */
-  padding-top: 10px;
+  column-count: 3; /* Nombre de colonnes */
+  column-gap: 3.5px; /* Espacement entre les colonnes */
+  padding: 0 50px; /* Espacement sur les côtés */
+  margin-top: 20px;
+  margin-bottom: 50px;
 }
 
 
-
-.projet {
-
-  text-align: center;
-  color: #000000;
-  text-decoration: none;
-  transition: all 0.2s;
-  margin: 4px;
-
-}
-
-.projet img {
-  margin-bottom: -4px;
-  
-}
 
 
 .projet h2 {
