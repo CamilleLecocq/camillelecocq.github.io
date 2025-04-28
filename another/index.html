@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <title>Portfolio de Camille Lecocq</title>
+  <style>
+
+    :root {
+      overscroll-behavior: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'helvetica neue', helvetica, sans-serif;
+      background-color: #20139c;
+      font-size: 1em;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .header {
+      position: fixed;
+      font-size: 160px;
+      text-align: center;
+      color: #f2ebd5;
+      top: -23%;
+      width: 100%;
+      z-index: 0;
+    }
+
+    .header .char {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: inline-block;
+    }
+
+    .header h1 {
+      word-break: keep-all;
+      white-space: normal;
+      hyphens: auto;
+    }
+
+    /* Grille d'images dans la modale */
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Plusieurs colonnes responsives */
+      gap: 8px; /* Espacement plus réduit entre les images */
+      margin-top: 20px;
+      grid-auto-rows: 150px; /* Hauteur minimale pour les images */
+      padding-left: 20px;
+    }
+
+    .images-grid img {
+      width: 100%;
+      height: 100%; /* Utilisation de la hauteur pour que l'image prenne toute la place de sa cellule */
+      object-fit: cover;
+    }
+
+    .images-grid img.horizontal {
+      object-fit: cover; /* Pour les images horizontales */
+    }
+
+    .images-grid img.vertical {
+      object-fit: cover; /* Pour les images verticales */
+    }
+
+    /* Media Query pour mobiles */
+    @media screen and (max-width: 768px) {
+      .fiche img {
+        display: block; /* Centrer l'image */
+        margin: 0 auto; /* Centrer horizontalement */
+        width: 90%; /* Réduire la largeur de l'image pour laisser une marge */
+        height: auto; /* Maintenir la proportion de l'image */
+      }
+
+      .images-grid {
+        display: flex; /* Utilisation de flex pour garantir que l'image est centrée */
+        justify-content: center; /* Centrer le contenu horizontalement */
+        align-items: center; /* Centrer le contenu verticalement si nécessaire */
+      }
+    }
+
+    /* Style pour les caractères animés de l'entête */
+    .header .char.visible {
+      opacity: 1;
+    }
+
+    .projets {
+      color: #fff;
+    }
+
+    .element {
+      width: 200px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .element:hover {
+      cursor: pointer;
+    }
+
+    img {
+      width: 120%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .fixed {
+      position: fixed;
+    }
+
+    .projets.fixed {
+      top: 100px;
+    }
+
+    .overlay {
+      position: absolute;
+      width: 100vw;
+      min-height: 100vh;
+      z-index: 9999;
+      background-color: rgba(156, 20, 20, 0.649);
+      padding: 48px;
+      top: 0;
+      left: 0;
+      padding-top: 49px;
+    }
+
+    .close {
+      position: fixed;
+      top: 35px;
+      right: 20%;
+      width: 48px;
+      height: 48px;
+      text-align: center;
+      line-height: 48px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 48px;
+    }
+
+    .wrap {
+      width: 100%;
+    }
+
+    .fiche {
+      margin: 0px auto;
+      max-width: 640px;
+      padding: 0 20px 20px;
+      color: rgb(255, 255, 255);
+    }
+
+    .fiche img {
+      margin: 0 -20px 20px;
+      width: calc(100%);
+      border-radius: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1><span class="ligne">Camille</span><br><span class="ligne">Lecocq</span></h1>
+  </header>
+
+  <div class="projets"></div>
+
+  <script src="https://unpkg.com/split-type"></script>
+  <script type="module" src="main.js"></script>
+
+</body>
+</html>
