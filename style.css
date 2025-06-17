@@ -226,6 +226,7 @@ color: #000; /* Couleur du texte */
     margin: 0 auto;           /* Centrer horizontalement */
     width: 90%;               /* Réduire la largeur de l'image pour laisser une marge */
     height: auto;             /* Maintenir la proportion de l'image */
+     filter: none;
   }
 
   .projet {
@@ -427,6 +428,16 @@ color: #000; /* Couleur du texte */
   padding: 0 50px; /* Espacement sur les côtés */
   margin-top: 20px;
   margin-bottom: 50px;
+}
+
+@media screen and (max-width: 768px) {
+  .projets {
+    column-count: 1; /* Une seule colonne sur mobile */
+    padding: 0 20px; /* Réduit les marges latérales */
+  }
+  .projets .projet {
+    margin-bottom: 10px; /* Marge verticale entre les projets */
+  }
 }
 
 
@@ -747,6 +758,7 @@ margin-top: -10px;
   .page-projet {
     display: flex;
     flex-direction: column; /* Modifie la disposition pour une colonne */
+    margin-top: 5px; /* Réduit la marge supérieure */
   }
 }
 
@@ -767,6 +779,12 @@ margin-top: -10px;
 
   .description p {
     font-size: 14px; /* Fixe la taille du texte */
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  .description p:last-child {
+    margin-bottom: 40px; /* Ajoute une marge sous le dernier paragraphe */
   }
 
   .description h4 {
