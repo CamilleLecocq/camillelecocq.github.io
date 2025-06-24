@@ -623,7 +623,7 @@ margin-top: -10px;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50%; /* Ajuste selon ton besoin */
-  max-width: 460px;
+  max-width: 30%;
 }
 
 .modal .horizontal {
