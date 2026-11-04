@@ -35,9 +35,12 @@
   /* Unité d'échelle : 1px à partir de 1512 px de large, proportionnelle en dessous */
   --k: min(1px, 100vw / 1512);
 
-  /* Tailles de texte : taille maquette, avec un plancher lisible sur petit écran */
-  --taille-titre: max(64px, calc(120 * var(--k)));       /* PORTFOLIO, BONJOUR ! */
-  --taille-sous-titre: max(34px, calc(64 * var(--k)));   /* nom, titre de projet, POUR ME CONTACTER */
+  /* Tailles de texte : taille maquette, avec un plancher lisible sur petit écran.
+     Les deux grands titres ont un plancher qui suit la largeur d'écran (min(…, N vw)) :
+     Arial est plus large que la police condensée de la maquette, un plancher fixe de
+     64 px ferait déborder « BONJOUR ! » sur un téléphone de 390 px. */
+  --taille-titre: max(min(64px, 12vw), calc(120 * var(--k)));       /* PORTFOLIO, BONJOUR ! */
+  --taille-sous-titre: max(min(34px, 7vw), calc(64 * var(--k)));    /* nom, titre de projet, POUR ME CONTACTER */
   --taille-carte: max(26px, calc(40 * var(--k)));        /* nom du projet au survol d'une carte */
   --taille-bouton: max(22px, calc(36 * var(--k)));       /* « Voir les projets » */
   --taille-menu: max(24px, calc(30 * var(--k)));         /* liens du panneau menu */
@@ -130,6 +133,7 @@ body {
   font-weight: 900;
   font-size: var(--taille-sous-titre);
   line-height: var(--interligne);
+  overflow-wrap: break-word; /* filet de sécurité : jamais de débordement horizontal */
 }
 
 .entete__metier {
@@ -247,6 +251,7 @@ body {
   font-family: var(--police-titre);
   font-weight: 900;
   line-height: var(--interligne);
+  overflow-wrap: break-word; /* filet de sécurité : jamais de débordement horizontal */
 }
 
 .contact__titre {
