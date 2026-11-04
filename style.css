@@ -581,6 +581,20 @@ body {
   margin-top: 1em;
 }
 
+/* Intertitre (« CONTENU : ») : même allure que le texte, pas de graisse ni de taille propres */
+.projet__intertitre {
+  margin: 1em 0 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* Liste du contenu : puces conservées, items hérités du texte ; aucune marge basse,
+   sinon le dernier bloc décalerait le chevron (calé sur le bas du texte) */
+.projet__texte ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
 /* Chevron 122 × 93 : bord droit à 75 du conteneur, bas 57 sous le bas du texte
    (marge négative : il dépasse du bloc, y compris quand le texte est court ou absent ;
    sans texte, le bloc fait 93 − 57 = 36 de haut et le chevron ne remonte pas sur les infos). */
