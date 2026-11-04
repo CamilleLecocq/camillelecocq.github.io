@@ -169,8 +169,11 @@ body {
   cursor: pointer;
 }
 
-.menu__bouton:hover {
-  color: var(--rouge-pale);
+/* Survol réservé aux appareils à souris : sur écran tactile, il resterait collé après un appui */
+@media (hover: hover) {
+  .menu__bouton:hover {
+    color: var(--rouge-pale);
+  }
 }
 
 .menu__bouton svg {
@@ -184,7 +187,7 @@ body {
 .menu__liste {
   position: absolute;
   z-index: 100;
-  top: calc(57 * var(--k) + var(--burger-hauteur) + 10 * var(--k));
+  top: calc(57 * var(--k) + var(--burger-hauteur) + max(8px, calc(10 * var(--k)))); /* plancher de 8 px sur téléphone */
   right: calc(-2 * var(--k));
   display: flex;
   flex-direction: column;
@@ -212,8 +215,10 @@ body {
   transition: color 0.05s linear;
 }
 
-.menu__liste a:hover {
-  color: var(--rouge-pale);
+@media (hover: hover) {
+  .menu__liste a:hover {
+    color: var(--rouge-pale);
+  }
 }
 
 /* Le contour rouge par défaut serait invisible sur le fond rouge du panneau */
@@ -323,9 +328,14 @@ body {
   transition: fill 0.05s linear;
 }
 
-.contact__lien:hover .icone__fond,
 .contact__lien:focus-visible .icone__fond {
   fill: var(--vert-fonce);
+}
+
+@media (hover: hover) {
+  .contact__lien:hover .icone__fond {
+    fill: var(--vert-fonce);
+  }
 }
 
 /* Sous 700 px : liens empilés verticalement */
@@ -385,8 +395,10 @@ body {
   text-decoration: none;
 }
 
-.bouton:hover {
-  background: var(--vert-clair); /* survol instantané */
+@media (hover: hover) {
+  .bouton:hover {
+    background: var(--vert-clair); /* survol instantané */
+  }
 }
 
 /* --- Filtres : 317 sous le bouton, 33 avant la grille --- */
@@ -419,10 +431,16 @@ body {
   transition: background-color 0.05s linear, color 0.05s linear;
 }
 
-.filtre:hover,
 .filtre[aria-pressed="true"] {
   background: var(--rouge);
   color: var(--blanc-casse);
+}
+
+@media (hover: hover) {
+  .filtre:hover {
+    background: var(--rouge);
+    color: var(--blanc-casse);
+  }
 }
 
 /* --- Grille : 3 colonnes de 432 × 327 (réutilisée par les sous-pages) --- */
@@ -473,10 +491,14 @@ body {
   transition: opacity 0.05s linear;
 }
 
-.carte a:hover .carte__nom,
-.carte a:focus-visible .carte__nom,
-.carte:focus-within .carte__nom {
+.carte a:focus-visible .carte__nom {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .carte a:hover .carte__nom {
+    opacity: 1;
+  }
 }
 
 /* Tablette : 2 colonnes */
@@ -571,6 +593,7 @@ body {
   font-size: var(--taille-texte);
   line-height: var(--interligne);
   text-align: justify;
+  hyphens: auto; /* évite les « rivières » entre 701 et 900 px (lang="fr" sur chaque page) */
 }
 
 .projet__texte p {
@@ -605,8 +628,10 @@ body {
   color: var(--rouge);
 }
 
-.defiler:hover {
-  color: var(--rouge-pale); /* survol instantané */
+@media (hover: hover) {
+  .defiler:hover {
+    color: var(--rouge-pale); /* survol instantané */
+  }
 }
 
 .defiler svg {
@@ -746,6 +771,9 @@ body {
 }
 
 .visionneuse::backdrop {
+  /* Valeur littérale d'abord : var() et color-mix() ne sont pas hérités dans ::backdrop
+     par les navigateurs plus anciens, qui perdraient le voile */
+  background: rgb(246 238 236 / 0.95);
   background: color-mix(in srgb, var(--blanc-casse) 95%, transparent);
 }
 
@@ -772,10 +800,12 @@ body {
   cursor: pointer;
 }
 
-.visionneuse__fermer:hover,
-.visionneuse__precedent:hover,
-.visionneuse__suivant:hover {
-  color: var(--rouge-pale);
+@media (hover: hover) {
+  .visionneuse__fermer:hover,
+  .visionneuse__precedent:hover,
+  .visionneuse__suivant:hover {
+    color: var(--rouge-pale);
+  }
 }
 
 /* Précédent / suivant masqués quand il n'y a qu'une image (display:flex l'emporterait sur [hidden]) */

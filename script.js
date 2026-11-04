@@ -158,11 +158,16 @@ function initVisionneuse() {
       else if (bouton.classList.contains('visionneuse__suivant')) afficher(indice + 1);
     });
 
-    // Flèches : on parcourt les images ; Échap : on ferme
+    // Flèches : on parcourt les images ; Échap : on ferme.
+    // Les flèches combinées à Alt / Ctrl / Cmd sont laissées au navigateur et aux lecteurs d’écran
+    // (Alt+← = page précédente, Ctrl+Option+flèches = VoiceOver)
     dialog.addEventListener('keydown', (evenement) => {
-      if (evenement.key === 'ArrowLeft') afficher(indice - 1);
-      else if (evenement.key === 'ArrowRight') afficher(indice + 1);
-      else if (evenement.key === 'Escape') {
+      const modifie = evenement.altKey || evenement.ctrlKey || evenement.metaKey;
+      if (evenement.key === 'ArrowLeft') {
+        if (!modifie) afficher(indice - 1);
+      } else if (evenement.key === 'ArrowRight') {
+        if (!modifie) afficher(indice + 1);
+      } else if (evenement.key === 'Escape') {
         evenement.preventDefault();
         dialog.close();
       }
