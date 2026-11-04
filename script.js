@@ -130,6 +130,9 @@ function initVisionneuse() {
     dialog = document.createElement('dialog');
     dialog.className = 'visionneuse';
     dialog.setAttribute('aria-label', 'Image agrandie');
+    // Focusable par programme : un clic sur l’image (ou sur un bouton que Safari / Firefox macOS
+    // ne focalisent pas) met le focus sur le dialog, donc les flèches du clavier continuent de marcher
+    dialog.tabIndex = -1;
     dialog.innerHTML =
       '<button class="visionneuse__fermer" type="button" aria-label="Fermer">' + croix + '</button>' +
       '<button class="visionneuse__precedent" type="button" aria-label="Image précédente">' + chevron + '</button>' +

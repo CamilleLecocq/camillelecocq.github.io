@@ -581,12 +581,13 @@ body {
   margin-top: 1em;
 }
 
-/* Chevron 122 × 93 : bord droit à 75 du conteneur, bas 35 sous le bas du texte
-   (marge négative : il dépasse du bloc, y compris quand le texte est court ou absent). */
+/* Chevron 122 × 93 : bord droit à 75 du conteneur, bas 57 sous le bas du texte
+   (marge négative : il dépasse du bloc, y compris quand le texte est court ou absent ;
+   sans texte, le bloc fait 93 − 57 = 36 de haut et le chevron ne remonte pas sur les infos). */
 .defiler {
   flex: none;
   width: calc(122 * var(--k));
-  margin: 0 calc(75 * var(--k)) calc(-35 * var(--k)) auto; /* auto : reste à droite sans texte */
+  margin: 0 calc(75 * var(--k)) calc(-57 * var(--k)) auto; /* auto : reste à droite sans texte */
   color: var(--rouge);
 }
 
@@ -601,13 +602,13 @@ body {
 }
 
 /* --- Galerie : 2 colonnes de 664 × 503 ---
-   36 sous le chevron, dont le bas dépasse de 35 sous le texte : 35 + 36 = 71. */
+   33 sous le chevron, dont le bas dépasse de 57 sous le texte : 57 + 33 = 90. */
 
 .galerie {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: calc(33 * var(--k));
-  margin-top: calc(71 * var(--k));
+  margin-top: calc(90 * var(--k));
 }
 
 .galerie__item {
