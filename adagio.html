@@ -3,187 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAM</title>
-  <link rel="icon" type="image/png" href="logo-moi.png">
+  <title>Adagio — Camille Lecocq</title>
   <meta name="description" content="Portfolio de Camille Lecocq, Best-of de mes photos.">
+  <link rel="icon" type="image/png" href="logo-moi.png">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="contact.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" aria-hidden="true"><path fill="currentColor" d="M50 30a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Z"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-  <div class="page-projet">
-    <div class="sous-projet">
-  
-
-      <!-- Image 2 -->
-      <label for="modal2">
-        <img src="img/Photo/best-of/tenu-face.jpg" alt="Livre de trois-quart" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal2" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal2" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal2" class="close">&times;</label>
-          <img src="img/Photo/best-of/tenu-face.jpg" alt="Livre de trois-quart">
-        </div>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere" style="--cadrage: 50% 25%">
+        <img class="banniere__image" src="img/Photo/best-of/couv-index.jpg" alt="">
+        <h1 class="banniere__titre">ADAGIO</h1>
       </div>
-
-      <!-- Image 3 -->
-      <label for="modal3">
-        <img src="img/Photo/best-of/tenu-dos.jpg" alt="Livre de dos" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal3" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal3" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal3" class="close">&times;</label>
-          <img src="img/Photo/best-of/tenu-dos.jpg" alt="Livre de dos">
+      <ul class="projet__infos">
+        <li>18,5 × 26,5 cm</li>
+        <li>2025</li>
+      </ul>
+      <div class="projet__suite">
+        <div class="projet__texte">
+          <p>Best-of de mes photos de 2023 à 2025.</p>
+          <p>Adagio est une édition de photographies prises entre septembre 2023 et avril 2025. Le livre se découpe en plusieurs mouvements numérotés de 1 à 5 où chaque mouvement explore un thème différent. L’édition se déroule comme une partition de musique jouée Adagio, c’est à dire de manière assez lente et contemplative.</p>
         </div>
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
+        </a>
       </div>
-
-       <!-- Image 4 -->
-       <label for="modal4">
-        <img src="img/Photo/best-of/page-1.jpg" alt="Page 1" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal4" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal4" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal4" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-1.jpg" alt="Page 1">
-        </div>
-      </div>
-
-      <!-- Image 5 -->
-      <label for="modal5">
-        <img src="img/Photo/best-of/page-2.jpg" alt="Page 2" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal5" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal5" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal5" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-2.jpg" alt="Page 2">
-        </div>
-      </div>
-
-      <!-- Image 6 -->
-      <label for="modal6">
-        <img src="img/Photo/best-of/page-3.jpg" alt="Page 3" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal6" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal6" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal6" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-3.jpg" alt="Page 3">
-        </div>
-      </div>
-
-      <!-- Image 7 -->
-      <label for="modal7">
-        <img src="img/Photo/best-of/page-4.jpg" alt="Page 4" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal7" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal7" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal7" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-4.jpg" alt="Page 4">
-        </div>
-      </div>
-
-      <!-- Image 8 -->
-      <label for="modal8">
-        <img src="img/Photo/best-of/page-5.jpg" alt="Page 5" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal8" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal8" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal8" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-5.jpg" alt="Page 5">
-        </div>
-      </div>
-
-      <!-- Image 9 -->
-      <label for="modal9">
-        <img src="img/Photo/best-of/page-6.jpg" alt="Page 6" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal9" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal9" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal9" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-6.jpg" alt="Page 6">
-        </div>
-      </div>
-
-      <!-- Image 10 -->
-      <label for="modal10">
-        <img src="img/Photo/best-of/page-7.jpg" alt="Page 7" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal10" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal10" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal10" class="close">&times;</label>
-          <img src="img/Photo/best-of/page-7.jpg" alt="Page 7">
-        </div>
-      </div>
-      
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" href="img/Photo/best-of/tenu-face.jpg"><img src="img/Photo/best-of/tenu-face.jpg" alt="Livre de trois-quart" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/tenu-dos.jpg"><img src="img/Photo/best-of/tenu-dos.jpg" alt="Livre de dos" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-1.jpg"><img src="img/Photo/best-of/page-1.jpg" alt="Page 1" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-2.jpg"><img src="img/Photo/best-of/page-2.jpg" alt="Page 2" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-3.jpg"><img src="img/Photo/best-of/page-3.jpg" alt="Page 3" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-4.jpg"><img src="img/Photo/best-of/page-4.jpg" alt="Page 4" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-5.jpg"><img src="img/Photo/best-of/page-5.jpg" alt="Page 5" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-6.jpg"><img src="img/Photo/best-of/page-6.jpg" alt="Page 6" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Photo/best-of/page-7.jpg"><img src="img/Photo/best-of/page-7.jpg" alt="Page 7" loading="lazy" decoding="async"></a>
+      </section>
     </div>
-
-    <div class="description">
-      <a onclick="window.history.back();" style="cursor: pointer;">← Retour</a>
-      <h2>ADAGIO</h2>
-      <h3>18,5 × 26,5 cm</h3>
-      <h3>2025</h3>
-      <p>Best-of de mes photos de 2023 à 2025.</p>
-      <p>Adagio est une édition de photographies prises entre septembre 2023 et avril 2025. Le livre se découpe en plusieurs mouvements numérotés de 1 à 5 où chaque mouvement explore un thème différent. L’édition se déroule comme une partition de musique jouée Adagio, c’est à dire de manière assez lente et contemplative.</p>
-
-    </div>
-  </div>
-
-  <script>
-    // Sélectionnez l'élément qui doit être défilé
-    const sousProjet = document.querySelector('.sous-projet');
-    
-    // Sélectionnez le texte "Défiler pour voir la suite"
-    const infoDefilement = document.querySelector('.info-défilement');
-    
-    // Variable pour savoir si l'utilisateur a défilé ou pas
-    let isScrolled = false;
-    
-    // Écoutez l'événement de défilement sur `.sous-projet`
-    sousProjet.addEventListener('scroll', function() {
-      // Si le défilement est supérieur à 10 pixels, cacher l'info
-      if (sousProjet.scrollTop > 10 && !isScrolled) {
-        infoDefilement.style.opacity = '0'; // Masquer le texte
-        isScrolled = true; // Marquer comme ayant été défilé
-      } else if (sousProjet.scrollTop === 0) {
-        // Si on revient tout en haut, réafficher le texte
-        infoDefilement.style.opacity = '1';
-        isScrolled = false; // Réinitialiser l'état
-      }
-    });
-  </script>
-
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés</footer>
 </body>
 </html>
