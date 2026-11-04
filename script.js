@@ -110,8 +110,95 @@ function initFiltres() {
 
 
 /* ==========================================================================
+   Visionneuse : agrandissement des images de la galerie (page projet)
+   ========================================================================== */
+
+function initVisionneuse() {
+  const liens = [...document.querySelectorAll('.galerie a.galerie__item')];
+  if (!liens.length) return;
+
+  // Chevron de .defiler (même trait) ; le CSS le tourne pour « précédent » et « suivant »
+  const chevron = '<svg viewBox="0 0 122 64" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/></svg>';
+  const croix = '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" aria-hidden="true"><path d="M5 5l30 30M35 5L5 35"/></svg>';
+
+  let dialog = null;
+  let image = null;
+  let indice = 0;
+
+  // Crée l’unique <dialog> à la première ouverture (« Fermer » en premier : il reçoit le focus)
+  function creer() {
+    dialog = document.createElement('dialog');
+    dialog.className = 'visionneuse';
+    dialog.setAttribute('aria-label', 'Image agrandie');
+    dialog.innerHTML =
+      '<button class="visionneuse__fermer" type="button" aria-label="Fermer">' + croix + '</button>' +
+      '<button class="visionneuse__precedent" type="button" aria-label="Image précédente">' + chevron + '</button>' +
+      '<img class="visionneuse__image" alt="">' +
+      '<button class="visionneuse__suivant" type="button" aria-label="Image suivante">' + chevron + '</button>';
+    image = dialog.querySelector('.visionneuse__image');
+
+    // Une seule image : rien à parcourir
+    const seule = liens.length < 2;
+    dialog.querySelector('.visionneuse__precedent').hidden = seule;
+    dialog.querySelector('.visionneuse__suivant').hidden = seule;
+
+    // Clic sur le fond (la cible est alors le <dialog> lui-même) ou sur un bouton
+    dialog.addEventListener('click', (evenement) => {
+      if (evenement.target === dialog) {
+        dialog.close();
+        return;
+      }
+      const bouton = evenement.target.closest('button');
+      if (!bouton) return;
+      if (bouton.classList.contains('visionneuse__fermer')) dialog.close();
+      else if (bouton.classList.contains('visionneuse__precedent')) afficher(indice - 1);
+      else if (bouton.classList.contains('visionneuse__suivant')) afficher(indice + 1);
+    });
+
+    // Flèches : on parcourt les images ; Échap : on ferme
+    dialog.addEventListener('keydown', (evenement) => {
+      if (evenement.key === 'ArrowLeft') afficher(indice - 1);
+      else if (evenement.key === 'ArrowRight') afficher(indice + 1);
+      else if (evenement.key === 'Escape') {
+        evenement.preventDefault();
+        dialog.close();
+      }
+    });
+
+    // À la fermeture, quelle qu’en soit la cause, le focus revient sur le lien de l’image affichée
+    // (c’est le lien cliqué tant qu’on n’a pas parcouru les images)
+    dialog.addEventListener('close', () => liens[indice].focus());
+
+    document.body.append(dialog);
+  }
+
+  // Affiche l’image n° i du parcours (en boucle) en recopiant son texte alternatif
+  function afficher(i) {
+    indice = (i + liens.length) % liens.length;
+    const lien = liens[indice];
+    const miniature = lien.querySelector('img');
+    image.setAttribute('src', lien.getAttribute('href'));
+    image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
+  }
+
+  liens.forEach((lien, i) => {
+    lien.addEventListener('click', (evenement) => {
+      const modifie = evenement.metaKey || evenement.ctrlKey || evenement.shiftKey || evenement.altKey;
+      if (evenement.button !== 0 || modifie) return; // le navigateur gère l’ouverture dans un nouvel onglet
+
+      evenement.preventDefault();
+      if (!dialog) creer();
+      afficher(i);
+      dialog.showModal();
+    });
+  });
+}
+
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
 initMenu();
 initFiltres();
+initVisionneuse();

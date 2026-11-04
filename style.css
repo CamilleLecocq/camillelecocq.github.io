@@ -10,6 +10,8 @@
      6. Pied de page
      7. Page Contact
      8. Page d'accueil (héros, filtres, grille de projets)
+     9. Page projet (bandeau, infos, texte, galerie, sous-pages)
+    10. Visionneuse (fenêtre d'agrandissement des images)
    Toutes les mesures viennent de la maquette Figma (cadre de 1512 px) :
    une mesure de N px maquette s'écrit calc(N * var(--k)).
    ========================================================================== */
@@ -427,7 +429,7 @@ body {
 
 .grille-projets {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: calc(33 * var(--k));
   margin: 0;
   padding: 0;
@@ -480,18 +482,347 @@ body {
 /* Tablette : 2 colonnes */
 @media (max-width: 1100px) {
   .grille-projets {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 /* Mobile : 1 colonne, espaces resserrés mais lisibles */
 @media (max-width: 700px) {
   .grille-projets {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
 
   .carte__nom {
     padding: 0 20px;
+  }
+}
+
+
+/* ==========================================================================
+   9. Page projet : bandeau, infos, texte + chevron, galerie, sous-pages
+   ========================================================================== */
+
+.projet {
+  /* 101 sous le bas du métier (qui finit à 148) ; 92 entre le bas de la page et le pied */
+  margin-top: calc(101 * var(--k));
+  padding-bottom: calc(92 * var(--k));
+}
+
+/* --- Bandeau 1362 × 315 : l'image remplit le cadre, le titre déborde par le bas --- */
+
+.banniere {
+  position: relative; /* repère du titre, en absolu */
+  aspect-ratio: 1362 / 315;
+  background: var(--gris); /* visible pendant le chargement de l'image */
+  /* pas de overflow:hidden : le titre doit pouvoir dépasser du bandeau */
+}
+
+.banniere__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--cadrage, 50% 50%); /* réglé page par page (attribut style du bandeau) */
+}
+
+/* Titre : gauche −4, bas −22 sous le bandeau. Il a la couleur du fond : la partie qui
+   dépasse du bandeau disparaît, les lettres semblent coupées (effet voulu de la maquette). */
+.banniere__titre {
+  position: absolute;
+  left: calc(-4 * var(--k));
+  bottom: calc(-22 * var(--k));
+  max-width: 75%;
+  margin: 0;
+  color: var(--blanc-casse);
+  font-family: var(--police-titre);
+  font-size: var(--taille-sous-titre);
+  font-weight: 900;
+  line-height: var(--interligne);
+  overflow-wrap: break-word; /* filet de sécurité : jamais de débordement horizontal */
+}
+
+/* --- Infos (format, dimensions, année) : collées sous le bandeau ---
+   Au-dessus du titre (z-index), sinon la partie invisible du titre les masquerait. */
+
+.projet__infos {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: calc(8 * var(--k)) 0 calc(7 * var(--k));
+  list-style: none;
+  color: var(--vert-clair);
+  font-size: var(--taille-infos);
+  line-height: var(--interligne);
+}
+
+/* --- Suite : texte à gauche, double chevron à droite ---
+   71 sous les infos (ou sous le bandeau quand il n'y a pas d'infos). */
+
+.projet__suite {
+  display: flex;
+  align-items: flex-end;
+  margin-top: calc(71 * var(--k));
+}
+
+.projet__texte {
+  max-width: calc(1017 * var(--k));
+  color: var(--vert-fonce);
+  font-size: var(--taille-texte);
+  line-height: var(--interligne);
+  text-align: justify;
+}
+
+.projet__texte p {
+  margin: 0;
+}
+
+.projet__texte p + p {
+  margin-top: 1em;
+}
+
+/* Chevron 122 × 93 : bord droit à 75 du conteneur, bas 35 sous le bas du texte
+   (marge négative : il dépasse du bloc, y compris quand le texte est court ou absent). */
+.defiler {
+  flex: none;
+  width: calc(122 * var(--k));
+  margin: 0 calc(75 * var(--k)) calc(-35 * var(--k)) auto; /* auto : reste à droite sans texte */
+  color: var(--rouge);
+}
+
+.defiler:hover {
+  color: var(--rouge-pale); /* survol instantané */
+}
+
+.defiler svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Galerie : 2 colonnes de 664 × 503 ---
+   36 sous le chevron, dont le bas dépasse de 35 sous le texte : 35 + 36 = 71. */
+
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(33 * var(--k));
+  margin-top: calc(71 * var(--k));
+}
+
+.galerie__item {
+  display: block;
+  aspect-ratio: 664 / 503;
+  overflow: hidden;
+  background: var(--gris); /* visible pendant le chargement de l'image */
+}
+
+.galerie__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Les vidéos occupent les 2 colonnes, au format naturel */
+.galerie__video {
+  grid-column: 1 / -1;
+}
+
+.galerie__video video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Sous-pages : grille de cartes après la galerie (même rythme que le pied : 92) --- */
+
+.projet .grille-projets {
+  margin-top: calc(92 * var(--k));
+}
+
+/* Titre de section lu par les lecteurs d'écran mais invisible (h2 de la grille des sous-pages) */
+.visuellement-masque {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Mobile : bandeau plus haut, texte à gauche, chevron sous le texte, 1 colonne */
+@media (max-width: 700px) {
+  .projet {
+    padding-bottom: 40px;
+  }
+
+  .banniere {
+    aspect-ratio: 16 / 9;
+  }
+
+  .banniere__titre {
+    max-width: 100%;
+  }
+
+  .projet__infos {
+    padding: 8px 0 7px; /* en px : l'échelle k est trop petite ici */
+  }
+
+  .projet__suite {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 24px;
+  }
+
+  .projet__texte {
+    max-width: none;
+    text-align: left;
+  }
+
+  .defiler {
+    width: 56px;
+    margin: 0 0 0 auto;
+  }
+
+  .projet__texte + .defiler {
+    margin-top: 24px;
+  }
+
+  .galerie {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .projet .grille-projets {
+    margin-top: 40px;
+  }
+}
+
+
+/* ==========================================================================
+   10. Visionneuse : <dialog> plein écran créé par script.js
+   ========================================================================== */
+
+.visionneuse {
+  /* Plein écran : le voile est le ::backdrop, un clic hors de l'image ferme la fenêtre */
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--rouge);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* [open] : sans lui, display:flex l'emporterait sur le display:none d'un <dialog> fermé */
+.visionneuse[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visionneuse::backdrop {
+  background: color-mix(in srgb, var(--blanc-casse) 95%, transparent);
+}
+
+.visionneuse__image {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.visionneuse__fermer,
+.visionneuse__precedent,
+.visionneuse__suivant {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rouge);
+  cursor: pointer;
+}
+
+.visionneuse__fermer:hover,
+.visionneuse__precedent:hover,
+.visionneuse__suivant:hover {
+  color: var(--rouge-pale);
+}
+
+/* Précédent / suivant masqués quand il n'y a qu'une image (display:flex l'emporterait sur [hidden]) */
+.visionneuse button[hidden] {
+  display: none;
+}
+
+.visionneuse__fermer {
+  top: 20px;
+  right: 20px;
+}
+
+.visionneuse__precedent,
+.visionneuse__suivant {
+  top: calc(50% - 28px); /* au milieu des bords */
+}
+
+.visionneuse__precedent {
+  left: 20px;
+}
+
+.visionneuse__suivant {
+  right: 20px;
+}
+
+.visionneuse__fermer svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+/* Chevron de .defiler (même trait), tourné : pointe vers la gauche / vers la droite */
+.visionneuse__precedent svg,
+.visionneuse__suivant svg {
+  display: block;
+  width: 52px;
+  height: auto;
+}
+
+.visionneuse__precedent svg {
+  transform: rotate(90deg);
+}
+
+.visionneuse__suivant svg {
+  transform: rotate(-90deg);
+}
+
+/* Mobile : précédent / suivant en bas pour ne pas recouvrir l'image */
+@media (max-width: 700px) {
+  .visionneuse__image {
+    max-height: calc(100vh - 160px);
+    max-height: calc(100dvh - 160px);
+  }
+
+  .visionneuse__fermer {
+    top: 12px;
+    right: 12px;
+  }
+
+  .visionneuse__precedent,
+  .visionneuse__suivant {
+    top: auto;
+    bottom: 24px;
   }
 }
