@@ -3,204 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAM</title>
+  <title>P’tites têtes — Camille Lecocq</title>
+  <meta name="description" content="P’tites têtes, projet de Camille Lecocq, designer graphique.">
   <link rel="icon" type="image/png" href="logo-moi.png">
-  <meta name="description" content="Portfolio de Camille Lecocq, critique sociétale.">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="contact.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" aria-hidden="true"><path fill="currentColor" d="M50 30a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Z"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-
-  <a onclick="window.history.back();" class="retour">← Retour</a>
-
-    <div class="images-societe">
-
-
-        <!-- Image 1 -->
-        <label for="modal1">
-            <img src="img/Dessin/ptites-tetes/maximilien.jpg" alt="Maximilien Vox" class="vertical">
-        </label>
-        <input type="checkbox" id="modal1" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal1" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal1" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/maximilien.jpg" alt="Maximilien Vox">
-            </div>
-        </div>
-
-
-          <!-- Image 2 -->
-          <label for="modal2">
-            <img src="img/Dessin/ptites-tetes/margot.jpg" alt="Margot" class="vertical">
-        </label>
-        <input type="checkbox" id="modal2" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal2" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal2" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/margot.jpg" alt="Margot">
-            </div>
-        </div>
-
-
-        <!-- Image 3 -->
-        <label for="modal3">
-            <img src="img/Dessin/ptites-tetes/fernand.jpg" alt="Fernand Baudin" class="vertical">
-        </label>
-        <input type="checkbox" id="modal3" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal3" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal3" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/fernand.jpg" alt="Fernand Baudin">
-            </div>
-        </div>
-
-
-        <!-- Image 4 -->
-          <label for="modal4">
-            <img src="img/Dessin/ptites-tetes/beatrice.jpg" alt="Béatrice Warde" class="vertical">
-        </label>
-        <input type="checkbox" id="modal4" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal4" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal4" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/beatrice.jpg" alt="Béatrice Warde">
-            </div>
-        </div>
-
-
-        <!-- Image 5 -->
-        <label for="modal5">
-            <img src="img/Dessin/ptites-tetes/jan.jpg" alt="Jan Tschichold" class="vertical">
-        </label>
-        <input type="checkbox" id="modal5" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal5" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal5" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/jan.jpg" alt="Jan Tschichold">
-            </div>
-        </div>
-
-
-        <!-- Image 6 -->
-        <label for="modal6">
-            <img src="img/Dessin/ptites-tetes/vivien.jpg" alt="Vivien Philizot" class="vertical">
-        </label>
-        <input type="checkbox" id="modal6" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal6" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal6" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/vivien.jpg" alt="Vivien Philizot">
-            </div>
-        </div>
-
-
-        <!-- Image 7 -->
-        <label for="modal7">
-            <img src="img/Dessin/ptites-tetes/regis.jpg" alt="Régis Debray" class="vertical">
-        </label>
-        <input type="checkbox" id="modal7" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal7" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal7" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/regis.jpg" alt="Régis Debray">
-            </div>
-        </div>
-
-
-        <!-- Image 8 -->
-        <label for="modal8">
-            <img src="img/Dessin/ptites-tetes/andre.jpg" alt="André Leroi-Gourhan" class="vertical">
-        </label>
-        <input type="checkbox" id="modal8" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal8" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal8" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/andre.jpg" alt="André Leroi-Gourhan">
-            </div>
-        </div>
-
-
-        <!-- Image 9 -->
-        <label for="modal9">
-            <img src="img/Dessin/ptites-tetes/roland.jpg" alt="Roland Barthes" class="vertical">
-        </label>
-        <input type="checkbox" id="modal9" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal9" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal9" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/roland.jpg" alt="Roland Barthes">
-            </div>
-        </div>
-
-        <!-- Image 10 -->
-        <label for="modal10">
-            <img src="img/Dessin/ptites-tetes/eug.jpg" alt="Eugénie" class="vertical">
-        </label>
-        <input type="checkbox" id="modal10" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal10" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal10" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/eug.jpg" alt="Eugén">
-            </div>
-        </div>
-
-        <!-- Image 11 -->
-        <label for="modal11">
-            <img src="img/Dessin/ptites-tetes/kant.jpg" alt="Emmanuel Kant" class="vertical">
-        </label>
-        <input type="checkbox" id="modal11" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal11" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal11" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/kant.jpg" alt="Emmanuel Kant">
-            </div>
-        </div>
-
-
-        <!-- Image 12 -->
-        <label for="modal12">
-            <img src="img/Dessin/ptites-tetes/robert.jpg" alt="Robert Bringhurst" class="vertical">
-        </label>
-        <input type="checkbox" id="modal12" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal12" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal12" class="close">&times;</label>
-                <img src="img/Dessin/ptites-tetes/robert.jpg" alt="Robert Bringhurst">
-            </div>
-        </div>
-    
-        </div>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere" style="--cadrage: 50% 40%">
+        <img class="banniere__image" src="img/Dessin/maximilien.jpg" alt="">
+        <h1 class="banniere__titre">P’TITES TÊTES</h1>
+      </div>
+      <div class="projet__suite">
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
+        </a>
+      </div>
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/maximilien.jpg"><img src="img/Dessin/ptites-tetes/maximilien.jpg" alt="Maximilien Vox" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/margot.jpg"><img src="img/Dessin/ptites-tetes/margot.jpg" alt="Margot" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/fernand.jpg"><img src="img/Dessin/ptites-tetes/fernand.jpg" alt="Fernand Baudin" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/beatrice.jpg"><img src="img/Dessin/ptites-tetes/beatrice.jpg" alt="Béatrice Warde" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/jan.jpg"><img src="img/Dessin/ptites-tetes/jan.jpg" alt="Jan Tschichold" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/vivien.jpg"><img src="img/Dessin/ptites-tetes/vivien.jpg" alt="Vivien Philizot" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/regis.jpg"><img src="img/Dessin/ptites-tetes/regis.jpg" alt="Régis Debray" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/andre.jpg"><img src="img/Dessin/ptites-tetes/andre.jpg" alt="André Leroi-Gourhan" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/roland.jpg"><img src="img/Dessin/ptites-tetes/roland.jpg" alt="Roland Barthes" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/eug.jpg"><img src="img/Dessin/ptites-tetes/eug.jpg" alt="Eugénie" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/kant.jpg"><img src="img/Dessin/ptites-tetes/kant.jpg" alt="Emmanuel Kant" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Dessin/ptites-tetes/robert.jpg"><img src="img/Dessin/ptites-tetes/robert.jpg" alt="Robert Bringhurst" loading="lazy" decoding="async"></a>
+      </section>
     </div>
-</div>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés</footer>
+</body>
+</html>

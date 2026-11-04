@@ -3,46 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAM</title>
+  <title>En couverture — Camille Lecocq</title>
+  <meta name="description" content="Portfolio de Camille Lecocq, Propositions de couvertures de livres.">
   <link rel="icon" type="image/png" href="logo-moi.png">
-  <meta name="description" content="Portfolio de Camille Lecocq, Propositions de couvertures de llivres.">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="contact.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" aria-hidden="true"><path fill="currentColor" d="M50 30a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Z"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-
- 
-  <h1 class="portfolio-title">COUVERTURES</h1> 
-
-    <div class="en-couvertures-texte">
-      <a onclick="window.history.back();" style="cursor: pointer;">← Retour</a>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere" style="--cadrage: 50% 40%">
+        <img class="banniere__image" src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="">
+        <h1 class="banniere__titre">EN COUVERTURE</h1>
+      </div>
+      <div class="projet__suite">
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
+        </a>
+      </div>
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" href="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg"><img src="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg" alt="La délicatesse" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Typo/Novecento/novecento-couv-numerique.jpg"><img src="img/Typo/Novecento/novecento-couv-numerique.jpg" alt="Novecento" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" href="img/Design/la-disparition/mockup-couverture-oreille.jpg"><img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="La disparition" loading="lazy" decoding="async"></a>
+      </section>
+      <h2 class="visuellement-masque">Couvertures</h2>
+      <ul class="grille-projets">
+        <li class="carte">
+          <a href="la-delicatesse.html">
+            <img src="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La délicatesse</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="novecento-pianiste.html">
+            <img src="img/Typo/Novecento/novecento-couv-numerique.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Novecento, pianiste</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="la-disparition.html">
+            <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La disparition</span>
+          </a>
+        </li>
+      </ul>
     </div>
-  
-
-  <div class="couvertures-livres">
-
-    <a href="la-delicatesse.html" class="couvertures">
-      <img src="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg" alt="La délicatesse">
-      <h2>La délicatesse</h2>
-    </a>
-    <a href="novecento-pianiste.html" class="couvertures">
-      <img src="img/Typo/Novecento/novecento-couv-numerique.jpg" alt="Novecento">
-      <h2>Novecento, pianiste</h2>
-    </a>
-    <a href="la-disparition.html" class="couvertures">
-      <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="La disparition">
-      <h2>La disparition</h2>
-
-  </div>
-
-
-  </body>
-  </html>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés</footer>
+</body>
+</html>
