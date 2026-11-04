@@ -1,212 +1,199 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KAM</title>
-  <!-- favicon -->
-  <link rel="icon" type="image/png" href="logo-moi.png">
-  <!-- meta description -->
+  <title>Camille Lecocq — Portfolio</title>
   <meta name="description" content="Portfolio de Camille Lecocq, designer graphique.">
+  <link rel="icon" type="image/png" href="logo-moi.png">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="contact.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" aria-hidden="true"><path fill="currentColor" d="M50 30a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Zm0-15a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6h47Z"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-  
-  <div id="progress-bar"></div>
-
-  <h1 class="portfolio-title">PORTFOLIO</h1>  
-
-  <div class="projets">
-
-        <a href="pietra-nova.html" class="projet">
-      <img src="img/Typo/pietra-nova/pietra-index.jpeg" alt="Pietra Nova">
-      <h2>Pietra Nova</h2>
-    </a>
-    
-    <a href="la-blanche.html" class="projet">
-      <img src="img/Typo/la-blanche/face-index.jpg" alt="La Blanche">
-      <h2>Première de couverture</h2>
-    </a>
-    
-    
-    <a href="opened-eyes.html" class="projet">
-      <img src="img/Dessin/kafka/couv-index.jpg" alt="Opened Eyes">
-      <h2>Opened Eyes</h2>
-    </a>
-    
-    <a href="out-of-the-past.html" class="projet">
-      <img src="img/Design/out-of-the-past.jpg" alt="Out of the Past">
-      <h2>Out of the Past</h2>
-    </a>
-    
-    
-    <a href="home-will-infect.html" class="projet">
-      <img src="img/Typo/bookmachine/trois_livres_index.jpg" alt="Édition de mise en page typographique">
-      <h2>Home will infect</h2>
-    </a>
-    
-
-    <a href="figma.html" class="projet">
-      <img src="img/Figma/fourchinette-index.jpg" alt="Figma présentation">
-      <h2>1nutile</h2>
-    </a>
-
-
-
-
-    <!--  <a href="dessins-traditionnels.html" class="projet">
-      <img src="img/Design/la-disparition/oreille.jpg" alt="La délicatesse">
-      <h2>Dessins traditionnels</h2>
-    </a>   -->
-
-
-    <a href="dessins-numeriques.html" class="projet">
-      <img src="img/Dessin/Touquette illu.jpg" alt="Dessins numériques">
-      <h2>Dessins numériques</h2>
-    </a>
-
-    
-
-        <a href="branly.html" class="projet">
-      <img src="img/Photo/branly/branly-face-index.jpg" alt="Balade">
-      <h2>Balade</h2>
-    </a>
-
-
-    <a href="questionnements.html" class="projet">
-      <img src="img/Design/questionnements/couv-index.jpg" alt="Questionnements d'une adulte en devenir">
-      <h2>Questionnements d'une adulte en devenir</h2>
-    </a>
-
-    <a href="conservatoire.html" class="projet">
-      <img src="img/Photo/conservatoire/couv-index.jpg" alt="Académie des Beaux-Arts">
-      <h2>Académie des Beaux-Arts</h2>
-    </a>
-    
-
-    <a href="toukiter.html" class="projet">
-      <img src="img/Design/toukiter/4-index.jpg" alt="Toukiter">
-      <h2>Toukiter</h2>
-    </a>
-
-
-    <a href="bloody-mary.html" class="projet">
-      <img src="img/Workshop/b-m-miniature.jpg" alt="Bloody Mary">
-      <h2></h2>
-    </a>
-
-
-    <a href="coffret.html" class="projet">
-      <img src="img/Design/coffret/tranche-coffret.jpg" alt="Coffret Saint-Exupéry">
-      <h2>Saint-Exupéry, le coffret</h2>
-    </a>
-
-
-
-    <a href="dune-scene-a-lautre.html" class="projet">
-      <img src="img/Photo/wanda/couverture-face-index.jpg" alt="D'une scène à l'autre">
-      <h2>D'une scène à l'autre</h2>
-    </a>
-
-
-    <a href="la-delicatesse.html" class="projet">
-      <img src="img/Typo/la-delicatesse/la-delicatesse-face.jpg" alt="La délicatesse">
-      <h2>La délicatesse</h2>
-    </a>
-
-
-    <a href="famille.html" class="projet">
-      <img src="img/Photo/album-de-famille/famille-de-face.jpg" alt="Album de famille">
-      <h2>Famille</h2>
-    </a>
-
-
-    <a href="adagio.html" class="projet">
-      <img src="img/Photo/best-of/couv-index.jpg" alt="Adagio">
-      <h2>Adagio</h2>
-    </a>
-    
-
-    <a href="Microscope.html" class="projet">
-      <img src="img/Typo/Magazine/couv-index.jpg" alt="Microscope">
-      <h2>Microscope</h2>
-    </a>
-
-    <a href="forte-impression.html" class="projet">
-      <img src="img/Design/forte-impression/triplette-index.jpg" alt="3 affiches">
-      <h2>Forte impression</h2>
-    </a>
-
-    <a href="la-disparition.html" class="projet">
-      <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="La disparition">
-      <h2>La disparition</h2>
-    </a>
-
-    <a href="novecento-pianiste.html" class="projet">
-      <img src="img/Typo/Novecento/novecento-mockup.jpg" alt="Novecento, pianiste">
-      <h2>Novecento, pianiste</h2>
-    </a>
-
-
-    <a href="balavoine.html" class="projet">
-      <img src="img/Volume/vinyle-index.jpg" alt="Balavoine, dernier train">
-      <h2>Balavoine, dernier train</h2>
-    </a>
-
-    <a href="fff.html" class="projet">
-      <img src="img/Photo/figures-figurines-figurants/couverture-fff.jpg" alt="Figures, Figurines et Figurants">
-      <h2>Figures, Figurines et Figurants</h2>
-    </a>
-
-    <a href="eau-secours.html" class="projet">
-      <img src="img/Design/eau-secours/eau-secours-mockup.jpg" alt="Eau secours">
-      <h2>Eau secours</h2>
-    </a>
-
-  </div>
-
-  <script>
-  const progressBar = document.getElementById("progress-bar");
-
-function startLoading() {
-  progressBar.style.width = "0"; // Réinitialise la barre
-  setTimeout(() => {
-    progressBar.style.width = "100%"; // Charge jusqu'à 100%
-  }, 50);
-}
-
-document.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", (e) => {
-    // Vérifie si le lien a target="_blank"
-    if (link.target === "_blank") {
-      return; // Ne bloque pas l'ouverture d'un nouvel onglet
-    }
-
-    // Empêche la navigation immédiate pour les autres liens
-    e.preventDefault();
-
-    // Démarre la barre de progression
-    startLoading();
-
-    // Redirige après un court délai
-    setTimeout(() => {
-      window.location.href = link.href;
-    }, 600);
-  });
-});
-
-
-  </script>
+  <main class="accueil conteneur">
+    <section class="hero">
+      <h1 class="titre-xl">PORTFOLIO</h1>
+      <a class="bouton" href="#projets">Voir les projets</a>
+    </section>
+    <section class="projets" id="projets">
+      <div class="filtres" role="group" aria-label="Filtrer les projets">
+        <button class="filtre" type="button" data-filtre="tous" aria-pressed="true">TOUS LES PROJETS</button>
+        <button class="filtre" type="button" data-filtre="editions" aria-pressed="false">ÉDITIONS</button>
+        <button class="filtre" type="button" data-filtre="affiches" aria-pressed="false">AFFICHES</button>
+        <button class="filtre" type="button" data-filtre="photo" aria-pressed="false">PHOTO</button>
+        <button class="filtre" type="button" data-filtre="web" aria-pressed="false">WEB</button>
+        <button class="filtre" type="button" data-filtre="packaging" aria-pressed="false">PACKAGING</button>
+        <button class="filtre" type="button" data-filtre="dessins" aria-pressed="false">DESSINS</button>
+      </div>
+      <ul class="grille-projets">
+        <li class="carte" data-categories="editions">
+          <a href="pietra-nova.html">
+            <img src="img/Typo/pietra-nova/pietra-index.jpeg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Pietra Nova</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="la-blanche.html">
+            <img src="img/Typo/la-blanche/face-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Première de couverture</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions dessins">
+          <a href="opened-eyes.html">
+            <img src="img/Dessin/kafka/couv-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Opened Eyes</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches">
+          <a href="out-of-the-past.html">
+            <img src="img/Design/out-of-the-past.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Out of the Past</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="home-will-infect.html">
+            <img src="img/Typo/bookmachine/trois_livres_index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Home will infect</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="web">
+          <a href="figma.html">
+            <img src="img/Figma/fourchinette-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">1nutile</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="dessins">
+          <a href="dessins-numeriques.html">
+            <img src="img/Dessin/Touquette%20illu.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Dessins numériques</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="branly.html">
+            <img src="img/Photo/branly/branly-face-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Balade</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="questionnements.html">
+            <img src="img/Design/questionnements/couv-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Questionnements d’une adulte en devenir</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="conservatoire.html">
+            <img src="img/Photo/conservatoire/couv-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Académie des Beaux-Arts</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="packaging">
+          <a href="toukiter.html">
+            <img src="img/Design/toukiter/4-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Toukiter</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="">
+          <a href="bloody-mary.html">
+            <img src="img/Workshop/b-m-miniature.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Bloody Mary</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches packaging">
+          <a href="coffret.html">
+            <img src="img/Design/coffret/tranche-coffret.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Saint-Exupéry, le coffret</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="wanda.html">
+            <img src="img/Photo/wanda/couverture-face-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">D’une scène à l’autre</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="la-delicatesse.html">
+            <img src="img/Typo/la-delicatesse/la-delicatesse-face.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La délicatesse</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="famille.html">
+            <img src="img/Photo/album-de-famille/famille-de-face.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Famille</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="adagio.html">
+            <img src="img/Photo/best-of/couv-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Adagio</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="Microscope.html">
+            <img src="img/Typo/Magazine/couv-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Microscope</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches">
+          <a href="forte-impression.html">
+            <img src="img/Design/forte-impression/triplette-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Forte impression</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="la-disparition.html">
+            <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La disparition</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions">
+          <a href="novecento-pianiste.html">
+            <img src="img/Typo/Novecento/novecento-mockup.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Novecento, pianiste</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="packaging">
+          <a href="guitare.html">
+            <img src="img/Volume/vinyle-index.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Balavoine, dernier train</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo">
+          <a href="fff.html">
+            <img src="img/Photo/figures-figurines-figurants/couverture-fff.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Figures, Figurines et Figurants</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches">
+          <a href="eau-secours.html">
+            <img src="img/Design/eau-secours/eau-secours-mockup.jpg" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Eau secours</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés</footer>
 </body>
-
 </html>

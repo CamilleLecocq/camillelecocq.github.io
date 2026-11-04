@@ -56,7 +56,62 @@ function initMenu() {
 
 
 /* ==========================================================================
+   Filtres de l'accueil : masquage des cartes, synchronisation de l'URL
+   ========================================================================== */
+
+function initFiltres() {
+  const groupe = document.querySelector('.filtres');
+  if (!groupe) return;
+
+  const boutons = [...groupe.querySelectorAll('.filtre')];
+  const cartes = [...document.querySelectorAll('.grille-projets .carte')];
+  const slugs = boutons.map((bouton) => bouton.dataset.filtre);
+
+  // Applique un filtre (slug inconnu ou absent => « tous ») et le reporte dans l'URL
+  function appliquerFiltre(slug) {
+    if (!slugs.includes(slug)) slug = 'tous';
+
+    boutons.forEach((bouton) => {
+      bouton.setAttribute('aria-pressed', String(bouton.dataset.filtre === slug));
+    });
+    cartes.forEach((carte) => {
+      const categories = (carte.dataset.categories || '').split(/\s+/);
+      carte.hidden = slug !== 'tous' && !categories.includes(slug);
+    });
+
+    // ?filtre=slug (ou rien pour « tous »), en gardant le hash courant et sans ajouter d'entrée d'historique
+    const url = new URL(location.href);
+    if (slug === 'tous') url.searchParams.delete('filtre');
+    else url.searchParams.set('filtre', slug);
+    history.replaceState(null, '', url.href);
+  }
+
+  // Clic sur une pilule de filtre
+  groupe.addEventListener('click', (evenement) => {
+    const bouton = evenement.target.closest('.filtre');
+    if (bouton) appliquerFiltre(bouton.dataset.filtre);
+  });
+
+  // Liens du menu vers index.html?filtre=… : on filtre sur place, sans recharger la page
+  document.addEventListener('click', (evenement) => {
+    const lien = evenement.target.closest('a[href^="index.html?filtre="]');
+    const modifie = evenement.metaKey || evenement.ctrlKey || evenement.shiftKey || evenement.altKey;
+    if (!lien || evenement.button !== 0 || modifie) return; // le navigateur gère l'ouverture dans un nouvel onglet
+
+    evenement.preventDefault();
+    appliquerFiltre(new URL(lien.href).searchParams.get('filtre'));
+    if (window.fermerMenu) window.fermerMenu();
+    document.getElementById('projets').scrollIntoView(); // doux, sauf si le visiteur préfère moins de mouvement (CSS)
+  });
+
+  // Au chargement : filtre demandé par l'URL
+  appliquerFiltre(new URLSearchParams(location.search).get('filtre'));
+}
+
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
 initMenu();
+initFiltres();
