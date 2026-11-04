@@ -1,855 +1,332 @@
-* {
+/* ==========================================================================
+   Portfolio de Camille Lecocq — feuille de style unique
+
+   Organisation (les tâches suivantes AJOUTENT leurs sections à la suite) :
+     1. Jetons de design (couleurs, polices, échelle, tailles de texte)
+     2. Base (réinitialisation, corps, focus, défilement doux)
+     3. Conteneur
+     4. En-tête
+     5. Menu (burger + panneau)
+     6. Pied de page
+     7. Page Contact
+   Toutes les mesures viennent de la maquette Figma (cadre de 1512 px) :
+   une mesure de N px maquette s'écrit calc(N * var(--k)).
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Jetons de design
+   ========================================================================== */
+
+:root {
+  /* Couleurs (styles Figma) */
+  --blanc-casse: #f6eeec;
+  --vert-clair: #97b980;
+  --vert-fonce: #618350;
+  --rouge: #e73149;
+  --rouge-pale: #eb7b8a;
+  --gris: #e1e1e1;
+
+  /* Polices : Arial en attendant les polices de la maquette
+     (Apparat Semi Cond Heavy pour les titres, BC Novatica CYR pour le texte) */
+  --police-titre: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police-texte: Arial, "Helvetica Neue", Helvetica, sans-serif;
+
+  /* Unité d'échelle : 1px à partir de 1512 px de large, proportionnelle en dessous */
+  --k: min(1px, 100vw / 1512);
+
+  /* Tailles de texte : taille maquette, avec un plancher lisible sur petit écran */
+  --taille-titre: max(64px, calc(120 * var(--k)));       /* PORTFOLIO, BONJOUR ! */
+  --taille-sous-titre: max(34px, calc(64 * var(--k)));   /* nom, titre de projet, POUR ME CONTACTER */
+  --taille-carte: max(26px, calc(40 * var(--k)));        /* nom du projet au survol d'une carte */
+  --taille-bouton: max(22px, calc(36 * var(--k)));       /* « Voir les projets » */
+  --taille-menu: max(24px, calc(30 * var(--k)));         /* liens du panneau menu */
+  --taille-texte: max(17px, calc(24 * var(--k)));        /* métier, filtres, textes */
+  --taille-pied: max(15px, calc(20 * var(--k)));         /* pied de page */
+  --taille-infos: max(14px, calc(18 * var(--k)));        /* format / dimensions / année */
+
+  /* Interlignage de la maquette : 120 % partout */
+  --interligne: 1.2;
+}
+
+
+/* ==========================================================================
+   2. Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  /* pour que les padding et margin ne modifient pas la taille de l'élément */
 }
 
 body {
-  background-color: #f3f3f3;
-  font-family: osvald, Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: normal;
-  padding-top: 85px;
-  margin: 0px; /* Réduit les marges du body */
-  width: 100%; /* Assure que la largeur du body est de 100% */
-  overflow-x: hidden; /* Empêche le défilement horizontal */
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.projet img {
-  width: 100%;
-  break-inside: avoid;
-  column-count: 4; /* 3 colonnes */
-  column-gap: 9px; /* Espacement entre les colonnes */
-  filter: grayscale(100%);
-  display: block;
-}
-
-.projet:hover img {
-  filter: none;
-}
-
-
-figure {
   margin: 0;
-  /* pour éviter les marges par défaut du navigateur */
+  background: var(--blanc-casse);
+  font-family: var(--police-texte);
+  font-weight: 400;
+  line-height: var(--interligne);
+  letter-spacing: 0;
 }
 
-.header {
-  left: 0;
-  width: 100%;
+/* Contour de focus clavier (visible uniquement à la navigation au clavier) */
+:focus-visible {
+  outline: 2px solid var(--rouge);
+  outline-offset: 4px;
+}
+
+/* Défilement doux, sauf si le visiteur préfère moins de mouvement */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+
+/* ==========================================================================
+   3. Conteneur : 1362 px de large, marges latérales de 75 px
+   ========================================================================== */
+
+.conteneur {
+  width: min(100% - calc(2 * 75 * var(--k)), 1362px);
+  margin-inline: auto;
+}
+
+@media (max-width: 700px) {
+  .conteneur {
+    width: calc(100% - 40px); /* marges de 20 px */
+  }
+}
+
+
+/* ==========================================================================
+   4. En-tête (identité à gauche, burger à droite)
+   ========================================================================== */
+
+.entete {
+  /* Repère du panneau du menu, qui se positionne par rapport à l'en-tête */
+  position: relative;
   display: flex;
   justify-content: space-between;
-  padding: 0 40px; /* Augmente les marges latérales du header */
-  position: fixed;
-  /* pour que le header reste en haut de la page */
-  top: 0;
-  /* pour que le header reste en haut de la page */
-  background-color: #f3f3f3;
-  border-bottom-width: 1px; /* Ajoute une largeur de bordure inférieure */
-  z-index: 999;
-  /* repeindre */
-  
+  align-items: flex-start;
+  column-gap: calc(20 * var(--k));
+  padding-top: calc(57 * var(--k));
+
+  /* Burger : 53 × 36 à l'échelle, avec un plancher pour rester cliquable */
+  --burger-largeur: max(36px, calc(53 * var(--k)));
+  --burger-hauteur: calc(var(--burger-largeur) * 36 / 53);
 }
 
-.header h1 {
-  margin: 6px 0;
-  /* pour éviter les marges par défaut du navigateur */
-  font-size: 2rem;
-}
-
-
-.header h1 a img {
-  width: 55px;
-  /* pour définir la largeur du logo */
-  height: auto;
-  margin-left: 0px;
-  margin-top: 10px;
-}
-
-.header h1:hover {
-  transform: scale(1.1);
-  /* Animation continue pendant le hover */
-}
-
-
-
-
-.portfolio-title {
-font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
-text-align: center; /* Centre le texte */
-margin-bottom: 10px;
-font-weight: 700; /* Épaisseur de la police */
-color: #000; /* Couleur du texte */
-}
-
-.portfolio-title {
-  font-size: clamp(30px, 8vw, 80px);
-  margin-top: 20px;
-}
-
-@media screen and (max-width: 550px) {
-  .portfolio-title {
-      font-size: 40px !important; /* Taille fixe sur très petits écrans */
-  }
-}
-
-
-.experiences-pro {
-font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
-text-align: center; /* Centre le texte */
-margin-top: 40px;
-margin-bottom: 40px;
-font-size: 30px; /* Taille de police pour le titre */
-font-weight: 700; /* Épaisseur de la police */
-color: #000; /* Couleur du texte */
-}
-
-
-
-.header-nav {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, max-content));
-  gap: 0 24px;
-  align-content: center;
-  grid-auto-flow: column;
-
-}
-
-.header-nav a {
-  color: #1e1e1e;
+.entete__identite {
+  display: block;
+  min-width: 0;
+  color: var(--vert-clair);
   text-decoration: none;
-  font-size: 1rem;
-  border: 1px solid #1e1e1e; /* Bordure fine */
-  padding: 10px 15px; /* Espacement intérieur pour le bouton */
- 
 }
 
-.header-nav a:hover {
-  transform: scale(1.1);
-  
+.entete__nom {
+  display: block;
+  font-family: var(--police-titre);
+  font-weight: 900;
+  font-size: var(--taille-sous-titre);
+  line-height: var(--interligne);
 }
 
-
-
-
-
-
-
-
-
-
-@media screen and (max-width: 768px) {
-
-  .header {
-    padding: 0 20px; /* Réduire les marges latérales */
-  }
-
-  .header h1 {
-    font-size: 1.5rem; /* Texte légèrement réduit */
-  }
-
-  .header-nav a {
-    font-size: 1rem; /* Réduire la taille des liens */
-  }
+.entete__metier {
+  display: block;
+  /* Le métier chevauche la boîte du nom (nom 57 → 134, métier à 119) */
+  margin-top: calc(-15 * var(--k));
+  font-size: var(--taille-texte);
+  line-height: var(--interligne);
 }
 
 
+/* ==========================================================================
+   5. Menu : bouton burger + panneau rouge
+   ========================================================================== */
 
-@media screen and (max-width: 550px) {
-
-  .header h1 {
-    font-size: 1rem; /* Réduire davantage le texte */
-  }
-
-  .header h1 a img {
-    width: 35px; /* Réduire la taille du logo */
-  }
-
-  .header-nav {
-    gap: 0 16px; /* Réduire l'espacement entre les liens */
-  }
-
-  .header-nav a {
-    font-size: 0.85rem; /* Texte des liens réduit mais lisible */
-    padding: 8px px; /* Espacement plus petit */
-  }
-
+.menu {
+  flex: none;
+  /* Le bord droit du burger dépasse de 2 px celui du conteneur */
+  margin-right: calc(-2 * var(--k));
 }
 
-
-
-.projet {
-  position: relative;
-  overflow: hidden;
-  display: inline-block; /* Assure que le conteneur prend bien la taille de l'image */
+.menu__bouton {
+  display: block;
+  width: var(--burger-largeur);
+  height: var(--burger-hauteur);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rouge);
+  cursor: pointer;
 }
 
-.projet h2 {
+.menu__bouton:hover {
+  color: var(--rouge-pale);
+}
+
+.menu__bouton svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Panneau : 321 de large, haut 103 px sous le haut de page (10 px sous le burger),
+   bord droit aligné sur celui du burger, coin haut-droit carré. */
+.menu__liste {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: rgb(0, 0, 0);
-  display: none;
-  padding: 0px;
-  text-align: center;
-  width: 100%; /* Assure un centrage correct */
-}
-
-
-.projet:hover {
-  transform: scale(1);
-  background-color: #f3f3f3;
-  z-index: 1;
-}
-
-.projet:hover h2 {
-  display: block;
-}
-
-.projet:hover img {
-  opacity: 0.4;
-}
-
-@keyframes rotate-alternate {
-  0% {
-    transform: scale(1.1);
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .projet img {
-    display: block;           /* Centrer l'image */
-    margin: 0 auto;           /* Centrer horizontalement */
-    width: 90%;               /* Réduire la largeur de l'image pour laisser une marge */
-    height: auto;             /* Maintenir la proportion de l'image */
-     filter: none;
-  }
-
-  .projet {
-    display: flex;            /* Utilisation de flex pour garantir que l'image est centrée */
-    justify-content: center;  /* Centrer le contenu horizontalement */
-    align-items: center;      /* Centrer le contenu verticalement si nécessaire */
-  }
-}
-
-
-
-
-
-
-@keyframes rainbow {
-  0% {
-    background-position: 0 0;
-  }
-
-  100% {
-    background-position: 200px 0;
-  }
-}
-
-
-
-
-.retour {
-  display: inline-block;
-  text-decoration: none;
-  color: #7a7a7a;
-  font-size: 16px;
-  padding: 30px 50px 10px; /* Ajuste le padding à ta convenance */
-}
-
-.retour:hover {
-  color: #202020;
-  cursor: pointer;
-}
-
-.images-dessins {
-  column-count: 3; /* 3 colonnes */
-  column-gap: 9px; /* Espacement entre les colonnes */
-  padding: 0 50px; /* Espacement à gauche/droite */
-  margin-top: 20px; /* Un peu d'espace entre la flèche et les images */
-}
-
-.images-dessins img {
-  width: 100%;
-  break-inside: avoid;
-  margin: 0 0 6px 0; /* 6px entre les images */
-}
-
-.sous-dessins {
-  position: relative; /* Permet de positionner le texte par rapport à l'image */
-  display: inline-block; /* Garde l’image et le texte ensemble */
-}
-
-.sous-dessins img {
-  width: 100%;
-  height: auto;
-  display: block; /* Évite les espaces sous l’image */
-}
-
-.sous-dessins h2 {
-  position: absolute; /* Permet de positionner le texte sur l'image */
-  top: 50%; /* Centre verticalement */
-  left: 50%; /* Centre horizontalement */
-  transform: translate(-50%, -50%); /* Ajuste la position exacte */
-  color: rgb(0, 0, 0); /* Couleur du texte */
-  padding: 10px 20px; /* Espacement autour du texte */
-  font-size: 17px; /* Taille du texte */
-  font-weight: normal; /* Texte en gras */
-  display: none; /* Caché par défaut */
-}
-
-.sous-dessins:hover img {
-  opacity: 0.15;
-}
-
-.sous-dessins:hover h2 {
-  display: block; /* Devient visible au survol */
-}
-
-/* Lors du survol, on change le curseur en main */
-.images-dessins img:hover {
-  cursor: pointer;
-}
-
-/* Adaptation pour les écrans de téléphone (moins de 768px) */
-@media screen and (max-width: 768px) {
-  .images-dessins {
-    column-count: 1; /* Met les images en une seule colonne */
-    padding: 0 20px; /* Réduit les marges à gauche et à droite */
-  }
-
-  .images-dessins img {
-    margin: 0 0 8px 0; /* Ajoute un espacement entre les images */
-  }
-
-  /* S'assurer que les images sont bien centrées et ont une marge */
-  .sous-dessins {
-    width: 100%; /* Remplir la largeur */
-    margin-bottom: 0px; /* Ajoute de l'espace en dessous */
-  }
-
-  .sous-dessins img {
-    width: 100%; /* Les images prennent toute la largeur */
-  }
-}
-
-
-
-.images-societe {
-  column-count: 4; /* 4 colonnes */
-  column-gap: 9px; /* Espacement entre les colonnes */
-  padding: 0 50px; /* Espacement à gauche/droite */
-  margin-top: 20px; /* Un peu d'espace entre la flèche et les images */
-}
-
-.images-societe img {
-  width: 100%;
-  break-inside: avoid;
-  margin: 0 0 6px 0; /* 6px entre les images */
-}
-
-/* Adaptation pour les écrans de téléphone (moins de 768px) */
-@media screen and (max-width: 768px) {
-  .images-societe {
-    column-count: 1; /* Met les images en une seule colonne */
-    padding: 0 20px; /* Réduit les marges à gauche et à droite */
-  }
-
-  .images-societe img {
-    margin: 0 0 20px 0; /* Ajoute un espacement entre les images */
-  }
-}
-
-
-
-
-
-/* À PROPOS */
-
-.àpropos{
-  display: grid;
-  grid-gap: 20px;
-  margin-top: 0px;
-  justify-items: center;
-  margin-right: 5%;
-  margin-left: 5%;
-}
-
-.àpropos p {
-    justify-items: center;
-    font-size: 17px;
-    margin-bottom: -20px;
-}
-
-.àpropos li{
-   justify-items: center;
-   font-size: 16px;
-}
-
-.àpropos p2 {
-  margin-top: 60px;
-  font-weight: bolder;
-}
-
-.àpropos p3 {
-  margin-top: -5px;
-  font-weight: bolder;
-}
-
-.àpropos p4 {
-  margin-top: 20px;
-  font-weight: bolder;
-}
-
-@media screen and (max-width: 768px) {
-  .àpropos p2 {
-    margin-top: 40px;
-    margin-bottom: 5px; /* Augmente la marge sous le p3 pour les écrans plus petits */
-  }
-
-  .àpropos p3 {
-    margin-top: -10px;
-    margin-bottom: 80px; /* Augmente la marge sous le p3 pour les écrans plus petits */
-  }
-}
-
-
-
-
-
-.projets {
-  column-count: 3; /* Nombre de colonnes */
-  column-gap: 3.5px; /* Espacement entre les colonnes */
-  padding: 0 50px; /* Espacement sur les côtés */
-  margin-top: 20px;
-  margin-bottom: 50px;
-}
-
-@media screen and (max-width: 768px) {
-  .projets {
-    column-count: 1; /* Une seule colonne sur mobile */
-    padding: 0 20px; /* Réduit les marges latérales */
-  }
-  .projets .projet {
-    margin-bottom: 10px; /* Marge verticale entre les projets */
-  }
-}
-
-
-
-
-.projet h2 {
-  font-size: 17px;
-  font-weight: 500;
-  margin: 0;
-  font-weight: normal;
-}
-
-
-
-
-
-
-.couvertures-title {
-  font-family: Verdana, Geneva, Tahoma, sans-serif; /* Police du titre */
-  text-align: center; /* Centre le texte */
-  margin-top: 45px;
-  margin-bottom: 10px;
-  font-size: 60px; /* Taille de police pour le titre */
-  font-weight: 700; /* Épaisseur de la police */
-  color: #000; /* Couleur du texte */
-}
-
-.en-couvertures-texte {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
-  /* 
-  - auto-fit : remplit l'espace avec autant de colonnes que possible.
-  - minmax(200px, 1fr) : chaque colonne a une largeur minimale de 200px et peut grandir jusqu'à occuper l'espace disponible.
-  */
-  gap: 0px 0px; /* Espace entre les éléments de la grille */
-  padding: 50px; /* Espacement autour de la grille */
-  justify-content: center; /* Centre les éléments horizontalement */
-  padding-top: 10px;
-}
-
-.en-couvertures-texte a {
-text-decoration: none;
-transition: all 0.2s;
-color: #7a7a7a;
-font-size: 16px;
-text-align: center;
-margin-top: -10px;
-}
-
-.en-couvertures-texte a:hover {
-  color: #000000;
-}
-
-
-.couvertures-livres {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px; /* Espacement entre les images */
-  max-width: 900px; /* Largeur maximale pour centrer les images */
-  margin: 0px auto; /* Centre la grille horizontalement */
-  padding-top: 1%; /* Espacement autour de la grille */
-  opacity: 1;
-  transition: opacity 0.8s ease;
-}
-
-.couvertures :hover {
-  transform: scale(1.03);
-  /* Animation continue pendant le hover */
-  z-index: 1;
-}
-
-.couvertures{
-  display: grid;
-}
-
-.couvertures img {
-  grid-column: 1/-1;
-  grid-row: 1/-1;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Recadre l'image sans la déformer */
-}
-
-/* Lorsqu'une image est survolée, son opacité devient 0.4 */
-.couvertures img:hover {
-  opacity: 0.4;
-}
-
-.couvertures h2 {
-  grid-column: 1/-1;
-  grid-row: 1/-1;
-  justify-self: center;
-  align-self: center;
-  color: rgb(0, 0, 0);
-  display: none;
-  text-decoration: none;
-  padding: 0px;
-  font-size: 17px;
-  margin: 0;
-  font-weight: normal;
-}
-
-.couvertures:hover h2 {
-  display: block;
-}
-
-
-
-
-
-
-.page-projet {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  column-gap: 10px;
-  margin: 40px;
-}
-
-/* Partie sous-projet */
-.sous-projet {
-  position: relative;
-  display: grid;
-  gap: 8px;
-  grid-template-columns: 1fr; /* Deux colonnes pour les images */
-  grid-template-rows: auto auto;
-  max-height: 80vh; /* Limite la hauteur de la section */
-  margin-right: 0px; /* Ajustez selon la largeur de la barre de défilement */
-}
-
-.vertical {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.horizontal{
-  grid-column: 1 / -1; /* Cette image occupe les deux colonnes */
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* Cache les checkboxes par défaut */
-.modal-toggle {
-  display: none;
-}
-
-/* Les images en miniature */
-.sous-projet img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-/* Modale - cachée par défaut */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-}
-
-/* Afficher la modale quand la checkbox est cochée */
-.modal-toggle:checked + .modal {
+  z-index: 100;
+  top: calc(57 * var(--k) + var(--burger-hauteur) + 10 * var(--k));
+  right: calc(-2 * var(--k));
   display: flex;
+  flex-direction: column;
+  gap: calc(37 * var(--k));
+  width: max(200px, calc(321 * var(--k)));
+  margin: 0;
+  padding: calc(23 * var(--k)) 0 calc(24 * var(--k));
+  list-style: none;
+  background: var(--rouge);
+  border-radius: calc(30 * var(--k)) 0 calc(30 * var(--k)) calc(30 * var(--k));
 }
 
-.modal-content img {
-  max-width: 100%;
-  max-height: 100%;
+/* Le panneau est fermé par défaut : sans cette règle, display:flex l'emporterait sur [hidden] */
+.menu__liste[hidden] {
+  display: none;
 }
 
-.modal .vertical{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50%; /* Ajuste selon ton besoin */
-  max-width: 30%;
-}
-
-.modal .horizontal {
-  position: relative;
-  max-width: 60%;
-}
-
-/* Fond de la modale */
-.modal-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Bouton de fermeture */
-.close {
-  position: absolute;
-  top: -10px;
-  right: -35px;
-  font-size: 35px;
-  cursor: pointer;
-  color: #f2f2f2;
-}
-
-.close:hover {
-  color: #202020;
-}
-
-/* Description */
-.description {
-  width: 40%;
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  margin-top: 9%;
-  padding-right: 20px;
-}
-
-.description a {
+.menu__liste a {
+  display: block;
+  color: var(--blanc-casse);
+  font-size: var(--taille-menu);
+  line-height: var(--interligne);
+  text-align: center;
   text-decoration: none;
-  transition: all 0.2s;
-  color: #7a7a7a;
-  font-size: 16px; /* Fixe la taille du texte */
-  padding-left: 20px;
+  transition: color 0.05s linear;
 }
 
-.description a:hover {
-  color: #000000;
+.menu__liste a:hover {
+  color: var(--rouge-pale);
 }
 
-.description h2 {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 29px; /* Fixe la taille du texte */
-  font-weight: 500;
+/* Le contour rouge par défaut serait invisible sur le fond rouge du panneau */
+.menu__liste a:focus-visible {
+  outline-color: var(--blanc-casse);
+  outline-offset: -4px;
+}
+
+
+/* ==========================================================================
+   6. Pied de page (l'espace au-dessus est fixé par le <main> de chaque page)
+   ========================================================================== */
+
+.pied {
+  padding-bottom: calc(45 * var(--k));
+  color: var(--vert-clair);
+  font-size: var(--taille-pied);
+  line-height: var(--interligne);
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   7. Page Contact
+   ========================================================================== */
+
+.contact {
+  /* 126 sous le métier ; 139 entre les libellés et le pied de page */
+  margin-top: calc(126 * var(--k));
+  padding-bottom: calc(139 * var(--k));
+  text-align: center;
+}
+
+.contact__titre,
+.contact__sous-titre {
   margin: 0;
-  margin-top: 40px;
-  margin-bottom: 15px;
-  padding-left: 20px;
+  color: var(--vert-fonce);
+  font-family: var(--police-titre);
+  font-weight: 900;
+  line-height: var(--interligne);
 }
 
-.description h3 {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px; /* Fixe la taille du texte */
-  font-weight: lighter;
-  color: #7a7a7a;
-  padding-left: 20px;
+.contact__titre {
+  font-size: var(--taille-titre);
 }
 
-.description p {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 16px; /* Fixe la taille du texte */
-  margin-top: 30px;
-  margin-bottom: 50px;
-  padding-left: 20px;
+.contact__intro {
+  margin: calc(9 * var(--k)) 0 0;
+  color: var(--vert-clair);
+  font-size: var(--taille-texte);
 }
 
-.description h4 {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: bold;
-  padding-bottom: 20px;
-  font-size: 19px; /* Fixe la taille du texte */
-  margin: 0;
-  padding-left: 20px;
+.contact__sous-titre {
+  margin-top: calc(54 * var(--k));
+  font-size: var(--taille-sous-titre);
 }
 
-.description li {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 17px; /* Fixe la taille du texte */
-  font-weight: lighter;
-  padding-bottom: none;
-  padding-left: 10px;
-  border-left: solid 1.5px #000000;
-  list-style-type: none;
-  margin-left: -20px;
-  margin-bottom: 10px;
+/* Rangée centrée de 3 liens. La zone d'icône (87 de haut, celle du téléphone) commence
+   31 sous le titre : l'icône Instagram (62) y est centrée, donc son cadre démarre à
+   12,5 + 31 + 4 (trait extérieur) = 47 sous le titre, comme dans la maquette. */
+.contact__liens {
+  /* Échelle propre aux icônes (relevée sur mobile pour qu'elles restent lisibles) */
+  --k-icone: var(--k);
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(40 * var(--k)) calc(94 * var(--k));
+  margin: calc(31 * var(--k)) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.page-projets .description {
-  max-width: 480px;
+/* Un lien = une colonne centrée : icône, puis libellé */
+.contact__lien {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--vert-clair);
+  font-size: var(--taille-texte);
+  text-decoration: none;
 }
 
-/* Responsive adjustments */
-@media screen and (max-width: 768px) {
-  /* Modification de la description pour qu'elle occupe tout l'espace sur mobile */
-  .description {
-    margin-top: 0; /* Déplace le texte en haut de la page */
-    margin-right: 0;
-    width: 100%; /* Prend toute la largeur de l'écran */
-    position: relative; /* Modifie la position fixe pour relative */
-    height: auto; /* Laisse la description s'ajuster au contenu */
-    order: -1; /* Passe la div description avant les images */
-  }
-
-  /* Retirer h4 et li */
-  .description h4,
-  .description li {
-    display: none;
-  }
-
-  /* Pour que les images soient centrées et agrandies sur mobile */
-  .description img {
-    max-width: 90%; /* Ajuste la taille des images */
-    height: auto;
-    display: block;
-    margin: 0 auto; /* Centre les images */
-  }
-
-  /* Les autres éléments de la page-projet */
-  .page-projet {
-    display: flex;
-    flex-direction: column; /* Modifie la disposition pour une colonne */
-    margin-top: 5px; /* Réduit la marge supérieure */
-  }
+.contact__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(87 * var(--k-icone));
+  margin-bottom: calc(11.5 * var(--k-icone));
 }
 
-@media screen and (max-width: 550px) {
-  .description {
-    margin-top: 10px; /* Place la description encore plus haut */
-    margin-right: 0;
-    width: 100%; /* Prend toute la largeur sur petits écrans */
-  }
-
-  .description h2 {
-    font-size: 23px; /* Fixe la taille du texte */
-  }
-
-  .description h3 {
-    font-size: 15px; /* Fixe la taille du texte */
-  }
-
-  .description p {
-    font-size: 14px; /* Fixe la taille du texte */
-    margin-top: 10px;
-    margin-bottom: 15px;
-  }
-
-  .description p:last-child {
-    margin-bottom: 40px; /* Ajoute une marge sous le dernier paragraphe */
-  }
-
-  .description h4 {
-    font-size: 16px; /* Fixe la taille du texte */
-  }
-
-  .description li {
-    font-size: 14px; /* Fixe la taille du texte */
-  }
-
-  /* Centrage et ajustement des images pour très petits écrans */
-  .description img {
-    max-width: 100%; /* Agrandir encore pour prendre toute la largeur */
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-
-  /* Pour éviter une mise en page trop dense, on laisse la liste en une seule colonne */
-  .description ul {
-    column-count: 1; /* Liste en une seule colonne */
-    column-gap: 15px;
-  }
+/* Les icônes Instagram et Mail font 62 de haut, le téléphone 87 ; la largeur suit le viewBox */
+.contact__icone svg {
+  display: block;
+  width: auto;
+  height: calc(62 * var(--k-icone));
 }
 
-
-
-
-
-
-
-
-
-.projet-data {
-  align-self: end;
-  /* pour aligner les éléments en bas dans la grille parent !!! */
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  margin-bottom: 12px;
-  border-top: 1px solid #ddd;
+.contact__lien[href^="tel:"] svg {
+  height: calc(87 * var(--k-icone));
 }
 
-.projet-data>* {
-  margin: 0;
-  padding-right: 12px;
-  font-size: 1em;
-  line-height: 3em;
-  border-bottom: 1px solid #ddd;
+/* Fond des icônes : blanc cassé, vert foncé au survol et au focus (les contours restent vert clair) */
+.icone__fond {
+  fill: var(--blanc-casse);
+  transition: fill 0.05s linear;
 }
 
-
-
-/* fx javascript */
-.projet {
-  opacity: 1;
-  transition: opacity 0.8s ease;
+.contact__lien:hover .icone__fond,
+.contact__lien:focus-visible .icone__fond {
+  fill: var(--vert-fonce);
 }
 
-#progress-bar {
-  position: fixed;
-  top: 0; /* Juste en dessous de la barre de recherche */
-  left: 0;
-  width: 0; /* La barre commence à 0 */
-  height: 4px; /* Hauteur de la barre */
-  background-color: #1c1c1c; /* Couleur de la barre */
-  z-index: 9999; /* Au-dessus de tout */
-  transition: width 0.5s ease-out; /* Transition fluide pour l'effet de progression */
+/* Sous 700 px : liens empilés verticalement */
+@media (max-width: 700px) {
+  .contact__liens {
+    --k-icone: max(var(--k), 0.7px);
+
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
 }
