@@ -12,6 +12,7 @@
      8. Page d'accueil (héros, filtres, grille de projets)
      9. Page projet (bandeau, infos, texte, galerie, sous-pages)
     10. Visionneuse (fenêtre d'agrandissement des images)
+    11. Menu des qualités (clic droit sur une image)
    Toutes les mesures viennent de la maquette Figma (cadre de 1512 px) :
    une mesure de N px maquette s'écrit calc(N * var(--k)).
    ========================================================================== */
@@ -30,9 +31,9 @@
   --rouge-pale: #eb7b8a;
   --gris: #e1e1e1;
 
-  /* Polices : Arial en attendant les polices de la maquette
-     (Apparat Semi Cond Heavy pour les titres, BC Novatica CYR pour le texte) */
-  --police-titre: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  /* Polices : Apparat Semi Cond Heavy (Adobe Fonts, kit are8zee chargé dans le <head>
+     de chaque page) pour les titres ; Arial pour le texte en attendant BC Novatica CYR */
+  --police-titre: "apparat-semicond", Arial, "Helvetica Neue", Helvetica, sans-serif;
   --police-texte: Arial, "Helvetica Neue", Helvetica, sans-serif;
 
   /* Unité d'échelle : 1px à partir de 1512 px de large, proportionnelle en dessous */
@@ -46,13 +47,18 @@
   --taille-sous-titre: max(min(34px, 7vw), calc(64 * var(--k)));    /* nom, titre de projet, POUR ME CONTACTER */
   --taille-carte: max(26px, calc(40 * var(--k)));        /* nom du projet au survol d'une carte */
   --taille-bouton: max(22px, calc(36 * var(--k)));       /* « Voir les projets » */
-  --taille-menu: max(24px, calc(30 * var(--k)));         /* liens du panneau menu */
+  --taille-menu: max(20px, calc(30 * var(--k)));         /* liens du panneau menu */
   --taille-texte: max(17px, calc(24 * var(--k)));        /* métier, filtres, textes */
   --taille-pied: max(15px, calc(20 * var(--k)));         /* pied de page */
   --taille-infos: max(14px, calc(18 * var(--k)));        /* format / dimensions / année */
+  --taille-annee: max(26px, calc(48 * var(--k)));        /* repères d'année de la grille d'accueil */
 
   /* Interlignage de la maquette : 120 % partout */
   --interligne: 1.2;
+
+  /* Mouvement : courbes partagées par les animations (survol des cartes, menu, contact) */
+  --courbe-douce: cubic-bezier(0.22, 1, 0.36, 1);    /* départ vif, arrivée en douceur */
+  --courbe-rebond: cubic-bezier(0.34, 1.56, 0.64, 1); /* léger dépassement, puis retour */
 }
 
 
@@ -79,6 +85,22 @@ body {
 :focus-visible {
   outline: 2px solid var(--rouge);
   outline-offset: 4px;
+}
+
+/* Images ni sélectionnables (pas de surlignage bleu au double-clic / Ctrl+A),
+   ni glissables, ni surlignées au toucher sur mobile (pas de menu « Enregistrer » sur iOS) */
+img,
+video,
+svg {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Défilement doux, sauf si le visiteur préfère moins de mouvement */
@@ -152,13 +174,48 @@ body {
    5. Menu : bouton burger + panneau rouge
    ========================================================================== */
 
+/* Comportement (script.js) :
+   - .menu--ouvert : panneau ouvert ; le burger se croise en X, un voile givré couvre la page ;
+   - .menu--flottant : l'en-tête est sorti de l'écran, le burger le suit en pastille fixe ;
+   - aria-current="page" : lien de la page (ou du filtre) affichée, en pastille pleine. */
+
 .menu {
   flex: none;
+  /* La boîte garde la taille du burger même quand il flotte : l'en-tête ne bouge pas */
+  width: var(--burger-largeur);
+  height: var(--burger-hauteur);
   /* Le bord droit du burger dépasse de 2 px celui du conteneur */
   margin-right: calc(-2 * var(--k));
+
+  /* Pastille flottante, alignée sur le bord droit du conteneur (100 % = largeur de la fenêtre) */
+  --flottant-taille: max(52px, calc(64 * var(--k)));
+  --flottant-haut: max(14px, calc(24 * var(--k)));
+  --flottant-droite: calc((100% - min(100% - calc(2 * 75 * var(--k)), 1362px)) / 2);
+}
+
+/* Voile givré derrière le panneau ouvert : il atténue la page et ferme le menu au clic */
+.menu::before {
+  content: "";
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  background: rgb(246 238 236 / 0.55); /* blanc cassé */
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+}
+
+.menu--ouvert::before {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0s;
 }
 
 .menu__bouton {
+  position: relative;
+  z-index: 101; /* au-dessus du voile */
   display: block;
   width: var(--burger-largeur);
   height: var(--burger-hauteur);
@@ -167,6 +224,71 @@ body {
   background: none;
   color: var(--rouge);
   cursor: pointer;
+  transition: color 0.3s ease, transform 0.35s var(--courbe-rebond);
+}
+
+/* Zone tactile élargie autour des 3 barres (sans changer leur taille visuelle) */
+.menu__bouton::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.menu__bouton[aria-expanded="true"] {
+  color: var(--rouge-pale);
+}
+
+.menu__bouton svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Les 3 barres se croisent en X à l'ouverture (déplacements en unités du viewBox 53 × 36) */
+.menu__barre {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.45s var(--courbe-douce), opacity 0.2s ease;
+}
+
+.menu--ouvert .menu__barre:nth-child(1) {
+  transform: translateY(15px) rotate(45deg) scaleX(0.82);
+}
+
+.menu--ouvert .menu__barre:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.menu--ouvert .menu__barre:nth-child(3) {
+  transform: translateY(-15px) rotate(-45deg) scaleX(0.82);
+}
+
+/* Burger flottant : pastille rouge fixe en haut à droite, qui arrive en tournoyant */
+.menu--flottant .menu__bouton {
+  position: fixed;
+  top: var(--flottant-haut);
+  right: var(--flottant-droite);
+  width: var(--flottant-taille);
+  height: var(--flottant-taille);
+  padding: calc(var(--flottant-taille) * 0.3) calc(var(--flottant-taille) * 0.25);
+  border-radius: 50%;
+  background: var(--rouge);
+  color: var(--blanc-casse);
+  box-shadow: 0 0 0 2px var(--blanc-casse), 0 8px 22px rgb(0 0 0 / 0.18);
+  animation: burger-arrivee 0.55s var(--courbe-rebond);
+}
+
+.menu--flottant .menu__bouton[aria-expanded="true"] {
+  color: var(--blanc-casse);
+}
+
+@keyframes burger-arrivee {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-90deg);
+  }
 }
 
 /* Survol réservé aux appareils à souris : sur écran tactile, il resterait collé après un appui */
@@ -174,57 +296,170 @@ body {
   .menu__bouton:hover {
     color: var(--rouge-pale);
   }
+
+  .menu--flottant .menu__bouton:hover {
+    color: var(--blanc-casse);
+    transform: scale(1.08);
+  }
 }
 
-.menu__bouton svg {
-  display: block;
-  width: 100%;
-  height: 100%;
+/* Appui : le burger s'enfonce légèrement */
+.menu__bouton:active,
+.menu--flottant .menu__bouton:active {
+  transform: scale(0.92);
 }
 
 /* Panneau : 321 de large, haut 103 px sous le haut de page (10 px sous le burger),
    bord droit aligné sur celui du burger, coin haut-droit carré. */
 .menu__liste {
+  --rayon-menu: max(22px, calc(30 * var(--k)));
+
   position: absolute;
   z-index: 100;
   top: calc(57 * var(--k) + var(--burger-hauteur) + max(8px, calc(10 * var(--k)))); /* plancher de 8 px sur téléphone */
   right: calc(-2 * var(--k));
   display: flex;
   flex-direction: column;
-  gap: calc(37 * var(--k));
+  gap: max(18px, calc(37 * var(--k)));
   width: max(200px, calc(321 * var(--k)));
   margin: 0;
-  padding: calc(23 * var(--k)) 0 calc(24 * var(--k));
+  padding: max(18px, calc(23 * var(--k))) 0 max(18px, calc(24 * var(--k)));
   list-style: none;
   background: var(--rouge);
-  border-radius: calc(30 * var(--k)) 0 calc(30 * var(--k)) calc(30 * var(--k));
+  border-radius: var(--rayon-menu) 0 var(--rayon-menu) var(--rayon-menu);
+  box-shadow: 0 0 0 2px var(--blanc-casse), 0 10px 28px rgb(0 0 0 / 0.15);
+
+  /* Fermé : replié dans le coin du burger, invisible et hors d'atteinte du clavier */
+  visibility: hidden;
+  opacity: 0;
+  clip-path: circle(0 at 100% 0);
+  transition: clip-path 0.3s ease-in, opacity 0.3s ease-in, visibility 0s linear 0.3s;
 }
 
-/* Le panneau est fermé par défaut : sans cette règle, display:flex l'emporterait sur [hidden] */
+/* Ouvert : le panneau se déploie en cercle depuis le burger
+   (170 % : le cercle couvre aussi l'ombre portée du panneau) */
+.menu--ouvert .menu__liste {
+  visibility: visible;
+  opacity: 1;
+  clip-path: circle(170% at 100% 0);
+  transition: clip-path 0.55s var(--courbe-douce), opacity 0.2s ease, visibility 0s;
+}
+
+/* Sans script, le panneau reste fermé grâce à l'attribut hidden (display:flex l'emporterait
+   sinon) ; le script retire hidden et ouvre/ferme le panneau avec .menu--ouvert */
 .menu__liste[hidden] {
   display: none;
 }
 
+/* Panneau du burger flottant : sous la pastille, coins tous arrondis */
+.menu--flottant .menu__liste {
+  position: fixed;
+  top: calc(var(--flottant-haut) + var(--flottant-taille) + max(8px, calc(10 * var(--k))));
+  right: var(--flottant-droite);
+  border-radius: var(--rayon-menu);
+}
+
+/* Les liens arrivent l'un après l'autre (--i : rang du lien, posé par le script) */
+.menu__liste li {
+  opacity: 0;
+  transform: translateY(-0.5em);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.menu--ouvert .menu__liste li {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.35s ease, transform 0.5s var(--courbe-douce);
+  transition-delay: calc(80ms + var(--i, 0) * 35ms);
+}
+
+/* Liens en pastilles, comme les filtres : contour au survol, pastille pleine pour la page
+   affichée. La marge négative compense le remplissage : l'espacement de la maquette ne bouge pas. */
 .menu__liste a {
   display: block;
+  width: fit-content;
+  margin: -0.12em auto;
+  padding: 0.12em 0.55em;
+  border-radius: 0.6em;
   color: var(--blanc-casse);
   font-size: var(--taille-menu);
   line-height: var(--interligne);
   text-align: center;
   text-decoration: none;
-  transition: color 0.05s linear;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.3s var(--courbe-rebond);
+}
+
+.menu__liste a[aria-current="page"] {
+  background: var(--blanc-casse);
+  color: var(--rouge);
 }
 
 @media (hover: hover) {
   .menu__liste a:hover {
-    color: var(--rouge-pale);
+    box-shadow: 0 0 0 2px var(--blanc-casse);
   }
+}
+
+.menu__liste a:active {
+  transform: scale(0.94);
 }
 
 /* Le contour rouge par défaut serait invisible sur le fond rouge du panneau */
 .menu__liste a:focus-visible {
   outline-color: var(--blanc-casse);
-  outline-offset: -4px;
+  outline-offset: 3px;
+}
+
+/* Mobile : en-tête équilibré, panneau dégagé sous le métier et cibles tactiles confortables */
+@media (max-width: 700px) {
+  .entete {
+    align-items: center;
+    padding-top: 20px;
+  }
+
+  .menu {
+    --flottant-droite: 20px; /* marges du conteneur sur mobile */
+  }
+
+  .menu__liste {
+    top: calc(100% + 4px);
+    gap: 4px;
+    width: min(210px, calc(100vw - 40px));
+    padding: 10px 0;
+  }
+
+  .menu__liste a {
+    margin: 0 auto;
+    padding: 7px 16px;
+  }
+}
+
+/* Moins de mouvement : le panneau et les liens apparaissent en fondu, le X se pose sans animation */
+@media (prefers-reduced-motion: reduce) {
+  .menu__liste,
+  .menu--ouvert .menu__liste {
+    clip-path: none;
+  }
+
+  .menu__liste li {
+    transform: none;
+  }
+
+  .menu--ouvert .menu__liste li {
+    transition-delay: 0s;
+  }
+
+  .menu__barre {
+    transition: none;
+  }
+
+  .menu--flottant .menu__bouton {
+    animation: none;
+  }
 }
 
 
@@ -301,6 +536,7 @@ body {
   color: var(--vert-clair);
   font-size: var(--taille-texte);
   text-decoration: none;
+  touch-action: manipulation; /* pas d'attente de double-tap : l'appui répond tout de suite */
 }
 
 .contact__icone {
@@ -309,6 +545,7 @@ body {
   justify-content: center;
   height: calc(87 * var(--k-icone));
   margin-bottom: calc(11.5 * var(--k-icone));
+  transition: transform 0.45s var(--courbe-rebond);
 }
 
 /* Les icônes Instagram et Mail font 62 de haut, le téléphone 87 ; la largeur suit le viewBox */
@@ -322,10 +559,12 @@ body {
   height: calc(87 * var(--k-icone));
 }
 
-/* Fond des icônes : blanc cassé, vert foncé au survol et au focus (les contours restent vert clair) */
+/* Fond des icônes : blanc cassé, vert foncé au survol et au focus (les contours restent vert clair).
+   Au survol, l'icône se soulève ; à l'appui (souris ou doigt), elle s'enfonce et se remplit
+   aussitôt, puis rebondit au relâchement. */
 .icone__fond {
   fill: var(--blanc-casse);
-  transition: fill 0.05s linear;
+  transition: fill 0.3s ease;
 }
 
 .contact__lien:focus-visible .icone__fond {
@@ -335,6 +574,27 @@ body {
 @media (hover: hover) {
   .contact__lien:hover .icone__fond {
     fill: var(--vert-fonce);
+  }
+
+  .contact__lien:hover .contact__icone {
+    transform: translateY(calc(-6 * var(--k-icone)));
+  }
+}
+
+.contact__lien:active .contact__icone {
+  transform: scale(0.88);
+  transition-duration: 0.12s;
+}
+
+.contact__lien:active .icone__fond {
+  fill: var(--vert-fonce);
+  transition-duration: 0.08s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact__lien:hover .contact__icone,
+  .contact__lien:active .contact__icone {
+    transform: none;
   }
 }
 
@@ -467,6 +727,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.8s var(--courbe-douce);
 }
 
 /* Calque rouge au survol : le nom reste dans le DOM (opacité, pas display:none)
@@ -488,16 +749,120 @@ body {
   text-wrap: balance;
   overflow-wrap: break-word; /* filet de sécurité : jamais de débordement horizontal */
   opacity: 0;
-  transition: opacity 0.05s linear;
+  transition: opacity 0.4s var(--courbe-douce);
 }
 
+/* Survol (et focus clavier) : le calque se fond en douceur pendant que l'image avance un peu */
 .carte a:focus-visible .carte__nom {
   opacity: 1;
+}
+
+.carte a:focus-visible img {
+  transform: scale(1.06);
 }
 
 @media (hover: hover) {
   .carte a:hover .carte__nom {
     opacity: 1;
+  }
+
+  .carte a:hover img {
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carte a:hover img,
+  .carte a:focus-visible img {
+    transform: none;
+  }
+}
+
+/* Filtre « Affiches » : chaque aperçu reprend le format de son affiche, sans recadrage.
+   Réservé à ce filtre (le script pose data-filtre sur la grille) : « Tous les projets »
+   garde la grille régulière en paysage. Les attributs width/height des images
+   réservent la place avant leur chargement. */
+.grille-projets[data-filtre="affiches"] {
+  align-items: start;
+}
+
+.grille-projets[data-filtre="affiches"] .carte a {
+  aspect-ratio: auto;
+}
+
+.grille-projets[data-filtre="affiches"] .carte img {
+  height: auto;
+}
+
+/* --- Repères d'année : la grille va du plus récent au plus ancien ---
+   Le script (initAnnees) insère une ligne avant la première carte de chaque année :
+   le millésime en lettres creuses vert foncé (comme les titres), puis un trait vert clair
+   de 2 px (l'épaisseur des contours des filtres) qui se dessine à l'arrivée à l'écran. */
+
+.grille-annee {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: max(12px, calc(22 * var(--k)));
+  padding-top: max(16px, calc(36 * var(--k)));
+}
+
+/* Premier repère affiché : pas d'espace en plus sous les filtres */
+.grille-annee--premiere {
+  padding-top: 0;
+}
+
+/* Année sans carte sous le filtre actif : display:flex l'emporterait sinon sur [hidden] */
+.grille-annee[hidden] {
+  display: none;
+}
+
+.grille-annee__titre {
+  margin: 0;
+  color: var(--vert-fonce); /* lettres pleines si le contour n'est pas pris en charge */
+  font-family: var(--police-titre);
+  font-size: var(--taille-annee);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transition: opacity 0.6s ease, transform 0.8s var(--courbe-douce);
+}
+
+@supports (-webkit-text-stroke: 1px) {
+  .grille-annee__titre {
+    color: transparent;
+    -webkit-text-stroke: max(1.5px, calc(2 * var(--k))) var(--vert-fonce);
+  }
+}
+
+.grille-annee__trait {
+  flex: 1;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--vert-clair);
+  transform-origin: left center;
+  transition: transform 1.2s var(--courbe-douce) 0.15s;
+}
+
+/* Avant l'arrivée à l'écran : millésime un peu plus bas et transparent, trait replié */
+.grille-annee:not(.grille-annee--vue) .grille-annee__titre {
+  opacity: 0;
+  transform: translateY(0.3em);
+}
+
+.grille-annee:not(.grille-annee--vue) .grille-annee__trait {
+  transform: scaleX(0);
+}
+
+/* Moins de mouvement : repères affichés d'emblée */
+@media (prefers-reduced-motion: reduce) {
+  .grille-annee:not(.grille-annee--vue) .grille-annee__titre {
+    opacity: 1;
+    transform: none;
+  }
+
+  .grille-annee:not(.grille-annee--vue) .grille-annee__trait {
+    transform: none;
   }
 }
 
@@ -761,6 +1126,8 @@ body {
   color: var(--rouge);
   overflow: hidden;
   overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* [open] : sans lui, display:flex l'emporterait sur le display:none d'un <dialog> fermé */
@@ -853,6 +1220,50 @@ body {
   transform: rotate(-90deg);
 }
 
+/* --- Qualité de l'image : boutons dans la visionneuse, sur écran tactile seulement
+       (à la souris, le choix se fait au clic droit : voir .menu-qualite) --- */
+.visionneuse__qualites {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .visionneuse__qualites:not([hidden]) {
+    position: absolute;
+    top: 28px;
+    left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: calc(100% - 100px); /* laisse la place au bouton Fermer */
+  }
+}
+
+/* Pilule (même style que les filtres), remplie pour la qualité affichée */
+.visionneuse__qualite {
+  padding: 0.25em 0.5em;
+  border: 0;
+  border-radius: 0.625em;
+  box-shadow: 0 0 0 2px var(--rouge);
+  background: transparent;
+  color: var(--rouge);
+  font-family: var(--police-texte);
+  font-size: var(--taille-infos);
+  line-height: var(--interligne);
+  cursor: pointer;
+}
+
+.visionneuse__qualite[aria-pressed="true"] {
+  background: var(--rouge);
+  color: var(--blanc-casse);
+}
+
+/* Image en cours de téléchargement dans une autre qualité */
+img[aria-busy="true"] {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+
 /* Mobile : précédent / suivant en bas pour ne pas recouvrir l'image */
 @media (max-width: 700px) {
   .visionneuse__image {
@@ -870,4 +1281,73 @@ body {
     top: auto;
     bottom: 24px;
   }
+}
+
+
+/* ==========================================================================
+   11. Menu des qualités (clic droit sur une image de galerie ou de la visionneuse)
+   ========================================================================== */
+
+.menu-qualite {
+  position: fixed;
+  z-index: 100;
+  min-width: 220px;
+  padding: 6px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px var(--rouge), 0 8px 24px rgb(0 0 0 / 0.15);
+  background: var(--blanc-casse);
+  color: var(--rouge);
+  font-family: var(--police-texte);
+  font-size: var(--taille-infos);
+  line-height: var(--interligne);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.menu-qualite[hidden] {
+  display: none;
+}
+
+.menu-qualite__titre {
+  margin: 0;
+  padding: 6px 10px 8px;
+  color: var(--rouge-pale);
+}
+
+.menu-qualite__option {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  width: 100%;
+  padding: 6px 10px 6px 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Coche devant la qualité en cours */
+.menu-qualite__option[aria-checked="true"]::before {
+  content: "✓";
+  position: absolute;
+  left: 10px;
+}
+
+.menu-qualite__detail {
+  margin-left: auto;
+  opacity: 0.75;
+}
+
+.menu-qualite__option:focus {
+  outline: none;
+}
+
+.menu-qualite__option:hover,
+.menu-qualite__option:focus-visible {
+  background: var(--rouge);
+  color: var(--blanc-casse);
 }
