@@ -149,6 +149,60 @@ function initFiltres() {
   const grille = document.querySelector('.grille-projets');
   const cartes = [...document.querySelectorAll('.grille-projets .carte')];
   const slugs = boutons.map((bouton) => bouton.dataset.filtre);
+  // Cartes et repères d'année, dans l'ordre du DOM (le même avant et après le filtrage)
+  const elements = grille ? [...grille.children] : [];
+  const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // Dernier filtre demandé (lu par le rappel de la transition) et transition en cours
+  let filtreVise = null;
+  let transitionEnCours = null;
+
+  // Pastille rouge du filtre actif : un seul élément, sans texte, glissé sous le bouton actif
+  // (transition CSS). Sans JS, la classe filtres--pastille manque : le bouton actif garde son fond rouge
+  const pastille = document.createElement('span');
+  pastille.className = 'filtres__pastille';
+  pastille.setAttribute('aria-hidden', 'true');
+  groupe.prepend(pastille);
+  groupe.classList.add('filtres--pastille');
+  let finGlissement = null;
+
+  // Place la pastille sous le bouton actif ; sans animation au chargement et au redimensionnement
+  function placerPastille(animer) {
+    const actif = boutons.find((bouton) => bouton.getAttribute('aria-pressed') === 'true');
+    if (!actif) return;
+    if (!animer) pastille.classList.add('filtres__pastille--fixe');
+    // Mesures au sous-pixel près (les tailles en --k tombent rarement juste) : offsetLeft/Width arrondissent
+    // au pixel et laissaient un liseré entre la pastille et le contour du bouton.
+    // La pilule cliquée peut être en plein rebond d'appui (scale) : la taille vient donc du style calculé
+    // (boîte bordure, sans transformation) et la position du centre, que le scale ne déplace pas
+    const repere = groupe.getBoundingClientRect();
+    const cadre = actif.getBoundingClientRect();
+    const style = getComputedStyle(actif);
+    const largeur = parseFloat(style.width);
+    const hauteur = parseFloat(style.height);
+    const x = cadre.left + cadre.width / 2 - largeur / 2 - repere.left - groupe.clientLeft;
+    const y = cadre.top + cadre.height / 2 - hauteur / 2 - repere.top - groupe.clientTop;
+    pastille.style.width = `${largeur}px`;
+    pastille.style.height = `${hauteur}px`;
+    pastille.style.transform = `translate(${x}px, ${y}px)`;
+    if (!animer) {
+      void pastille.offsetWidth; // la position s'applique sans transition avant que celle-ci revienne
+      pastille.classList.remove('filtres__pastille--fixe');
+      return;
+    }
+    // Pendant le glissement, les textes changent de couleur en douceur, au rythme de la pastille
+    groupe.classList.add('filtres--glisse');
+    clearTimeout(finGlissement);
+    finGlissement = setTimeout(() => groupe.classList.remove('filtres--glisse'), 600);
+  }
+
+  // Taille des pilules modifiée (police chargée, fenêtre redimensionnée, retour à la ligne) : on recale
+  if ('ResizeObserver' in window) {
+    const observateur = new ResizeObserver(() => placerPastille(false));
+    observateur.observe(groupe);
+    boutons.forEach((bouton) => observateur.observe(bouton));
+  } else {
+    window.addEventListener('resize', () => placerPastille(false));
+  }
 
   // Applique un filtre (slug inconnu ou absent => « tous ») et le reporte dans l'URL
   function appliquerFiltre(slug) {
@@ -159,7 +213,12 @@ function initFiltres() {
     });
     cartes.forEach((carte) => {
       const categories = (carte.dataset.categories || '').split(/\s+/);
+      const etaitCachee = carte.hidden;
       carte.hidden = slug !== 'tous' && !categories.includes(slug);
+      // Carte qui revient : elle ne rejoue pas son apparition au défilement
+      if (etaitCachee && !carte.hidden && carte.classList.contains('apparition')) {
+        carte.classList.add('apparition--vue');
+      }
     });
 
     // La grille connaît le filtre actif : sous « Affiches », les cartes prennent le format des affiches (CSS)
@@ -190,10 +249,68 @@ function initFiltres() {
     if (window.marquerPageCourante) window.marquerPageCourante();
   }
 
+  // Nom de transition (et classe de groupe) posé sur un élément pour un filtrage animé
+  function nommer(element, nom, classe) {
+    element.style.setProperty('view-transition-name', nom);
+    element.style.setProperty('view-transition-class', classe);
+  }
+
+  // Retire les noms de transition : cartes, repères et barre de filtres reviennent à l'état normal
+  function retirerNoms() {
+    [...elements, groupe].forEach((element) => {
+      element.style.removeProperty('view-transition-name');
+      element.style.removeProperty('view-transition-class');
+    });
+  }
+
+  // Clic sur une pilule. La pastille glisse jusqu'au nouveau filtre (CSS). Avec l'API View Transitions
+  // (et sans « mouvement réduit »), les cartes et repères glissent aussi à leur place, ceux qui partent
+  // s'effacent et ceux qui arrivent apparaissent. Sinon : cartes filtrées instantanément.
+  function changerFiltre(slug) {
+    const cible = slugs.includes(slug) ? slug : 'tous';
+    const actif = boutons.find((bouton) => bouton.getAttribute('aria-pressed') === 'true');
+    if (actif && actif.dataset.filtre === cible) return;
+    const animer = !mouvementReduit.matches;
+
+    if (!animer || typeof document.startViewTransition !== 'function') {
+      appliquerFiltre(cible);
+      placerPastille(animer);
+      return;
+    }
+    filtreVise = cible;
+
+    // Avant la photo de l'état actuel : un nom par carte ou repère visible. La barre de filtres a son
+    // propre nom : seule sa version vivante est affichée, la pastille y glisse sans image figée par-dessus
+    retirerNoms();
+    elements.forEach((element, i) => {
+      if (!element.hidden) nommer(element, `filtre-li-${i}`, 'filtre');
+    });
+    groupe.style.setProperty('view-transition-name', 'filtres-barre');
+
+    const transition = document.startViewTransition(() => {
+      appliquerFiltre(filtreVise);
+      placerPastille(true);
+      // Après le filtrage : noms des éléments encore visibles et de ceux qui arrivent
+      elements.forEach((element, i) => {
+        if (!element.hidden) nommer(element, `filtre-li-${i}`, 'filtre');
+      });
+    });
+
+    // Fin de la transition, réussie ou interrompue par un clic plus récent : seule la dernière retire ses noms
+    transitionEnCours = transition;
+    const terminer = () => {
+      if (transition !== transitionEnCours) return;
+      transitionEnCours = null;
+      retirerNoms();
+    };
+    transition.finished.then(terminer, terminer);
+    transition.ready.catch(() => {}); // transition remplacée par un clic plus récent : rien à signaler
+  }
+
   // Clic sur une pilule de filtre
   groupe.addEventListener('click', (evenement) => {
     const bouton = evenement.target.closest('.filtre');
-    if (bouton) appliquerFiltre(bouton.dataset.filtre);
+    if (bouton) changerFiltre(bouton.dataset.filtre);
   });
 
   // Liens du menu vers index.html?filtre=… : on filtre sur place, sans recharger la page
@@ -203,13 +320,16 @@ function initFiltres() {
     if (!lien || evenement.button !== 0 || modifie) return; // le navigateur gère l'ouverture dans un nouvel onglet
 
     evenement.preventDefault();
+    // Sans animation : la page défile vers la grille au même moment, une transition y serait faussée
     appliquerFiltre(new URL(lien.href).searchParams.get('filtre'));
+    placerPastille(false);
     if (window.fermerMenu) window.fermerMenu();
     document.getElementById('projets').scrollIntoView(); // doux, sauf si le visiteur préfère moins de mouvement (CSS)
   });
 
   // Au chargement : filtre demandé par l'URL
   appliquerFiltre(new URLSearchParams(location.search).get('filtre'));
+  placerPastille(false);
 }
 
 
@@ -326,7 +446,8 @@ function initVisionneuse() {
     else choix.set(lien, cle);
     appliquerVignette(lien);
     if (dialog && dialog.open && liens[indice] === lien) {
-      changerSource(image, qualiteVisionneuse(lien).url);
+      // Pendant un fondu enchaîné, la réapparition de l’image prend déjà la nouvelle qualité (changerImage)
+      if (!image.classList.contains('visionneuse__image--change')) changerSource(image, qualiteVisionneuse(lien).url);
       majBoutonsQualite();
     }
   }
@@ -536,16 +657,52 @@ function initVisionneuse() {
     });
   }
 
+  // Changement d’image en fondu enchaîné (visionneuse ouverte) : l’image sort en fondu, la suivante
+  // se télécharge en parallèle, puis elle réapparaît. Le jeton écarte un affichage dépassé (clics rapides)
+  function changerImage(lien) {
+    const jeton = {};
+    jetons.set(image, jeton);
+    image.classList.add('visionneuse__image--change');
+
+    const pret = new Promise((resoudre) => {
+      const prechargement = new Image();
+      prechargement.src = qualiteVisionneuse(lien).url;
+      // decode() évite un à-coup au moment de l’affichage ; sans lui, on attend l’événement load.
+      // En cas d’erreur, l’image est quand même affichée (image cassée, comme avant)
+      if (prechargement.decode) prechargement.decode().then(resoudre, resoudre);
+      else {
+        prechargement.onload = resoudre;
+        prechargement.onerror = resoudre;
+      }
+    });
+    // Durée du fondu de sortie, identique à .visionneuse__image--change dans style.css
+    const estompage = new Promise((resoudre) => setTimeout(resoudre, 150));
+
+    Promise.all([pret, estompage]).then(() => {
+      if (jetons.get(image) !== jeton) return; // un autre affichage a pris la main entre-temps
+      const miniature = lien.querySelector('img');
+      image.setAttribute('src', qualiteVisionneuse(lien).url); // qualité au moment de la réapparition
+      image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
+      image.classList.remove('visionneuse__image--change');
+    });
+  }
+
   // Affiche l’image n° i du parcours (en boucle), dans sa qualité, avec son texte alternatif
   function afficher(i) {
     fermerMenu();
     indice = (i + liens.length) % liens.length;
     const lien = liens[indice];
-    const miniature = lien.querySelector('img');
-    jetons.delete(image); // abandonne un éventuel téléchargement de l’image précédente
+    jetons.delete(image); // abandonne un éventuel téléchargement ou fondu de l’image précédente
     image.removeAttribute('aria-busy');
-    image.setAttribute('src', qualiteVisionneuse(lien).url);
-    image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
+    if (dialog.open) {
+      changerImage(lien);
+    } else {
+      // Avant l’ouverture : affichage direct, l’ouverture en fondu suffit
+      const miniature = lien.querySelector('img');
+      image.classList.remove('visionneuse__image--change');
+      image.setAttribute('src', qualiteVisionneuse(lien).url);
+      image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
+    }
     construireBoutonsQualite();
   }
 
@@ -567,6 +724,145 @@ function initVisionneuse() {
 
 
 /* ==========================================================================
+   Apparition au défilement : cartes et images de galerie montent en cascade
+   ========================================================================== */
+
+function initApparitions() {
+  const cibles = document.querySelectorAll('.grille-projets .carte, .galerie > a.galerie__item, .galerie > div.galerie__video');
+  if (!cibles.length) return;
+
+  // Sans IntersectionObserver, rien n'est caché : tout reste visible comme avant
+  if (!('IntersectionObserver' in window)) return;
+
+  cibles.forEach((cible) => cible.classList.add('apparition'));
+
+  // Les éléments qui entrent à l'écran dans le même rappel montent l'un après l'autre (--i = 0, 1, 2…)
+  // Une carte masquée par un filtre reste observée : elle monte quand elle réapparaît
+  const observateur = new IntersectionObserver((entrees) => {
+    entrees
+      .filter((entree) => entree.isIntersecting)
+      .forEach((entree, rang) => {
+        entree.target.style.setProperty('--i', rang);
+        entree.target.classList.add('apparition--vue');
+        observateur.unobserve(entree.target);
+      });
+  }, { rootMargin: '0px 0px -10% 0px' });
+  cibles.forEach((cible) => observateur.observe(cible));
+}
+
+
+/* ==========================================================================
+   Fondu des images : une image pas encore chargée reste invisible sur le fond gris,
+   puis apparaît en douceur. Les images déjà chargées ou en cache ne sont pas touchées.
+   ========================================================================== */
+
+function initFonduImages() {
+  const images = [...document.querySelectorAll('.carte img, .galerie__item img')];
+  if (!images.length) return;
+
+  images.forEach((image) => {
+    if (image.complete) return; // chargée ou en cache : pas de fondu, donc pas de clignotement
+
+    image.classList.add('image-attente');
+    // Une image en erreur redevient visible aussi (son texte de remplacement s'affiche)
+    const retirer = () => image.classList.remove('image-attente');
+    image.addEventListener('load', retirer, { once: true });
+    image.addEventListener('error', retirer, { once: true });
+  });
+}
+
+
+/* ==========================================================================
+   Transitions entre pages : la carte cliquée devient le bandeau du projet.
+   L'animation est en CSS ; ici on nomme seulement l'image de la carte suivie.
+   ========================================================================== */
+
+function initTransitionPages() {
+  // Le navigateur annule la transition de certaines navigations (adresse tapée, retour arrière…) :
+  // ses promesses sont alors rejetées. On absorbe ce rejet attendu pour ne pas polluer la console
+  const absorber = (transition) => {
+    if (!transition) return;
+    transition.ready.catch(() => {});
+    transition.finished.catch(() => {});
+  };
+  absorber(document.activeViewTransition);
+  window.addEventListener('pagereveal', (event) => absorber(event.viewTransition));
+  window.addEventListener('pageswap', (event) => absorber(event.viewTransition));
+
+  // Sans carte sur la page, aucune image ne peut devenir un bandeau
+  if (!document.querySelector('.carte a')) return;
+
+  // Image de carte à laquelle le nom de transition a été donné (retiré au retour par bfcache)
+  let imageCliquee = null;
+
+  // pageswap : la page quittée n'est pas encore capturée, le nom posé ici est donc pris en compte
+  window.addEventListener('pageswap', (event) => {
+    // Pas de transition entre documents (navigateur sans support, ou navigation hors transition)
+    if (!event.viewTransition || !event.activation) return;
+
+    const cible = event.activation.entry.url;
+    const lien = Array.from(document.querySelectorAll('.carte a')).find((a) => a.href === cible);
+    const image = lien && lien.querySelector('img');
+    if (!image) return;
+
+    // Un seul élément par page peut porter le nom : le bandeau de cette page le cède à la carte
+    const bandeau = document.querySelector('.banniere__image');
+    if (bandeau) bandeau.style.viewTransitionName = 'none';
+
+    image.style.viewTransitionName = 'banniere-projet';
+    imageCliquee = image;
+  });
+
+  // pageshow : page restaurée par bfcache avec les noms encore posés, on les retire
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+
+    if (imageCliquee) imageCliquee.style.viewTransitionName = '';
+    const bandeau = document.querySelector('.banniere__image');
+    if (bandeau) bandeau.style.viewTransitionName = '';
+    imageCliquee = null;
+  });
+}
+
+
+/* ==========================================================================
+   Titre d'accueil : « PORTFOLIO » arrive lettre par lettre
+   ========================================================================== */
+
+// Découpe le titre en un span par lettre (animés en CSS). Le texte complet reste lu une
+// seule fois, en entier, par les lecteurs d'écran : les lettres leur sont cachées.
+function initTitreLettres() {
+  const titre = document.querySelector('.hero .titre-xl');
+  if (!titre) return;
+
+  // Mouvement réduit : le titre reste d'un bloc, affiché d'emblée
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const texte = titre.textContent.trim();
+
+  const lettres = document.createElement('span');
+  lettres.className = 'titre-xl__lettres';
+  lettres.setAttribute('aria-hidden', 'true');
+
+  // Rang de chaque lettre : le délai de son arrivée en dépend (CSS)
+  Array.from(texte).forEach((caractere, rang) => {
+    const lettre = document.createElement('span');
+    lettre.className = 'titre-xl__lettre';
+    lettre.textContent = caractere;
+    lettre.style.setProperty('--i', rang);
+    lettres.append(lettre);
+  });
+
+  // Texte complet, masqué visuellement (classe utilitaire de style.css)
+  const complet = document.createElement('span');
+  complet.className = 'visuellement-masque';
+  complet.textContent = texte;
+
+  titre.replaceChildren(complet, lettres);
+}
+
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
@@ -577,3 +873,7 @@ initMenu();
 initAnnees(); // avant les filtres, qui masquent les repères sans carte
 initFiltres();
 initVisionneuse();
+initApparitions();
+initFonduImages();
+initTransitionPages();
+initTitreLettres();
