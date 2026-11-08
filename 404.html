@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAM</title>
+  <!-- Page servie pour toute URL manquante (y compris dans un sous-dossier) : chemins absolus obligatoires -->
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="/logo-moi.png">
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/are8zee.css">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+<body>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="/index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" fill="currentColor" aria-hidden="true"><rect class="menu__barre" width="53" height="6" rx="3"/><rect class="menu__barre" y="15" width="53" height="6" rx="3"/><rect class="menu__barre" y="30" width="53" height="6" rx="3"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="/index.html">Accueil</a></li>
+        <li><a href="/index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="/index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="/index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="/index.html?filtre=web#projets">Web</a></li>
+        <li><a href="/index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="/index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="contact conteneur" data-trainee>
+    <h1 class="contact__titre">OUPS&nbsp;<span class="contact__salut">!</span></h1>
+    <p class="contact__intro">Cette page n’existe pas (ou plus).</p>
+    <a class="bouton" href="/index.html">Retour au portfolio</a>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés · <a href="/contact.html">Contact</a></footer>
+</body>
+</html>

@@ -221,7 +221,7 @@ function initFiltres() {
       }
     });
 
-    // La grille connaît le filtre actif : sous « Affiches », les cartes prennent le format des affiches (CSS)
+    // La grille connaît le filtre actif : sous « Affiches » et « Dessins », les cartes prennent le format de leur image (CSS)
     if (grille) grille.dataset.filtre = slug;
 
     // Repères d'année (initAnnees) : masqués quand aucune carte de leur année n'est affichée ;
@@ -585,6 +585,9 @@ function initVisionneuse() {
     dialog.querySelector('.visionneuse__precedent').hidden = seule;
     dialog.querySelector('.visionneuse__suivant').hidden = seule;
 
+    // Balayage tactile (avant le gestionnaire de clic : il écarte le clic qui suivrait un balayage)
+    brancherBalayage();
+
     // Clic sur le fond (la cible est alors le <dialog> lui-même) ou sur un bouton
     dialog.addEventListener('click', (evenement) => {
       if (evenement.target === dialog) {
@@ -626,6 +629,7 @@ function initVisionneuse() {
     // (c’est le lien cliqué tant qu’on n’a pas parcouru les images)
     dialog.addEventListener('close', () => {
       fermerMenu();
+      reinitialiserBalayage();
       liens[indice].focus();
     });
 
@@ -683,6 +687,7 @@ function initVisionneuse() {
       const miniature = lien.querySelector('img');
       image.setAttribute('src', qualiteVisionneuse(lien).url); // qualité au moment de la réapparition
       image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
+      placerEntree(); // après un balayage : l’image arrive du côté opposé à celui où l’autre est partie
       image.classList.remove('visionneuse__image--change');
     });
   }
@@ -704,6 +709,163 @@ function initVisionneuse() {
       image.setAttribute('alt', (miniature && miniature.getAttribute('alt')) || '');
     }
     construireBoutonsQualite();
+  }
+
+  /* --- Balayage tactile ---------------------------------------------------- */
+
+  // Sur écran tactile, un balayage horizontal passe à l’image précédente / suivante et l’image suit
+  // le doigt. Mouvement réduit : pas de suivi du doigt, l’image change simplement au balayage.
+  const SEUIL_BALAYAGE = 50;     // px : distance qui valide le changement d’image
+  const VITESSE_BALAYAGE = 0.4;  // px/ms : un geste court (20 px au moins) mais vif suffit aussi
+  const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const doigts = new Set();      // doigts posés sur la visionneuse
+  let geste = null;              // balayage en cours : { id, x, t, dx, horizontal, suit, base }
+  let balayageFait = false;      // le geste en cours (ou le dernier) était un balayage : son clic est ignoré
+  let decalageEntree = 0;        // px : côté d’où arrive la nouvelle image après un balayage validé
+  let minuterieRetour = null;
+
+  // Retire tout effet du balayage sur l’image, sans animation
+  function effacerSuivi() {
+    clearTimeout(minuterieRetour);
+    image.classList.remove('visionneuse__image--glisse', 'visionneuse__image--retour', 'visionneuse__image--sortie');
+    image.style.removeProperty('--glisse-x');
+    image.style.removeProperty('--glisse-o');
+  }
+
+  function reinitialiserBalayage() {
+    geste = null;
+    balayageFait = false;
+    decalageEntree = 0;
+    doigts.clear();
+    effacerSuivi();
+  }
+
+  // L’image suit le doigt (translation) et s’estompe légèrement
+  function suivreDoigt(dx, base) {
+    const progression = Math.min(Math.abs(dx) / 200, 1);
+    image.style.setProperty('--glisse-x', dx + 'px');
+    image.style.setProperty('--glisse-o', String(base * (1 - 0.4 * progression)));
+  }
+
+  // Lâcher sous le seuil : l’image revient à sa place avec un léger rebond
+  function revenirEnPlace() {
+    if (!image.classList.contains('visionneuse__image--glisse')) return;
+    image.classList.remove('visionneuse__image--glisse');
+    image.classList.add('visionneuse__image--retour');
+    image.style.removeProperty('--glisse-x');
+    image.style.removeProperty('--glisse-o');
+    clearTimeout(minuterieRetour);
+    minuterieRetour = setTimeout(() => image.classList.remove('visionneuse__image--retour'), 600);
+  }
+
+  // Lâcher au-delà du seuil : même chemin que les flèches. L’image sortante poursuit sa course dans
+  // le sens du doigt en s’effaçant, puis la nouvelle arrive du côté opposé (placerEntree)
+  function validerBalayage(sens, suit) {
+    if (suit) {
+      const actuel = parseFloat(image.style.getPropertyValue('--glisse-x')) || 0;
+      image.style.setProperty('--glisse-x', (actuel - sens * 40) + 'px');
+      image.classList.remove('visionneuse__image--glisse');
+      image.classList.add('visionneuse__image--sortie');
+      decalageEntree = sens * 60;
+    }
+    afficher(indice + sens);
+  }
+
+  // Appelée quand la nouvelle image réapparaît : la translation retombe à zéro. Après un balayage,
+  // l’image est d’abord posée du côté d’où elle arrive (sans transition), puis glisse à sa place
+  function placerEntree() {
+    const depart = decalageEntree;
+    decalageEntree = 0;
+    image.classList.remove('visionneuse__image--sortie');
+    image.style.removeProperty('--glisse-x');
+    image.style.removeProperty('--glisse-o');
+    if (!depart) return;
+    image.style.transition = 'none';
+    image.style.transform = 'translateX(' + depart + 'px)';
+    void image.offsetWidth; // fige la position de départ avant de rétablir les transitions
+    image.style.removeProperty('transition');
+    image.style.removeProperty('transform');
+  }
+
+  function brancherBalayage() {
+    // Un balayage ne doit pas être pris pour un clic (un lâcher sur le fond fermerait la visionneuse)
+    dialog.addEventListener('click', (evenement) => {
+      if (!balayageFait) return;
+      balayageFait = false;
+      evenement.preventDefault();
+      evenement.stopImmediatePropagation();
+    }, true);
+
+    dialog.addEventListener('pointerdown', (evenement) => {
+      balayageFait = false;
+      if (evenement.pointerType !== 'touch') return;
+      if (evenement.isPrimary) doigts.clear(); // écarte un doigt resté enregistré par erreur
+      doigts.add(evenement.pointerId);
+      if (doigts.size > 1) { // deux doigts : zoom, pas un balayage
+        geste = null;
+        revenirEnPlace();
+        return;
+      }
+      // Une seule image, bouton (qualité, précédent, suivant, fermer) ou menu : pas de balayage
+      if (liens.length < 2 || evenement.target.closest('button, .menu-qualite')) return;
+
+      // Pendant un fondu enchaîné, l’image n’est pas visible : le balayage change d’image sans la suivre
+      const enChangement = image.classList.contains('visionneuse__image--change');
+      if (!enChangement) effacerSuivi();
+      geste = {
+        id: evenement.pointerId,
+        x: evenement.clientX,
+        y: evenement.clientY,
+        t: evenement.timeStamp,
+        dx: 0,
+        horizontal: false,
+        suit: !enChangement && !mouvementReduit.matches,
+        base: image.hasAttribute('aria-busy') ? 0.6 : 1, // opacité de départ (image en téléchargement : atténuée)
+      };
+    });
+
+    dialog.addEventListener('pointermove', (evenement) => {
+      if (!geste || evenement.pointerId !== geste.id) return;
+      let dx = evenement.clientX - geste.x;
+      const dy = evenement.clientY - geste.y;
+      if (!geste.horizontal) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; // trop tôt pour connaître la direction
+        if (Math.abs(dy) > Math.abs(dx)) { // geste vertical : le navigateur défile, on s’efface
+          geste = null;
+          return;
+        }
+        // Balayage horizontal reconnu : la mesure repart d’ici, l’image ne saute pas
+        geste.horizontal = true;
+        geste.x = evenement.clientX;
+        geste.t = evenement.timeStamp;
+        balayageFait = true;
+        dx = 0;
+        if (geste.suit) image.classList.add('visionneuse__image--glisse');
+      }
+      geste.dx = dx;
+      if (geste.suit) suivreDoigt(dx, geste.base);
+    });
+
+    dialog.addEventListener('pointerup', (evenement) => {
+      doigts.delete(evenement.pointerId);
+      if (!geste || evenement.pointerId !== geste.id) return;
+      const fin = geste;
+      geste = null;
+      if (!fin.horizontal) return; // simple appui : le clic fait son travail
+      const distance = Math.abs(fin.dx);
+      const vif = distance >= 20 && distance / Math.max(evenement.timeStamp - fin.t, 1) >= VITESSE_BALAYAGE;
+      if (distance >= SEUIL_BALAYAGE || vif) validerBalayage(fin.dx < 0 ? 1 : -1, fin.suit);
+      else revenirEnPlace();
+    });
+
+    // Le navigateur reprend le geste (défilement vertical, zoom…) : retour en place
+    dialog.addEventListener('pointercancel', (evenement) => {
+      doigts.delete(evenement.pointerId);
+      if (!geste || evenement.pointerId !== geste.id) return;
+      geste = null;
+      revenirEnPlace();
+    });
   }
 
   liens.forEach((lien, i) => {
@@ -747,7 +909,8 @@ function initApparitions() {
         observateur.unobserve(entree.target);
       });
   }, { rootMargin: '0px 0px -10% 0px' });
-  cibles.forEach((cible) => observateur.observe(cible));
+  // Page pré-rendue en arrière-plan : on observe à l'affichage, pour que la cascade se joue devant le visiteur
+  quandAffichee(() => cibles.forEach((cible) => observateur.observe(cible)));
 }
 
 
@@ -773,7 +936,8 @@ function initFonduImages() {
 
 
 /* ==========================================================================
-   Transitions entre pages : la carte cliquée devient le bandeau du projet.
+   Transitions entre pages : la carte cliquée devient le bandeau du projet,
+   et au retour le bandeau redevient sa carte.
    L'animation est en CSS ; ici on nomme seulement l'image de la carte suivie.
    ========================================================================== */
 
@@ -789,38 +953,100 @@ function initTransitionPages() {
   window.addEventListener('pagereveal', (event) => absorber(event.viewTransition));
   window.addEventListener('pageswap', (event) => absorber(event.viewTransition));
 
-  // Sans carte sur la page, aucune image ne peut devenir un bandeau
+  // Sans carte sur la page, aucune image ne peut devenir un bandeau (ni un bandeau redevenir une carte)
   if (!document.querySelector('.carte a')) return;
 
-  // Image de carte à laquelle le nom de transition a été donné (retiré au retour par bfcache)
-  let imageCliquee = null;
+  // Bandeau de la page (sous-page à grille) : il porte le nom dans la feuille de style
+  // et le cède à la carte suivie, car un seul élément par page peut le porter
+  const bandeau = document.querySelector('.banniere__image');
+  // Image de carte à laquelle le nom de transition a été donné
+  let imageNommee = null;
+  // Vrai de l'arrivée sur la page (retour animé) jusqu'à la fin de cette transition
+  let retourEnCours = false;
+
+  const nommerCarte = (image) => {
+    if (bandeau) bandeau.style.viewTransitionName = 'none';
+    image.style.viewTransitionName = 'banniere-projet';
+    imageNommee = image;
+  };
+
+  // Rend les noms : la carte n'en porte plus, le bandeau retrouve celui de la feuille de style
+  const retirerNoms = () => {
+    if (imageNommee) imageNommee.style.viewTransitionName = '';
+    if (bandeau) bandeau.style.viewTransitionName = '';
+    imageNommee = null;
+  };
+
+  // Chemin d'une adresse sans « .html » ni barre finale : « /page » et « /page.html » sont la même page
+  const chemin = (url) => url.pathname.replace(/(\.html)?\/?$/, '');
+
+  // Image de la carte dont le lien mène à cette adresse (null si aucune, ou si l'adresse est d'un autre site)
+  const imageDeCarte = (adresse) => {
+    if (!adresse) return null;
+    const url = new URL(adresse, location.href);
+    if (url.origin !== location.origin) return null;
+    const lien = Array.from(document.querySelectorAll('.carte a')).find((a) => chemin(new URL(a.href)) === chemin(url));
+    return lien ? lien.querySelector('img') : null;
+  };
 
   // pageswap : la page quittée n'est pas encore capturée, le nom posé ici est donc pris en compte
   window.addEventListener('pageswap', (event) => {
+    // On part : un retour animé encore en cours ne doit plus retirer les noms posés ci-dessous
+    retourEnCours = false;
+    retirerNoms();
+
     // Pas de transition entre documents (navigateur sans support, ou navigation hors transition)
     if (!event.viewTransition || !event.activation) return;
 
-    const cible = event.activation.entry.url;
-    const lien = Array.from(document.querySelectorAll('.carte a')).find((a) => a.href === cible);
-    const image = lien && lien.querySelector('img');
+    const image = imageDeCarte(event.activation.entry.url);
+    if (image) nommerCarte(image);
+  });
+
+  // pagereveal : la page vient d'être affichée, avant la capture de son état. Quand on revient d'un projet
+  // (retour arrière, lien…), la carte de ce projet prend le nom du bandeau quitté : il rétrécit et s'y pose.
+  // L'écouteur doit exister avant le premier rendu : les pages à cartes chargent donc script.js avec
+  // blocking="render", qui retient le rendu jusqu'à l'exécution du script (defer seul arriverait trop tard).
+  // L'origine vient de l'API Navigation : rien à stocker ni à lire en dehors de la page.
+  window.addEventListener('pagereveal', (event) => {
+    const transition = event.viewTransition;
+    if (!transition) return;
+
+    // Noms restés d'un départ précédent (page restaurée par bfcache) : on repart de zéro
+    retirerNoms();
+
+    const origine = window.navigation && navigation.activation && navigation.activation.from;
+    const image = origine ? imageDeCarte(origine.url) : null;
     if (!image) return;
 
-    // Un seul élément par page peut porter le nom : le bandeau de cette page le cède à la carte
-    const bandeau = document.querySelector('.banniere__image');
-    if (bandeau) bandeau.style.viewTransitionName = 'none';
+    // Carte absente (masquée par un filtre) ou hors de l'écran : le bandeau s'efface, comme avant
+    const cadre = image.getBoundingClientRect();
+    if (cadre.width === 0 || cadre.height === 0
+      || cadre.bottom <= 0 || cadre.top >= window.innerHeight
+      || cadre.right <= 0 || cadre.left >= window.innerWidth) return;
 
-    image.style.viewTransitionName = 'banniere-projet';
-    imageCliquee = image;
+    // La carte doit être visible dès la capture : pas de montée au défilement (opacité 0, décalage)
+    const carte = image.closest('.carte');
+    if (carte) carte.classList.add('apparition--vue', 'apparition--directe');
+
+    nommerCarte(image);
+    retourEnCours = true;
+
+    // Fin de la transition (réussie ou annulée) : la carte rend son nom, sinon le prochain filtrage
+    // ou le prochain clic nommerait deux éléments pareil
+    const terminer = () => {
+      if (!retourEnCours) return; // un départ a déjà repris la main
+      retourEnCours = false;
+      retirerNoms();
+    };
+    transition.finished.then(terminer, terminer);
   });
 
   // pageshow : page restaurée par bfcache avec les noms encore posés, on les retire
+  // (sauf si un retour animé vient de les poser : ils partiront à la fin de sa transition)
   window.addEventListener('pageshow', (event) => {
-    if (!event.persisted) return;
+    if (!event.persisted || retourEnCours) return;
 
-    if (imageCliquee) imageCliquee.style.viewTransitionName = '';
-    const bandeau = document.querySelector('.banniere__image');
-    if (bandeau) bandeau.style.viewTransitionName = '';
-    imageCliquee = null;
+    retirerNoms();
   });
 }
 
@@ -863,13 +1089,520 @@ function initTitreLettres() {
 
 
 /* ==========================================================================
+   Préchargement : la page projet se prépare dès le survol d'une carte (Speculation Rules).
+   Le navigateur la charge et l'exécute en arrière-plan, cachée ; au clic elle s'affiche
+   d'un coup, grande image du bandeau déjà chargée, et la transition entre pages a de quoi
+   se jouer. Sans prise en charge, rien ne change : la page se charge au clic comme avant.
+   ========================================================================== */
+
+// Exécute l'action quand la page est vraiment affichée : aussitôt en navigation normale,
+// à l'activation (événement prerenderingchange) si la page est pré-rendue en arrière-plan.
+// Évite de jouer une animation d'entrée devant personne.
+function quandAffichee(action) {
+  if (document.prerendering) {
+    document.addEventListener('prerenderingchange', () => action(), { once: true });
+  } else {
+    action();
+  }
+}
+
+// Page pré-rendue : ses animations CSS d'entrée (titre et voile du bandeau, lettres du titre,
+// contact…) attendent l'affichage. La classe prerendu les met en pause (voir style.css) ;
+// elle est retirée à l'activation, et elles partent alors depuis le début.
+function initPrerendu() {
+  if (!document.prerendering) return;
+
+  const racine = document.documentElement;
+  racine.classList.add('prerendu');
+  quandAffichee(() => racine.classList.remove('prerendu'));
+}
+
+function initPrechargement() {
+  // Navigateur sans Speculation Rules : pas de préchargement, la navigation reste normale
+  if (!(window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules'))) return;
+
+  const regles = {
+    // Cartes : pré-rendu complet dès le survol (environ 200 ms à la souris) ou l'appui, avant le clic
+    prerender: [{
+      where: { selector_matches: '.carte a' },
+      eagerness: 'moderate'
+    }],
+    // Liens du menu : simple préchargement du document, seulement à l'appui (rien n'est gaspillé au survol)
+    prefetch: [{
+      where: { selector_matches: '.menu__liste a, .entete__identite' },
+      eagerness: 'conservative'
+    }]
+  };
+
+  // Posé par le script plutôt qu'écrit dans chaque page : les ~30 pages n'ont rien à porter
+  const script = document.createElement('script');
+  script.type = 'speculationrules';
+  script.textContent = JSON.stringify(regles);
+  document.head.append(script);
+}
+
+
+/* ==========================================================================
+   Galeries « Pinterest » : colonnes de même largeur, chaque image à son format,
+   posée dans la colonne la plus courte (la plus à gauche à égalité)
+   ========================================================================== */
+
+// Répartition pure : hauteurs des éléments (dans l'ordre de la page) → colonne et position haute de chacun.
+// La hauteur rendue est celle de la plus longue colonne, sans la gouttière qui suit son dernier élément.
+function repartirEnColonnes(hauteurs, nbColonnes, gouttiere) {
+  const colonnes = new Array(nbColonnes).fill(0);
+  const positions = hauteurs.map((hauteur) => {
+    const colonne = colonnes.indexOf(Math.min(...colonnes));
+    const haut = colonnes[colonne];
+    colonnes[colonne] += hauteur + gouttiere;
+    return { colonne, haut };
+  });
+  return { positions, hauteur: hauteurs.length ? Math.max(...colonnes) - gouttiere : 0 };
+}
+
+// Autant de colonnes que la largeur minimale le permet, comme Pinterest ; jamais moins de 2
+function nombreDeColonnes(largeur, largeurMin, gouttiere) {
+  return Math.max(2, Math.floor((largeur + gouttiere) / (largeurMin + gouttiere)));
+}
+
+// Format (largeur / hauteur) d'un élément : style="--ratio: …" écrit par l'outil dimensions.mjs.
+// Lu une fois puis gardé dans data-ratio, car le style de l'élément est réécrit au placement.
+function formatDe(element) {
+  if (!element.dataset.ratio) {
+    const lu = (element.getAttribute('style') || '').match(/--ratio:\s*([\d.]+)/);
+    element.dataset.ratio = lu ? lu[1] : '';
+  }
+  return parseFloat(element.dataset.ratio) || 0;
+}
+
+function placerGalerie(galerie) {
+  const largeur = galerie.clientWidth;
+  if (!largeur) return; // page pas encore mise en page : on attendra le redimensionnement
+
+  const styles = getComputedStyle(galerie);
+  const gouttiere = parseFloat(styles.columnGap) || 0;
+  const largeurMin = parseFloat(styles.getPropertyValue('--colonne-min')) || 400;
+  const nbColonnes = nombreDeColonnes(largeur, largeurMin, gouttiere);
+  const colonne = (largeur - gouttiere * (nbColonnes - 1)) / nbColonnes;
+
+  galerie.classList.add('galerie--pinterest');
+  const elements = Array.from(galerie.children);
+  elements.forEach((element) => { element.style.width = `${colonne}px`; });
+
+  // Images : hauteur connue d'avance par leur format (rien ne bouge au chargement) ; vidéos : mesurées
+  const hauteurs = elements.map((element) => {
+    const format = formatDe(element);
+    return format > 0 ? colonne / format : element.offsetHeight;
+  });
+
+  const { positions, hauteur } = repartirEnColonnes(hauteurs, nbColonnes, gouttiere);
+  positions.forEach(({ colonne: rang, haut }, i) => {
+    elements[i].style.left = `${rang * (colonne + gouttiere)}px`;
+    elements[i].style.top = `${haut}px`;
+  });
+  galerie.style.height = `${hauteur}px`;
+}
+
+function initGaleries() {
+  // Rendues publiques, comme fermerMenu : la répartition se vérifie et se rejoue de l'extérieur
+  Object.assign(window, { repartirEnColonnes, nombreDeColonnes, placerGalerie });
+
+  document.querySelectorAll('.galerie').forEach((galerie) => {
+    placerGalerie(galerie);
+
+    if (!window.ResizeObserver) {
+      window.addEventListener('resize', () => placerGalerie(galerie));
+      return;
+    }
+
+    // Largeur changée (fenêtre, rotation du téléphone) : nouvelle répartition.
+    // La hauteur, que le placement change lui-même, est ignorée.
+    let largeurConnue = galerie.clientWidth;
+    new ResizeObserver(() => {
+      if (galerie.clientWidth === largeurConnue) return;
+      largeurConnue = galerie.clientWidth;
+      placerGalerie(galerie);
+    }).observe(galerie);
+
+    // Vidéo : sa hauteur n'est connue qu'après le chargement de ses métadonnées
+    const videos = galerie.querySelectorAll('.galerie__video');
+    if (videos.length) {
+      const observateur = new ResizeObserver(() => placerGalerie(galerie));
+      videos.forEach((video) => observateur.observe(video));
+    }
+  });
+}
+
+
+/* ==========================================================================
+   Lecteur vidéo : panneau translucide en bas de la vidéo (façon iOS)
+   Barre de progression, temps écoulé / restant, vitesse, recul et avance de 10 s,
+   lecture / pause, AirPlay (Safari) ou image dans l'image, plein écran.
+   Sans script, la vidéo garde les commandes natives du navigateur.
+   ========================================================================== */
+
+// 250 → « 04:10 » ; au-delà d'une heure : 3725 → « 1:02:05 »
+function formatTemps(secondes) {
+  const total = Number.isFinite(secondes) && secondes > 0 ? Math.floor(secondes) : 0;
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const deux = (n) => String(n).padStart(2, '0');
+  return h ? `${h}:${deux(m)}:${deux(s)}` : `${deux(m)}:${deux(s)}`;
+}
+
+const ICONES_LECTEUR = {
+  lire: '<path d="M8 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 8 4.5z"/>',
+  pause: '<rect x="5" y="3.5" width="5" height="17" rx="1.5"/><rect x="14" y="3.5" width="5" height="17" rx="1.5"/>',
+  recul: '<rect x="4" y="5" width="2.5" height="14" rx="1"/><path d="M20 5.9v12.2a.9.9 0 0 1-1.4.75L9.6 12.75a.9.9 0 0 1 0-1.5l9-6.1A.9.9 0 0 1 20 5.9z"/>',
+  avance: '<rect x="17.5" y="5" width="2.5" height="14" rx="1"/><path d="M4 5.9v12.2a.9.9 0 0 0 1.4.75l9-6.1a.9.9 0 0 0 0-1.5l-9-6.1A.9.9 0 0 0 4 5.9z"/>',
+  airplay: '<path d="M7 17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 14l5 6.5H7z"/>',
+  incrustation: '<rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="12" y="11" width="7" height="6" rx="1"/>',
+  pleinEcran: '<path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+};
+
+const VITESSES = [1, 1.25, 1.5, 2, 0.5];
+
+function initLecteurs() {
+  window.formatTemps = formatTemps; // rendue publique, comme fermerMenu
+
+  document.querySelectorAll('.galerie__video video').forEach((video) => {
+    const icone = (nom) => `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICONES_LECTEUR[nom]}</svg>`;
+    const creer = (balise, classe, attributs = {}) => {
+      const element = document.createElement(balise);
+      element.className = `lecteur__${classe}`;
+      Object.entries(attributs).forEach(([nom, valeur]) => element.setAttribute(nom, valeur));
+      return element;
+    };
+    const bouton = (classe, libelle, nomIcone) => {
+      const b = creer('button', classe, { type: 'button', 'aria-label': libelle });
+      if (nomIcone) b.innerHTML = icone(nomIcone);
+      return b;
+    };
+
+    // Enveloppe : la vidéo et son panneau
+    const lecteur = document.createElement('div');
+    lecteur.className = 'lecteur';
+    video.before(lecteur);
+    lecteur.append(video);
+    video.removeAttribute('controls');
+
+    const progression = creer('input', 'progression', {
+      type: 'range', min: '0', max: '0', step: '0.1', value: '0', 'aria-label': 'Position dans la vidéo',
+    });
+    const vitesse = bouton('vitesse', 'Vitesse de lecture');
+    vitesse.textContent = '1.0×';
+    const ecoule = creer('span', 'ecoule');
+    const restant = creer('span', 'restant');
+    const temps = creer('div', 'temps');
+    temps.append(ecoule, restant);
+
+    // À gauche : AirPlay sur Safari, sinon image dans l'image, sinon rien
+    let diffusion = null;
+    if (typeof video.webkitShowPlaybackTargetPicker === 'function') {
+      diffusion = bouton('diffusion', 'AirPlay', 'airplay');
+      diffusion.addEventListener('click', () => video.webkitShowPlaybackTargetPicker());
+    } else if (document.pictureInPictureEnabled && video.requestPictureInPicture) {
+      diffusion = bouton('diffusion', 'Image dans l’image', 'incrustation');
+      diffusion.addEventListener('click', () => {
+        const action = document.pictureInPictureElement === video
+          ? document.exitPictureInPicture()
+          : video.requestPictureInPicture();
+        action.catch(() => {});
+      });
+    }
+
+    const recul = bouton('recul', 'Reculer de 10 secondes', 'recul');
+    const lecture = bouton('lecture', 'Lire', 'lire');
+    const avance = bouton('avance', 'Avancer de 10 secondes', 'avance');
+    const pleinEcran = bouton('plein-ecran', 'Plein écran', 'pleinEcran');
+
+    const commandes = creer('div', 'commandes');
+    commandes.append(diffusion || creer('span', 'vide'), recul, lecture, avance, pleinEcran);
+
+    const panneau = creer('div', 'panneau');
+    panneau.append(progression, vitesse, temps, commandes);
+
+    // État réduit (par défaut) : pastille lecture / pause dans le coin et fil de progression en bas
+    const mini = bouton('mini', 'Lire', 'lire');
+    const fil = creer('div', 'fil', { 'aria-hidden': 'true' });
+    lecteur.append(fil, mini, panneau);
+
+    // --- État affiché ---
+    const duree = () => (Number.isFinite(video.duration) ? video.duration : 0);
+    const majTemps = () => {
+      const position = video.currentTime || 0;
+      progression.max = String(duree());
+      progression.value = String(position);
+      lecteur.style.setProperty('--progression', `${duree() ? (position / duree()) * 100 : 0}%`);
+      ecoule.textContent = formatTemps(position);
+      restant.textContent = `-${formatTemps(duree() - position)}`;
+    };
+    const majLecture = () => {
+      const enPause = video.paused;
+      [lecture, mini].forEach((b) => {
+        b.setAttribute('aria-label', enPause ? 'Lire' : 'Pause');
+        b.innerHTML = icone(enPause ? 'lire' : 'pause');
+      });
+      lecteur.classList.toggle('lecteur--pause', enPause);
+    };
+    ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked'].forEach((type) => video.addEventListener(type, majTemps));
+    ['play', 'pause', 'ended'].forEach((type) => video.addEventListener(type, majLecture));
+
+    // --- Actions ---
+    const basculer = () => {
+      if (video.paused) {
+        const promesse = video.play();
+        if (promesse && promesse.catch) promesse.catch(() => {});
+      } else {
+        video.pause();
+      }
+    };
+    const deplacer = (secondes) => {
+      video.currentTime = Math.min(Math.max((video.currentTime || 0) + secondes, 0), duree() || Infinity);
+    };
+    lecture.addEventListener('click', basculer);
+    mini.addEventListener('click', basculer);
+    recul.addEventListener('click', () => deplacer(-10));
+    avance.addEventListener('click', () => deplacer(10));
+    progression.addEventListener('input', () => {
+      video.currentTime = Number(progression.value);
+    });
+    vitesse.addEventListener('click', () => {
+      const suivante = VITESSES[(VITESSES.indexOf(video.playbackRate) + 1) % VITESSES.length] ?? 1;
+      video.playbackRate = suivante;
+      vitesse.textContent = `${suivante.toFixed(suivante % 0.5 ? 2 : 1)}×`;
+    });
+    pleinEcran.addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      else if (lecteur.requestFullscreen) lecteur.requestFullscreen().catch(() => {});
+      else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); // iPhone : plein écran natif
+    });
+
+    // --- Réduit par défaut ; déployé au survol, au toucher ou au clavier ---
+    // Il se réduit dès que la souris sort, ou après 2,5 s sans geste (sauf si le focus est dedans).
+    let minuteur = null;
+    const reduire = () => {
+      clearTimeout(minuteur);
+      lecteur.classList.remove('lecteur--deploye');
+    };
+    const deployer = () => {
+      lecteur.classList.add('lecteur--deploye');
+      clearTimeout(minuteur);
+      minuteur = setTimeout(() => {
+        if (!lecteur.contains(document.activeElement)) reduire();
+      }, 2500);
+    };
+    lecteur.addEventListener('pointermove', deployer);
+    lecteur.addEventListener('pointerleave', (evenement) => {
+      if (evenement.pointerType !== 'touch') reduire();
+    });
+    lecteur.addEventListener('focusin', deployer);
+    // Le focus part ailleurs (Tab, clic hors du lecteur) : réduit tout de suite
+    lecteur.addEventListener('focusout', (evenement) => {
+      if (!lecteur.contains(evenement.relatedTarget)) reduire();
+    });
+    // Toucher ou clic ailleurs dans la page (au doigt, pointerleave n'arrive pas) : réduit tout de suite
+    document.addEventListener('pointerdown', (evenement) => {
+      if (!lecteur.contains(evenement.target)) reduire();
+    });
+    // Clic sur l'image : réduit, elle déploie le lecteur (au doigt) ; déployé, lecture / pause
+    video.addEventListener('click', () => {
+      if (lecteur.classList.contains('lecteur--deploye')) {
+        basculer();
+        deployer();
+      } else {
+        deployer();
+      }
+    });
+
+    majTemps();
+    majLecture();
+  });
+}
+
+
+/* ==========================================================================
+   Page 404 : images des projets, tirées au hasard, en traînée derrière la souris
+   ========================================================================== */
+
+// Chaque fois que le pointeur a parcouru assez de chemin, une image de projet apparaît dessous puis
+// s'efface en se floutant (animation CSS). Les images viennent de la grille de l'accueil.
+function initTrainee() {
+  const zone = document.querySelector('main[data-trainee]');
+  if (!zone) return;
+  // Moins de mouvement : pas de traînée, la page reste simple
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.fetch || !window.DOMParser) return;
+
+  const SEUIL = 180; // px parcourus entre deux images
+  const MAXIMUM = 6; // images à l'écran au plus
+
+  const calque = document.createElement('div');
+  calque.className = 'trainee';
+  calque.setAttribute('aria-hidden', 'true');
+  document.body.append(calque);
+
+  let sources = [];
+  // Chemins absolus : la 404 est servie à n'importe quelle profondeur d'adresse
+  const accueil = new URL('/index.html', location.href);
+  fetch(accueil.href)
+    .then((reponse) => (reponse.ok ? reponse.text() : Promise.reject(new Error(String(reponse.status)))))
+    .then((html) => {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      sources = Array.from(doc.querySelectorAll('.grille-projets .carte img'),
+        (img) => new URL(img.getAttribute('src'), accueil).pathname);
+    })
+    .catch(() => {});
+
+  let dernierX = null;
+  let dernierY = null;
+  let dernier = -1;
+  let prechargee = null;
+
+  // Tirage au hasard, jamais deux fois de suite la même image ; la suivante est préchargée
+  const tirer = () => {
+    let rang;
+    do rang = Math.floor(Math.random() * sources.length);
+    while (rang === dernier && sources.length > 1);
+    return rang;
+  };
+
+  document.addEventListener('pointermove', (evenement) => {
+    if (!sources.length) return;
+    const { clientX: x, clientY: y } = evenement;
+    if (dernierX !== null && Math.hypot(x - dernierX, y - dernierY) < SEUIL) return;
+    dernierX = x;
+    dernierY = y;
+
+    dernier = prechargee ?? tirer();
+    prechargee = null;
+
+    const image = document.createElement('img');
+    image.className = 'trainee__image';
+    image.alt = '';
+    image.decoding = 'async';
+    image.src = sources[dernier];
+    image.style.left = `${x}px`;
+    image.style.top = `${y}px`;
+    // Taille au hasard : entre 60 % et 100 % de la taille de base (style.css)
+    image.style.setProperty('--echelle', (0.6 + Math.random() * 0.4).toFixed(2));
+    image.addEventListener('animationend', () => image.remove());
+    calque.append(image);
+    while (calque.children.length > MAXIMUM) calque.firstElementChild.remove();
+
+    prechargee = tirer();
+    new Image().src = sources[prechargee];
+  });
+}
+
+
+/* ==========================================================================
+   Lien d'évitement : premier arrêt de la touche Tab, il saute l'en-tête et le menu
+   ========================================================================== */
+
+// Posé par le script plutôt qu'écrit dans chaque page, comme les règles de préchargement
+function initEvitement() {
+  const principal = document.querySelector('main');
+  if (!principal) return;
+  if (!principal.id) principal.id = 'contenu';
+
+  const lien = document.createElement('a');
+  lien.className = 'evitement';
+  lien.href = `#${principal.id}`;
+  lien.textContent = 'Aller au contenu';
+  document.body.prepend(lien);
+}
+
+
+/* ==========================================================================
+   Projets voisins : précédent / tous les projets / suivant, en bas des pages projet
+   ========================================================================== */
+
+// L'ordre vient de la grille de l'accueil (seule liste des projets à tenir à jour) ; la suite boucle,
+// comme la visionneuse. Une sous-page absente de la grille garde seulement « Tous les projets ».
+function initVoisins() {
+  const conteneur = document.querySelector('main.projet > .conteneur');
+  if (!conteneur) return;
+
+  // « /page », « /page.html » et « page.html » désignent la même page
+  const chemin = (adresse) => new URL(adresse, location.href).pathname.split('/').pop().replace(/\.html$/, '');
+
+  const lienVoisin = (projet, sens) => {
+    const lien = document.createElement('a');
+    lien.className = `voisins__lien voisins__lien--${sens === 'prev' ? 'precedent' : 'suivant'}`;
+    lien.href = projet.href;
+    lien.rel = sens;
+    const libelle = document.createElement('span');
+    libelle.className = 'voisins__sens';
+    libelle.innerHTML = sens === 'prev'
+      ? '<span class="voisins__fleche" aria-hidden="true">←</span> Projet précédent'
+      : 'Projet suivant <span class="voisins__fleche" aria-hidden="true">→</span>';
+    const nom = document.createElement('span');
+    nom.className = 'voisins__nom';
+    nom.textContent = projet.nom;
+    lien.append(libelle, nom);
+    return lien;
+  };
+
+  const construire = (projets) => {
+    const nav = document.createElement('nav');
+    nav.className = 'voisins';
+    nav.setAttribute('aria-label', 'Autres projets');
+
+    const tous = document.createElement('a');
+    tous.className = 'voisins__tous';
+    tous.href = 'index.html#projets';
+    tous.textContent = 'Tous les projets';
+
+    const ici = chemin(location.href);
+    const rang = projets.findIndex((projet) => chemin(projet.href) === ici);
+    if (rang !== -1 && projets.length > 1) {
+      const total = projets.length;
+      nav.append(
+        lienVoisin(projets[(rang - 1 + total) % total], 'prev'),
+        tous,
+        lienVoisin(projets[(rang + 1) % total], 'next')
+      );
+    } else {
+      nav.append(tous);
+    }
+    conteneur.append(nav);
+  };
+
+  // Hors ligne, en file:// ou navigateur ancien : la navigation se réduit à « Tous les projets »
+  if (!window.fetch || !window.DOMParser) {
+    construire([]);
+    return;
+  }
+
+  fetch('index.html')
+    .then((reponse) => (reponse.ok ? reponse.text() : Promise.reject(new Error(String(reponse.status)))))
+    .then((html) => {
+      const accueil = new DOMParser().parseFromString(html, 'text/html');
+      return Array.from(accueil.querySelectorAll('.grille-projets .carte a'), (a) => ({
+        href: a.getAttribute('href'),
+        nom: (a.querySelector('.carte__nom')?.textContent ?? '').trim(),
+      }));
+    })
+    .catch(() => [])
+    .then(construire);
+}
+
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
 // iOS n'applique :active (retour visuel à l'appui : menu, contact) que si la page écoute touchstart
 document.addEventListener('touchstart', () => {}, { passive: true });
 
+initEvitement();
 initMenu();
+initVoisins();
+initTrainee();
+initLecteurs(); // avant les galeries : la vidéo est enveloppée dans son lecteur avant d'être mesurée
+initGaleries();
 initAnnees(); // avant les filtres, qui masquent les repères sans carte
 initFiltres();
 initVisionneuse();
@@ -877,3 +1610,5 @@ initApparitions();
 initFonduImages();
 initTransitionPages();
 initTitreLettres();
+initPrerendu(); // page pré-rendue : animations d'entrée en pause jusqu'à l'affichage
+initPrechargement();

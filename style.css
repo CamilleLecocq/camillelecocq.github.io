@@ -13,6 +13,7 @@
      9. Page projet (bandeau, infos, texte, galerie, sous-pages)
     10. Visionneuse (fenêtre d'agrandissement des images)
     11. Menu des qualités (clic droit sur une image)
+    12. Page 404 (traînée d'images derrière la souris)
    Toutes les mesures viennent de la maquette Figma (cadre de 1512 px) :
    une mesure de N px maquette s'écrit calc(N * var(--k)).
    ========================================================================== */
@@ -94,6 +95,27 @@ body {
   color: var(--blanc-casse);
 }
 
+/* Lien d'évitement (posé par initEvitement) : hors de l'écran, il descend au premier appui sur Tab */
+.evitement {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 200; /* au-dessus du menu et de son voile */
+  padding: 0.4em 0.8em;
+  border-radius: 0.6em;
+  background: var(--rouge);
+  color: var(--blanc-casse);
+  font-size: var(--taille-texte);
+  text-decoration: none;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.evitement:focus {
+  transform: none;
+  outline: 2px solid var(--rouge);
+  outline-offset: 3px;
+}
+
 /* Nom des cartes : le calque est déjà rouge, la sélection y serait invisible.
    Fond vert foncé pour que le texte sélectionné reste visible. */
 .carte__nom::selection {
@@ -128,7 +150,9 @@ button {
 /* ==========================================================================
    Transitions entre pages (View Transitions entre documents)
    Clic sur une carte : son image grandit jusqu'au bandeau de la page projet
-   (le script nomme l'image cliquée). Autres liens internes : fondu doux.
+   (le script nomme l'image cliquée). Retour vers une page qui montre la carte du projet
+   (retour arrière, lien) : le bandeau rétrécit et se pose sur sa carte (le script nomme la carte
+   à l'arrivée, avant le premier rendu). Autres liens internes : fondu doux.
    Sans support du navigateur, ou si le visiteur préfère moins de mouvement :
    navigation normale.
    ========================================================================== */
@@ -168,12 +192,14 @@ button {
   }
 
   /* L'image de la carte reste pleine sous le bandeau, qui arrive en fondu par-dessus : si la grande
-     image du bandeau n'est pas encore chargée, on voit la carte grandir au lieu d'un cadre vide */
+     image du bandeau n'est pas encore chargée, on voit la carte grandir au lieu d'un cadre vide.
+     Au retour, c'est l'inverse avec les mêmes règles : le bandeau quitté reste plein et rétrécit,
+     la carte arrive en fondu par-dessus et le recouvre en fin de trajet */
   ::view-transition-old(banniere-projet) {
     animation: none;
   }
 
-  /* Bandeau seul, sans carte en face (retour à l'accueil, lien du menu…) : il s'efface vite.
+  /* Bandeau seul, sans carte en face (lien du menu, carte masquée par un filtre ou hors de l'écran…) : il s'efface vite.
      Sans cette règle, il restait plein par-dessus la nouvelle page puis disparaissait d'un coup */
   ::view-transition-old(banniere-projet):only-child {
     animation: banniere-disparition 0.3s var(--courbe-douce) both;
@@ -204,6 +230,15 @@ button {
     animation-duration: 0.3s;
     animation-timing-function: var(--courbe-douce);
   }
+}
+
+/* Page pré-rendue en arrière-plan (Speculation Rules, voir initPrerendu dans script.js) : les
+   animations d'entrée (titre du bandeau, lettres, contact…) attendent l'affichage au lieu de se
+   jouer devant personne. La classe est retirée à l'activation : elles partent alors depuis le début. */
+.prerendu *,
+.prerendu *::before,
+.prerendu *::after {
+  animation-play-state: paused !important;
 }
 
 /* Barre de défilement aux couleurs du site (largeur inchangée) */
@@ -569,16 +604,17 @@ html {
     --flottant-droite: 20px; /* marges du conteneur sur mobile */
   }
 
+  /* Liens de 42 px de haut (au lieu de 34), écart supprimé : le panneau garde la même hauteur */
   .menu__liste {
     top: calc(100% + 4px);
-    gap: 4px;
+    gap: 0;
     width: min(210px, calc(100vw - 40px));
     padding: 10px 0;
   }
 
   .menu__liste a {
     margin: 0 auto;
-    padding: 7px 16px;
+    padding: 9px 16px;
   }
 }
 
@@ -625,6 +661,23 @@ html {
   font-size: var(--taille-pied);
   line-height: var(--interligne);
   text-align: center;
+}
+
+/* Lien Contact : zone d'appui de 44 px de haut, sans changer la hauteur de la ligne */
+.pied a {
+  display: inline-block;
+  padding: 12px 4px;
+  margin: -12px -4px;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .pied a:hover {
+    color: var(--rouge); /* survol instantané, comme le chevron */
+  }
 }
 
 
@@ -1115,6 +1168,20 @@ html {
   }
 }
 
+/* Écran tactile : zone d'appui élargie de 5 px autour de chaque pilule, invisible.
+   L'écart entre pilules est d'au moins 10 px : les zones se touchent sans se chevaucher. */
+@media (pointer: coarse) {
+  .filtre {
+    position: relative;
+  }
+
+  .filtre::after {
+    content: "";
+    position: absolute;
+    inset: -5px;
+  }
+}
+
 /* Appui : la pilule s'enfonce légèrement, avec le même rebond que les liens du menu */
 .filtre:active {
   transform: scale(0.94);
@@ -1318,19 +1385,22 @@ html {
   }
 }
 
-/* Filtre « Affiches » : chaque aperçu reprend le format de son affiche, sans recadrage.
-   Réservé à ce filtre (le script pose data-filtre sur la grille) : « Tous les projets »
+/* Filtres « Affiches » et « Dessins » : chaque aperçu reprend le format de son image, sans recadrage.
+   Réservé à ces filtres (le script pose data-filtre sur la grille) : « Tous les projets »
    garde la grille régulière en paysage. Les attributs width/height des images
    réservent la place avant leur chargement. */
-.grille-projets[data-filtre="affiches"] {
+.grille-projets[data-filtre="affiches"],
+.grille-projets[data-filtre="dessins"] {
   align-items: start;
 }
 
-.grille-projets[data-filtre="affiches"] .carte a {
+.grille-projets[data-filtre="affiches"] .carte a,
+.grille-projets[data-filtre="dessins"] .carte a {
   aspect-ratio: auto;
 }
 
-.grille-projets[data-filtre="affiches"] .carte img {
+.grille-projets[data-filtre="affiches"] .carte img,
+.grille-projets[data-filtre="dessins"] .carte img {
   height: auto;
 }
 
@@ -1424,6 +1494,14 @@ html {
   transform: none;
 }
 
+/* Carte qui accueille le bandeau lors d'un retour animé (initTransitionPages) : visible d'emblée,
+   sans montée ni délai, pour que son image soit en place à la capture de la page */
+.apparition--directe {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 /* Moins de mouvement : contenu visible d'emblée, sans déplacement ni délai */
 @media (prefers-reduced-motion: reduce) {
   .apparition {
@@ -1513,8 +1591,9 @@ html {
    0,55 s après l'arrivée : c'est la durée du trajet de l'image depuis la carte cliquée
    (transition entre pages). Pendant ce trajet, l'image volante passe au-dessus du reste de la page ;
    titre et voile sont donc encore invisibles quand elle se pose, et rien ne surgit d'un coup.
-   L'image elle-même n'a pas d'animation : la transition fait son entrée, et une transformation
-   propre serait figée pendant le trajet puis sauterait à sa valeur réelle à l'arrivée. */
+   L'image elle-même n'a pas d'animation d'entrée : la transition fait son entrée, et une transformation
+   propre serait figée pendant le trajet puis sauterait à sa valeur réelle à l'arrivée
+   (son parallaxe au défilement, plus bas, évite pour cela toute transformation). */
 .banniere__titre {
   animation: banniere-titre-entree 0.9s var(--courbe-douce) 0.55s backwards;
 }
@@ -1551,6 +1630,61 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .banniere__titre,
   .banniere::before {
+    animation: none;
+  }
+}
+
+/* --- Parallaxe discret : au défilement, le contenu de l'image glisse un peu moins vite que la page ---
+   Le contenu descend lentement dans son cadre : de 1 à 13 % de la hauteur du bandeau au plus
+   (5 à 9 % pour la plupart des pages), atteint quand le bandeau quitte l'écran.
+
+   Pourquoi object-view-box et pas transform / translate / scale : .banniere__image porte le
+   view-transition-name « banniere-projet ». Une transformation sur cet élément serait figée pendant
+   le trajet carte → bandeau, puis sauterait à sa valeur réelle à l'arrivée (bug déjà rencontré).
+   object-view-box ne déplace ni ne redimensionne la boîte de l'image : il choisit seulement la
+   partie de l'image qui y est dessinée.
+
+   Mécanisme : l'animation retire jusqu'à 5 % du bas de l'image (inset(0 0 5% 0)). Le cadrage de la
+   page (object-position: var(--cadrage), jamais réécrit) se recalcule alors sur une image un peu plus
+   courte : la fenêtre visible, placée à Y % de la marge de recadrage, remonte de Y % × 5 % de la
+   hauteur de l'image, donc le contenu descend dans le cadre. Conséquences :
+   - le cadrage choisi page par page (horizontal comme vertical) est respecté tel quel ;
+   - jamais de vide ni de débordement : la fenêtre reste toujours dans l'image, et le bandeau
+     garde sa boîte (le titre dépasse toujours, sans overflow:hidden) ;
+   - une image cadrée tout en haut (Y proche de 0 %) bouge à peine : il n'y a rien au-dessus à révéler.
+
+   Chronologie : défilement de la page, de 0 jusqu'au bas du bandeau (101 + 148 + 315 ≈ 565 en pixels
+   maquette). En haut de page (défilement 0), l'animation est à son état de départ inset(0 0 0 0),
+   qui montre l'image entière : rendu identique à l'image sans animation, donc à celle sur laquelle
+   la transition entre pages se pose.
+
+   Sans animations pilotées par le défilement ou sans object-view-box : bloc ignoré, rien ne change.
+   Réservé aux écrans de plus de 700 px : en mobile le bandeau passe en 16/9, la marge de recadrage
+   est trop faible pour un mouvement visible et le rognage forcerait un léger zoom sur les images 16/9. */
+@supports (animation-timeline: scroll()) and (object-view-box: inset(0)) {
+  @media (min-width: 701px) {
+    .banniere__image {
+      animation: banniere-parallaxe linear both;
+      /* après le raccourci animation, qui remettrait la chronologie à sa valeur par défaut */
+      animation-timeline: scroll(root block);
+      animation-range: 0px calc(565 * var(--k));
+    }
+
+    @keyframes banniere-parallaxe {
+      from {
+        object-view-box: inset(0 0 0 0); /* explicite : « none » ne s'interpole pas avec inset() */
+      }
+
+      to {
+        object-view-box: inset(0 0 5% 0);
+      }
+    }
+  }
+}
+
+/* Moins de mouvement : aucun parallaxe, l'image reste fixe dans son cadre */
+@media (prefers-reduced-motion: reduce) {
+  .banniere__image {
     animation: none;
   }
 }
@@ -1678,19 +1812,47 @@ html {
   }
 }
 
-/* --- Galerie : 2 colonnes de 664 × 503 ---
-   33 sous le chevron, dont le bas dépasse de 57 sous le texte : 57 + 33 = 90. */
+/* --- Galerie : chaque image garde son format d'origine, rien n'est rogné ---
+   33 sous le chevron, dont le bas dépasse de 57 sous le texte : 57 + 33 = 90.
+
+   Galerie « Pinterest » (initGaleries, script.js) : colonnes de même largeur, autant que
+   --colonne-min le permet (jamais moins de 2) ; chaque élément, dans l'ordre de la page, est posé
+   dans la colonne la plus courte. Sa hauteur vient de son format (--ratio = largeur / hauteur, écrit
+   par camillelecocq-outils/outils-images/dimensions.mjs) : la place est connue avant le chargement.
+   Sans script : colonnes CSS (même allure, ordre lu colonne par colonne). */
 
 .galerie {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: calc(33 * var(--k));
+  --colonne-min: max(280px, calc(400 * var(--k))); /* 3 colonnes sur PC, 2 sur tablette et mobile */
+  columns: 3;
+  column-gap: calc(33 * var(--k)); /* lue aussi par le script comme gouttière */
   margin-top: calc(90 * var(--k));
+}
+
+.galerie > * {
+  break-inside: avoid;
+  margin-bottom: calc(33 * var(--k));
+}
+
+@media (max-width: 1100px) {
+  .galerie {
+    columns: 2;
+  }
+}
+
+/* Placement par le script : positions et largeurs en ligne, hauteur de la galerie aussi */
+.galerie--pinterest {
+  position: relative;
+  columns: auto;
+}
+
+.galerie--pinterest > * {
+  position: absolute;
+  margin: 0;
 }
 
 .galerie__item {
   display: block;
-  aspect-ratio: 664 / 503;
+  aspect-ratio: var(--ratio, 1.32);
   overflow: hidden;
   background: var(--gris); /* visible pendant le chargement de l'image */
 }
@@ -1732,9 +1894,313 @@ a.galerie__item:focus-visible > img {
   }
 }
 
-/* Les vidéos occupent les 2 colonnes, au format naturel */
-.galerie__video {
-  grid-column: 1 / -1;
+/* Les vidéos sont des éléments comme les autres, au format naturel, dans leur colonne */
+
+/* --- Lecteur vidéo (initLecteurs) : panneau translucide et flouté posé en bas de l'image,
+   façon lecteur iOS. Ligne 1 : barre de progression + vitesse ; ligne 2 : temps écoulé / restant ;
+   ligne 3 : AirPlay ou image dans l'image, recul, lecture, avance, plein écran.
+   Requête de conteneur : sur une vidéo étroite (colonne de téléphone), le panneau se resserre. --- */
+
+.lecteur {
+  --lecteur-texte: #fff;
+  --lecteur-secondaire: rgb(255 255 255 / 0.62);
+  --lecteur-piste: rgb(255 255 255 / 0.28);
+  position: relative;
+  container-type: inline-size;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #000;
+}
+
+.lecteur video {
+  cursor: pointer;
+}
+
+.lecteur:fullscreen {
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+}
+
+.lecteur:fullscreen video {
+  height: 100%;
+  object-fit: contain;
+}
+
+.lecteur__panneau {
+  position: absolute;
+  /* Toutes les mesures suivent la largeur de la vidéo (cqi = 1 % du lecteur), entre un plancher
+     et la taille de l'image de référence : le panneau se réduit avec la vidéo au lieu de la couvrir */
+  --l-marge: clamp(4px, 1.6cqi, 8px);
+  inset: auto var(--l-marge) var(--l-marge);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "barre vitesse"
+    "temps vitesse"
+    "commandes commandes";
+  align-items: center;
+  column-gap: clamp(6px, 2.8cqi, 14px);
+  padding: clamp(6px, 2.8cqi, 14px) clamp(8px, 3.2cqi, 16px) clamp(3px, 2cqi, 10px);
+  border-radius: clamp(10px, 3.6cqi, 18px);
+  /* Verre dépoli sombre : il prend la teinte de l'image dessous, comme sur iOS */
+  background: rgb(28 20 22 / 0.42);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  backdrop-filter: blur(22px) saturate(1.6);
+  color: var(--lecteur-texte);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--police-texte);
+  transition: opacity 0.3s ease, transform 0.3s var(--courbe-douce);
+}
+
+/* Réduit par défaut : le panneau est caché (et ne capte pas les clics) ; il se déploie au survol,
+   au toucher ou au clavier (classe lecteur--deploye posée par le script) */
+.lecteur:not(.lecteur--deploye) .lecteur__panneau {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+/* Réduit et en lecture : le curseur disparaît pour laisser voir l'image */
+.lecteur:not(.lecteur--deploye):not(.lecteur--pause) video {
+  cursor: none;
+}
+
+/* Pastille lecture / pause de l'état réduit, en bas à gauche, même verre dépoli que le panneau */
+.lecteur__mini {
+  position: absolute;
+  left: clamp(4px, 1.6cqi, 8px);
+  bottom: clamp(8px, 2.6cqi, 14px);
+  display: grid;
+  place-items: center;
+  width: clamp(30px, 8cqi, 40px);
+  height: clamp(30px, 8cqi, 40px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(28 20 22 / 0.42);
+  -webkit-backdrop-filter: blur(22px) saturate(1.6);
+  backdrop-filter: blur(22px) saturate(1.6);
+  color: var(--lecteur-texte);
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s var(--courbe-rebond);
+}
+
+.lecteur__mini svg {
+  width: 45%;
+  height: 45%;
+}
+
+.lecteur__mini:active {
+  transform: scale(0.88);
+}
+
+.lecteur__mini:focus-visible {
+  outline: 2px solid var(--lecteur-texte);
+  outline-offset: 2px;
+}
+
+/* Fil de progression de l'état réduit : 3 px tout en bas de la vidéo */
+.lecteur__fil {
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--lecteur-texte) var(--progression, 0%), var(--lecteur-piste) var(--progression, 0%));
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Déployé : la pastille et le fil s'effacent sous le panneau */
+.lecteur--deploye .lecteur__mini,
+.lecteur--deploye .lecteur__fil {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Barre de progression : piste claire translucide, partie lue blanche, curseur rond blanc */
+.lecteur__progression {
+  grid-area: barre;
+  width: 100%;
+  height: clamp(14px, 4cqi, 20px); /* zone d'appui ; la piste visible est plus fine */
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lecteur__progression::-webkit-slider-runnable-track {
+  height: clamp(3px, 1cqi, 5px);
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--lecteur-texte) var(--progression, 0%), var(--lecteur-piste) var(--progression, 0%));
+}
+
+.lecteur__progression::-moz-range-track {
+  height: clamp(3px, 1cqi, 5px);
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--lecteur-texte) var(--progression, 0%), var(--lecteur-piste) var(--progression, 0%));
+}
+
+.lecteur__progression::-webkit-slider-thumb {
+  width: clamp(9px, 2.6cqi, 13px);
+  height: clamp(9px, 2.6cqi, 13px);
+  margin-top: calc((clamp(3px, 1cqi, 5px) - clamp(9px, 2.6cqi, 13px)) / 2);
+  border: 0;
+  border-radius: 50%;
+  background: var(--lecteur-texte);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lecteur__progression::-moz-range-thumb {
+  width: clamp(9px, 2.6cqi, 13px);
+  height: clamp(9px, 2.6cqi, 13px);
+  border: 0;
+  border-radius: 50%;
+  background: var(--lecteur-texte);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+}
+
+.lecteur__progression:focus-visible {
+  outline: 2px solid var(--lecteur-texte);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Pastille de vitesse « 1.0× » */
+.lecteur__vitesse {
+  grid-area: vitesse;
+  min-width: clamp(34px, 9.2cqi, 46px);
+  padding: clamp(3px, 1cqi, 5px) clamp(5px, 1.8cqi, 9px);
+  border: 0;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.16);
+  color: var(--lecteur-texte);
+  font-family: inherit;
+  font-size: clamp(10px, 2.6cqi, 13px);
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.lecteur__temps {
+  grid-area: temps;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  color: var(--lecteur-secondaire);
+  font-size: clamp(9px, 2.4cqi, 12px);
+  font-variant-numeric: tabular-nums;
+}
+
+.lecteur__commandes {
+  grid-area: commandes;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(0px, 1.6cqi, 8px);
+}
+
+.lecteur__commandes button {
+  display: grid;
+  place-items: center;
+  width: clamp(28px, 8.8cqi, 44px);
+  height: clamp(28px, 8.8cqi, 44px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--lecteur-texte);
+  cursor: pointer;
+  transition: transform 0.2s var(--courbe-rebond), background-color 0.2s ease;
+}
+
+.lecteur__commandes svg {
+  width: clamp(15px, 4.8cqi, 24px);
+  height: clamp(15px, 4.8cqi, 24px);
+}
+
+/* Lecture / pause : l'icône la plus grande, au centre */
+.lecteur__lecture svg {
+  width: clamp(20px, 6.8cqi, 34px);
+  height: clamp(20px, 6.8cqi, 34px);
+}
+
+/* Recul et avance resserrés autour de lecture / pause, comme sur iOS */
+.lecteur__recul {
+  margin-left: auto;
+}
+
+.lecteur__avance {
+  margin-right: auto;
+}
+
+.lecteur__lecture {
+  margin-inline: clamp(2px, 3.6cqi, 18px);
+}
+
+.lecteur__vide {
+  width: clamp(28px, 8.8cqi, 44px);
+}
+
+.lecteur__commandes button:active,
+.lecteur__vitesse:active {
+  transform: scale(0.88);
+}
+
+.lecteur__commandes button:focus-visible,
+.lecteur__vitesse:focus-visible {
+  outline: 2px solid var(--lecteur-texte);
+  outline-offset: 0;
+}
+
+@media (hover: hover) {
+  .lecteur__commandes button:hover,
+  .lecteur__vitesse:hover {
+    background-color: rgb(255 255 255 / 0.14);
+  }
+}
+
+/* Vidéo étroite (colonne de téléphone) : barre et temps sur toute la largeur,
+   vitesse et diffusion masquées pour garder les commandes principales lisibles */
+@container (max-width: 300px) {
+  .lecteur__panneau {
+    grid-template-areas:
+      "barre barre"
+      "temps temps"
+      "commandes commandes";
+  }
+
+  .lecteur__vitesse,
+  .lecteur__diffusion,
+  .lecteur__vide {
+    display: none;
+  }
+
+  .lecteur__recul {
+    margin-left: 0;
+  }
+
+  .lecteur__avance {
+    margin-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lecteur__panneau,
+  .lecteur__commandes button {
+    transition: none;
+  }
+
+  .lecteur__mini,
+  .lecteur__fil {
+    transition: none;
+  }
+
+  .lecteur:not(.lecteur--deploye) .lecteur__panneau {
+    transform: none;
+  }
 }
 
 .galerie__video video {
@@ -1800,15 +2266,173 @@ a.galerie__item:focus-visible > img {
     margin-top: 24px;
   }
 
+  /* 2 colonnes, comme Pinterest sur téléphone ; gouttière de 16 px */
   .galerie {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    column-gap: 16px;
     margin-top: 24px;
+  }
+
+  .galerie > * {
+    margin-bottom: 16px;
   }
 
   .projet .grille-projets {
     margin-top: 40px;
   }
+}
+
+
+/* --- Bandeau « titre seul » (classe banniere--sans-image, choisie page par page) ---
+   Pour un dessin, le recadrer en bandeau panoramique le dénaturerait : la page garde l'en-tête
+   des autres projets (même place, même police) mais sans image, en vert foncé comme
+   « PORTFOLIO » et « BONJOUR ! ». Les dessins s'affichent entiers dans la galerie. */
+.banniere.banniere--sans-image {
+  aspect-ratio: auto;
+  background: none;
+}
+
+.banniere--sans-image::before {
+  content: none;
+}
+
+.banniere--sans-image .banniere__titre {
+  position: static;
+  max-width: none;
+  color: var(--vert-fonce);
+  font-size: var(--taille-titre);
+  /* Pas d'image volante à attendre : le titre arrive presque tout de suite */
+  animation-delay: 0.1s;
+}
+
+
+/* --- Projets voisins (créés par initVoisins) : précédent à gauche, tous au centre, suivant à droite --- */
+
+.voisins {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: "precedent tous suivant";
+  align-items: center;
+  column-gap: calc(33 * var(--k));
+  margin-top: calc(90 * var(--k));
+  padding-top: calc(33 * var(--k));
+  border-top: 2px solid var(--rouge);
+}
+
+.voisins__lien {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15em;
+  min-height: 44px;
+  color: var(--rouge);
+  text-decoration: none;
+}
+
+.voisins__lien--precedent {
+  grid-area: precedent;
+  align-items: flex-start;
+}
+
+.voisins__lien--suivant {
+  grid-area: suivant;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.voisins__sens {
+  color: var(--vert-clair);
+  font-size: var(--taille-infos);
+}
+
+.voisins__fleche {
+  display: inline-block;
+  transition: transform 0.2s var(--courbe-douce);
+}
+
+.voisins__nom {
+  font-family: var(--police-titre);
+  font-size: var(--taille-carte);
+  font-weight: 900;
+  line-height: 1.1;
+  overflow-wrap: break-word;
+}
+
+/* « Tous les projets » : pilule des filtres de l'accueil */
+.voisins__tous {
+  grid-area: tous;
+  padding: 0.208em 0.375em;
+  border-radius: 0.625em;
+  box-shadow: 0 0 0 2px var(--rouge);
+  color: var(--rouge);
+  font-size: var(--taille-texte);
+  line-height: var(--interligne);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.05s linear, color 0.05s linear, transform 0.3s var(--courbe-rebond);
+}
+
+.voisins__tous:active {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) {
+  .voisins__lien:hover {
+    color: var(--rouge-pale);
+  }
+
+  .voisins__lien--precedent:hover .voisins__fleche {
+    transform: translateX(-4px);
+  }
+
+  .voisins__lien--suivant:hover .voisins__fleche {
+    transform: translateX(4px);
+  }
+
+  .voisins__tous:hover {
+    background: var(--rouge);
+    color: var(--blanc-casse);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voisins__fleche,
+  .voisins__tous {
+    transition: none;
+  }
+
+  .voisins__lien:hover .voisins__fleche,
+  .voisins__tous:active {
+    transform: none;
+  }
+}
+
+/* Mobile : précédent et suivant côte à côte, « Tous les projets » en dessous, centré */
+@media (max-width: 700px) {
+  .voisins {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "precedent suivant"
+      "tous tous";
+    gap: 20px 16px;
+    margin-top: 40px;
+    padding-top: 20px;
+  }
+
+  .voisins__nom {
+    font-size: 20px; /* deux noms côte à côte sur 335 px */
+  }
+
+  .voisins__tous {
+    justify-self: center;
+    padding: 0.5em 1em; /* 44 px de haut au doigt */
+  }
+}
+
+/* Sous-page hors de la grille : « Tous les projets » seul, centré, sans ligne vide au-dessus */
+.voisins:not(:has(.voisins__lien)) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "tous";
+  justify-items: center;
 }
 
 
@@ -1893,6 +2517,32 @@ a.galerie__item:focus-visible > img {
 .visionneuse__image.visionneuse__image--change {
   opacity: 0;
   transition: opacity 0.15s var(--courbe-douce);
+}
+
+/* Balayage au doigt (script.js, initVisionneuse) : défilement vertical et zoom à deux doigts restent
+   au navigateur, le balayage horizontal revient au script */
+.visionneuse,
+.visionneuse__image {
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Pendant le geste : l'image suit le doigt et s'estompe légèrement, sans transition.
+   Inactif pendant un fondu enchaîné (le fondu garde la main) */
+.visionneuse__image.visionneuse__image--glisse:not(.visionneuse__image--change) {
+  transform: translateX(var(--glisse-x, 0px));
+  opacity: var(--glisse-o, 1);
+  transition: none;
+}
+
+/* Lâcher sous le seuil : retour en place avec un léger rebond */
+.visionneuse__image.visionneuse__image--retour:not(.visionneuse__image--change) {
+  transition: transform 0.5s var(--courbe-rebond), opacity 0.25s var(--courbe-douce);
+}
+
+/* Balayage validé : pendant le fondu de sortie, l'image poursuit sa course dans le sens du doigt */
+.visionneuse__image.visionneuse__image--change.visionneuse__image--sortie {
+  transform: translateX(var(--glisse-x, 0px));
+  transition: opacity 0.15s var(--courbe-douce), transform 0.15s var(--courbe-douce);
 }
 
 .visionneuse__fermer,
@@ -2038,6 +2688,16 @@ img[aria-busy="true"] {
     transition: opacity 0.15s linear;
   }
 
+  /* Balayage : l'image ne suit pas le doigt (le script ne pose alors pas ces classes ; filet de sécurité) */
+  .visionneuse__image.visionneuse__image--glisse:not(.visionneuse__image--change),
+  .visionneuse__image.visionneuse__image--change.visionneuse__image--sortie {
+    transform: none;
+  }
+
+  .visionneuse__image.visionneuse__image--retour:not(.visionneuse__image--change) {
+    transition: opacity 0.15s linear;
+  }
+
   @starting-style {
     .visionneuse[open] .visionneuse__image {
       transform: none;
@@ -2114,3 +2774,53 @@ img[aria-busy="true"] {
   color: var(--blanc-casse);
 }
 
+
+
+/* ==========================================================================
+   12. Page 404 : traînée d'images des projets derrière la souris (initTrainee)
+   ========================================================================== */
+
+/* Calque plein écran, sous le contenu (z-index négatif : le fond du site reste derrière lui,
+   car il est peint sur le canevas) ; il ne capte aucun clic */
+.trainee {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Chaque image naît nette sous le pointeur, puis s'efface en se floutant */
+.trainee__image {
+  position: absolute;
+  /* Taille de base × échelle tirée au hasard par le script (0,6 à 1) */
+  width: calc(clamp(70px, 8vw, 130px) * var(--echelle, 1));
+  height: auto;
+  translate: -50% -50%;
+  animation: trainee 1.4s var(--courbe-douce) forwards;
+}
+
+@keyframes trainee {
+  0% {
+    opacity: 0;
+    scale: 0.85;
+    filter: blur(0);
+  }
+
+  12% {
+    opacity: 1;
+    scale: 1;
+    filter: blur(0);
+  }
+
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    scale: 0.96;
+    filter: blur(14px);
+  }
+}
