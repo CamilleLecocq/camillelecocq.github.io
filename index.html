@@ -1,212 +1,210 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAM</title>
-  <!-- favicon -->
-  <link rel="icon" type="image/png" href="logo-moi.png">
-  <!-- meta description -->
   <meta name="description" content="Portfolio de Camille Lecocq, designer graphique.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Camille Lecocq — Portfolio">
+  <meta property="og:title" content="Camille Lecocq — Portfolio">
+  <meta property="og:description" content="Portfolio de Camille Lecocq, designer graphique.">
+  <meta property="og:url" content="https://camillelecocq.github.io/">
+  <meta property="og:image" content="https://camillelecocq.github.io/img/Typo/pietra-nova/pietra-index.jpeg">
+  <meta property="og:image:alt" content="Visuel du projet Pietra Nova">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="logo-moi.png">
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/are8zee.css">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer blocking="render"></script>
 </head>
-
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="a-propos.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" fill="currentColor" aria-hidden="true"><rect class="menu__barre" width="53" height="6" rx="3"/><rect class="menu__barre" y="15" width="53" height="6" rx="3"/><rect class="menu__barre" y="30" width="53" height="6" rx="3"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-  
-  <div id="progress-bar"></div>
-
-  <h1 class="portfolio-title">PORTFOLIO</h1>  
-
-  <div class="projets">
-
-        <a href="pietra-nova.html" class="projet">
-      <img src="img/Typo/pietra-nova/pietra-index.jpeg" alt="Pietra Nova">
-      <h2>Pietra Nova</h2>
-    </a>
-    
-    <a href="la-blanche.html" class="projet">
-      <img src="img/Typo/la-blanche/face-index.jpg" alt="La Blanche">
-      <h2>Première de couverture</h2>
-    </a>
-    
-    
-    <a href="opened-eyes.html" class="projet">
-      <img src="img/Dessin/kafka/couv-index.jpg" alt="Opened Eyes">
-      <h2>Opened Eyes</h2>
-    </a>
-    
-    <a href="out-of-the-past.html" class="projet">
-      <img src="img/Design/out-of-the-past.jpg" alt="Out of the Past">
-      <h2>Out of the Past</h2>
-    </a>
-    
-    
-    <a href="home-will-infect.html" class="projet">
-      <img src="img/Typo/bookmachine/trois_livres_index.jpg" alt="Édition de mise en page typographique">
-      <h2>Home will infect</h2>
-    </a>
-    
-
-    <a href="figma.html" class="projet">
-      <img src="img/Figma/fourchinette-index.jpg" alt="Figma présentation">
-      <h2>1nutile</h2>
-    </a>
-
-
-
-
-    <!--  <a href="dessins-traditionnels.html" class="projet">
-      <img src="img/Design/la-disparition/oreille.jpg" alt="La délicatesse">
-      <h2>Dessins traditionnels</h2>
-    </a>   -->
-
-
-    <a href="dessins-numeriques.html" class="projet">
-      <img src="img/Dessin/Touquette illu.jpg" alt="Dessins numériques">
-      <h2>Dessins numériques</h2>
-    </a>
-
-    
-
-        <a href="branly.html" class="projet">
-      <img src="img/Photo/branly/branly-face-index.jpg" alt="Balade">
-      <h2>Balade</h2>
-    </a>
-
-
-    <a href="questionnements.html" class="projet">
-      <img src="img/Design/questionnements/couv-index.jpg" alt="Questionnements d'une adulte en devenir">
-      <h2>Questionnements d'une adulte en devenir</h2>
-    </a>
-
-    <a href="conservatoire.html" class="projet">
-      <img src="img/Photo/conservatoire/couv-index.jpg" alt="Académie des Beaux-Arts">
-      <h2>Académie des Beaux-Arts</h2>
-    </a>
-    
-
-    <a href="toukiter.html" class="projet">
-      <img src="img/Design/toukiter/4-index.jpg" alt="Toukiter">
-      <h2>Toukiter</h2>
-    </a>
-
-
-    <a href="bloody-mary.html" class="projet">
-      <img src="img/Workshop/b-m-miniature.jpg" alt="Bloody Mary">
-      <h2></h2>
-    </a>
-
-
-    <a href="coffret.html" class="projet">
-      <img src="img/Design/coffret/tranche-coffret.jpg" alt="Coffret Saint-Exupéry">
-      <h2>Saint-Exupéry, le coffret</h2>
-    </a>
-
-
-
-    <a href="dune-scene-a-lautre.html" class="projet">
-      <img src="img/Photo/wanda/couverture-face-index.jpg" alt="D'une scène à l'autre">
-      <h2>D'une scène à l'autre</h2>
-    </a>
-
-
-    <a href="la-delicatesse.html" class="projet">
-      <img src="img/Typo/la-delicatesse/la-delicatesse-face.jpg" alt="La délicatesse">
-      <h2>La délicatesse</h2>
-    </a>
-
-
-    <a href="famille.html" class="projet">
-      <img src="img/Photo/album-de-famille/famille-de-face.jpg" alt="Album de famille">
-      <h2>Famille</h2>
-    </a>
-
-
-    <a href="adagio.html" class="projet">
-      <img src="img/Photo/best-of/couv-index.jpg" alt="Adagio">
-      <h2>Adagio</h2>
-    </a>
-    
-
-    <a href="Microscope.html" class="projet">
-      <img src="img/Typo/Magazine/couv-index.jpg" alt="Microscope">
-      <h2>Microscope</h2>
-    </a>
-
-    <a href="forte-impression.html" class="projet">
-      <img src="img/Design/forte-impression/triplette-index.jpg" alt="3 affiches">
-      <h2>Forte impression</h2>
-    </a>
-
-    <a href="la-disparition.html" class="projet">
-      <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="La disparition">
-      <h2>La disparition</h2>
-    </a>
-
-    <a href="novecento-pianiste.html" class="projet">
-      <img src="img/Typo/Novecento/novecento-mockup.jpg" alt="Novecento, pianiste">
-      <h2>Novecento, pianiste</h2>
-    </a>
-
-
-    <a href="balavoine.html" class="projet">
-      <img src="img/Volume/vinyle-index.jpg" alt="Balavoine, dernier train">
-      <h2>Balavoine, dernier train</h2>
-    </a>
-
-    <a href="fff.html" class="projet">
-      <img src="img/Photo/figures-figurines-figurants/couverture-fff.jpg" alt="Figures, Figurines et Figurants">
-      <h2>Figures, Figurines et Figurants</h2>
-    </a>
-
-    <a href="eau-secours.html" class="projet">
-      <img src="img/Design/eau-secours/eau-secours-mockup.jpg" alt="Eau secours">
-      <h2>Eau secours</h2>
-    </a>
-
-  </div>
-
-  <script>
-  const progressBar = document.getElementById("progress-bar");
-
-function startLoading() {
-  progressBar.style.width = "0"; // Réinitialise la barre
-  setTimeout(() => {
-    progressBar.style.width = "100%"; // Charge jusqu'à 100%
-  }, 50);
-}
-
-document.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", (e) => {
-    // Vérifie si le lien a target="_blank"
-    if (link.target === "_blank") {
-      return; // Ne bloque pas l'ouverture d'un nouvel onglet
-    }
-
-    // Empêche la navigation immédiate pour les autres liens
-    e.preventDefault();
-
-    // Démarre la barre de progression
-    startLoading();
-
-    // Redirige après un court délai
-    setTimeout(() => {
-      window.location.href = link.href;
-    }, 600);
-  });
-});
-
-
-  </script>
+  <main class="accueil conteneur">
+    <section class="hero">
+      <h1 class="titre-xl">PORTFOLIO</h1>
+      <a class="bouton" href="#projets">Voir les projets</a>
+    </section>
+    <section class="projets" id="projets">
+      <div class="filtres" role="group" aria-label="Filtrer les projets">
+        <button class="filtre" type="button" data-filtre="tous" aria-pressed="true">TOUS LES PROJETS</button>
+        <button class="filtre" type="button" data-filtre="editions" aria-pressed="false">ÉDITIONS</button>
+        <button class="filtre" type="button" data-filtre="affiches" aria-pressed="false">AFFICHES</button>
+        <button class="filtre" type="button" data-filtre="photo" aria-pressed="false">PHOTO</button>
+        <button class="filtre" type="button" data-filtre="web" aria-pressed="false">WEB</button>
+        <button class="filtre" type="button" data-filtre="packaging" aria-pressed="false">PACKAGING</button>
+        <button class="filtre" type="button" data-filtre="dessins" aria-pressed="false">DESSINS</button>
+      </div>
+      <ul class="grille-projets">
+        <li class="carte" data-categories="editions" data-annee="2025">
+          <a href="pietra-nova.html">
+            <img width="640" height="480" src="img/opt/typo/pietra-nova/pietra-index-640.webp" srcset="img/opt/typo/pietra-nova/pietra-index-640.webp 640w, img/opt/typo/pietra-nova/pietra-index-1280.webp 1280w, img/opt/typo/pietra-nova/pietra-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Pietra Nova</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2025">
+          <a href="la-blanche.html">
+            <img width="640" height="427" src="img/opt/typo/la-blanche/face-index-640.webp" srcset="img/opt/typo/la-blanche/face-index-640.webp 640w, img/opt/typo/la-blanche/face-index-1280.webp 1280w, img/opt/typo/la-blanche/face-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Première de couverture</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions dessins" data-annee="2025">
+          <a href="opened-eyes.html">
+            <img width="640" height="427" src="img/opt/dessin/kafka/couv-index-640.webp" srcset="img/opt/dessin/kafka/couv-index-640.webp 640w, img/opt/dessin/kafka/couv-index-1280.webp 1280w, img/opt/dessin/kafka/couv-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Opened Eyes</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches" data-annee="2025">
+          <a href="out-of-the-past.html">
+            <img src="img/opt/design/out-of-the-past-640.webp" srcset="img/opt/design/out-of-the-past-640.webp 640w, img/opt/design/out-of-the-past-1280.webp 1280w, img/opt/design/out-of-the-past-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" width="640" height="960" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Out of the Past</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2025">
+          <a href="questionnements.html">
+            <img width="640" height="486" src="img/opt/design/questionnements/couv-index-640.webp" srcset="img/opt/design/questionnements/couv-index-640.webp 640w, img/opt/design/questionnements/couv-index-1280.webp 1280w, img/opt/design/questionnements/couv-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Questionnements d’une adulte en devenir</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2025">
+          <a href="conservatoire.html">
+            <img width="640" height="426" src="img/opt/photo/conservatoire/couv-index-640.webp" srcset="img/opt/photo/conservatoire/couv-index-640.webp 640w, img/opt/photo/conservatoire/couv-index-1280.webp 1280w, img/opt/photo/conservatoire/couv-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Académie des Beaux-Arts</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="packaging" data-annee="2025">
+          <a href="toukiter.html">
+            <img width="640" height="430" src="img/opt/design/toukiter/4-index-640.webp" srcset="img/opt/design/toukiter/4-index-640.webp 640w, img/opt/design/toukiter/4-index-1280.webp 1280w, img/opt/design/toukiter/4-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Toukiter</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2025">
+          <a href="wanda.html">
+            <img width="640" height="481" src="img/opt/photo/wanda/couverture-face-index-640.webp" srcset="img/opt/photo/wanda/couverture-face-index-640.webp 640w, img/opt/photo/wanda/couverture-face-index-1280.webp 1280w, img/opt/photo/wanda/couverture-face-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">D’une scène à l’autre</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2025">
+          <a href="adagio.html">
+            <img width="640" height="427" src="img/opt/photo/best-of/couv-index-640.webp" srcset="img/opt/photo/best-of/couv-index-640.webp 640w, img/opt/photo/best-of/couv-index-1280.webp 1280w, img/opt/photo/best-of/couv-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Adagio</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2025">
+          <a href="forte-impression.html">
+            <img width="640" height="480" src="img/opt/design/forte-impression/triplette-index-640.webp" srcset="img/opt/design/forte-impression/triplette-index-640.webp 640w, img/opt/design/forte-impression/triplette-index-1280.webp 1280w, img/opt/design/forte-impression/triplette-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Forte impression</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="home-will-infect.html">
+            <img width="640" height="546" src="img/opt/typo/bookmachine/trois_livres_index-640.webp" srcset="img/opt/typo/bookmachine/trois_livres_index-640.webp 640w, img/opt/typo/bookmachine/trois_livres_index-1280.webp 1280w, img/opt/typo/bookmachine/trois_livres_index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Home will infect</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="web" data-annee="2024">
+          <a href="figma.html">
+            <img width="640" height="379" src="img/opt/figma/fourchinette-index-640.webp" srcset="img/opt/figma/fourchinette-index-640.webp 640w, img/opt/figma/fourchinette-index-1280.webp 1280w, img/opt/figma/fourchinette-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">1nutile</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="dessins" data-annee="2024">
+          <a href="dessins-numeriques.html">
+            <img width="640" height="452" src="img/opt/dessin/touquette-illu-640.webp" srcset="img/opt/dessin/touquette-illu-640.webp 640w, img/opt/dessin/touquette-illu-1280.webp 1280w, img/opt/dessin/touquette-illu-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Dessins numériques</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2024">
+          <a href="branly.html">
+            <img width="640" height="467" src="img/opt/photo/branly/branly-face-index-640.webp" srcset="img/opt/photo/branly/branly-face-index-640.webp 640w, img/opt/photo/branly/branly-face-index-1280.webp 1280w, img/opt/photo/branly/branly-face-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Balade</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="web" data-annee="2024">
+          <a href="bloody-mary.html">
+            <img width="640" height="360" src="img/opt/workshop/b-m-miniature-640.webp" srcset="img/opt/workshop/b-m-miniature-640.webp 640w, img/opt/workshop/b-m-miniature-1280.webp 1280w, img/opt/workshop/b-m-miniature-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Bloody Mary</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="coffret.html">
+            <img width="640" height="427" src="img/opt/design/coffret/tranche-coffret-640.webp" srcset="img/opt/design/coffret/tranche-coffret-640.webp 640w, img/opt/design/coffret/tranche-coffret-1280.webp 1280w, img/opt/design/coffret/tranche-coffret-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Saint-Exupéry, le coffret</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="la-delicatesse.html">
+            <img width="640" height="427" src="img/opt/typo/la-delicatesse/la-delicatesse-face-640.webp" srcset="img/opt/typo/la-delicatesse/la-delicatesse-face-640.webp 640w, img/opt/typo/la-delicatesse/la-delicatesse-face-1280.webp 1280w, img/opt/typo/la-delicatesse/la-delicatesse-face-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La délicatesse</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2024">
+          <a href="famille.html">
+            <img width="640" height="427" src="img/opt/photo/album-de-famille/famille-de-face-640.webp" srcset="img/opt/photo/album-de-famille/famille-de-face-640.webp 640w, img/opt/photo/album-de-famille/famille-de-face-1280.webp 1280w, img/opt/photo/album-de-famille/famille-de-face-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Famille</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="Microscope.html">
+            <img width="640" height="388" src="img/opt/typo/magazine/couv-index-640.webp" srcset="img/opt/typo/magazine/couv-index-640.webp 640w, img/opt/typo/magazine/couv-index-1280.webp 1280w, img/opt/typo/magazine/couv-index-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Microscope</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="la-disparition.html">
+            <img width="640" height="480" src="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp" srcset="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp 640w, img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp 1280w, img/opt/design/la-disparition/mockup-couverture-oreille-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La disparition</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="editions" data-annee="2024">
+          <a href="novecento-pianiste.html">
+            <img width="640" height="391" src="img/opt/typo/novecento/novecento-mockup-640.webp" srcset="img/opt/typo/novecento/novecento-mockup-640.webp 640w, img/opt/typo/novecento/novecento-mockup-1280.webp 1280w, img/opt/typo/novecento/novecento-mockup-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Novecento, pianiste</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="web" data-annee="2024">
+          <a href="guitare.html">
+            <img width="640" height="424" src="img/opt/volume/vinyle-index-640.webp" srcset="img/opt/volume/vinyle-index-640.webp 640w, img/opt/volume/vinyle-index-1090.webp 1090w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Balavoine, dernier train</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="photo" data-annee="2023">
+          <a href="fff.html">
+            <img width="640" height="448" src="img/opt/photo/figures-figurines-figurants/couverture-fff-640.webp" srcset="img/opt/photo/figures-figurines-figurants/couverture-fff-640.webp 640w, img/opt/photo/figures-figurines-figurants/couverture-fff-1280.webp 1280w, img/opt/photo/figures-figurines-figurants/couverture-fff-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Figures, Figurines et Figurants</span>
+          </a>
+        </li>
+        <li class="carte" data-categories="affiches" data-annee="2023">
+          <a href="eau-secours.html">
+            <img src="img/opt/design/eau-secours/eau-secours-mockup-640.webp" srcset="img/opt/design/eau-secours/eau-secours-mockup-640.webp 640w, img/opt/design/eau-secours/eau-secours-mockup-1280.webp 1280w, img/opt/design/eau-secours/eau-secours-mockup-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" width="640" height="480" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Eau secours</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés · <a href="contact.html">Contact</a></footer>
 </body>
-
 </html>

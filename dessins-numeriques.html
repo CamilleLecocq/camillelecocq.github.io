@@ -4,201 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAM</title>
-  <link rel="icon" type="image/png" href="logo-moi.png">
   <meta name="description" content="Portfolio de Camille Lecocq, galerie de dessins numériques.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Camille Lecocq — Portfolio">
+  <meta property="og:title" content="Dessins numériques — Camille Lecocq">
+  <meta property="og:description" content="Portfolio de Camille Lecocq, galerie de dessins numériques.">
+  <meta property="og:url" content="https://camillelecocq.github.io/dessins-numeriques.html">
+  <meta property="og:image" content="https://camillelecocq.github.io/img/opt/dessin/touquette-illu-1280.webp">
+  <meta property="og:image:alt" content="Visuel du projet « Dessins numériques »">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="logo-moi.png">
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/are8zee.css">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer blocking="render"></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="a-propos.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" fill="currentColor" aria-hidden="true"><rect class="menu__barre" width="53" height="6" rx="3"/><rect class="menu__barre" y="15" width="53" height="6" rx="3"/><rect class="menu__barre" y="30" width="53" height="6" rx="3"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-
-  <a onclick="window.history.back();" class="retour">← Retour</a>
-
-    <div class="images-dessins">
-
-
-        <!-- Image 1 -->
-        <label for="modal1">
-            <img src="img/Dessin/Touquette illu.jpg" alt="Bord de mer" class="horizontal">
-        </label>
-        <input type="checkbox" id="modal1" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal1" class="modal-background"></label>
-            <div class="modal-content horizontal">
-                <label for="modal1" class="close">&times;</label>
-                <img src="img/Dessin/Touquette illu.jpg" alt="Bord de mer">
-            </div>
-        </div>
-
-
-          <!-- Image 2 -->
-          <label for="modal2">
-            <img src="img/Dessin/Méduse.jpg" alt="Méduse" class="vertical">
-        </label>
-        <input type="checkbox" id="modal2" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal2" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal2" class="close">&times;</label>
-                <img src="img/Dessin/Méduse.jpg" alt="Méduse">
-            </div>
-        </div>
-
-
-        <!-- Image 3 - Carrousel automatique -->
-        <a href="en-societe.html" class="sous-dessins">
-            <img id="carrousel-img-societe" src="img/Dessin/critique/buy.jpg" alt="En société">
-            <h2>En société</h2>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere banniere--sans-image">
+        <h1 class="banniere__titre">DESSINS NUMÉRIQUES</h1>
+      </div>
+      <div class="projet__suite">
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
         </a>
-
-
-        <!-- Image 4 -->
-        <label for="modal4">
-            <img src="img/Dessin/matinale.jpg" alt="Matinale" class="vertical">
-        </label>
-        <input type="checkbox" id="modal4" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal4" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal4" class="close">&times;</label>
-                <img src="img/Dessin/matinale.jpg" alt="Matinale">
-            </div>
-        </div>
-
-
-        <!-- Image 5 -->
-          <label for="modal5">
-            <img src="img/Dessin/ensemble.jpg" alt="Ensemble" class="vertical">
-        </label>
-        <input type="checkbox" id="modal5" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal5" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal5" class="close">&times;</label>
-                <img src="img/Dessin/ensemble.jpg" alt="Ensemble">
-            </div>
-        </div>
-
-
-       <!-- Image 6 - Carrousel automatique -->
-        <a href="tenues.html" class="sous-dessins">
-            <img id="carrousel-img" src="img/Dessin/tenues/helena.jpg" alt="Tenues">
-            <h2>Tenues</h2>
-        </a>
-
-        <!-- Image 7 -->
-         <label for="modal7">
-            <img src="img/Dessin/dream.jpg" alt="Dream" class="vertical">
-        </label>
-        <input type="checkbox" id="modal7" class="modal-toggle">
-
-        <div class="modal">
-            <label for="modal7" class="modal-background"></label>
-            <div class="modal-content vertical">
-                <label for="modal7" class="close">&times;</label>
-                <img src="img/Dessin/dream.jpg" alt="Dream">
-            </div>
-        </div>
-
-        <!-- Image 8 - Carrousel automatique -->
-        <a href="ptites-tetes.html" class="sous-dessins">
-            <img id="carrousel-img-tetes" src="img/Dessin/maximilien.jpg" alt="Ptites têtes">
-            <h2>Ptites têtes</h2>
-        </a>
-
-    
-        </div>
+      </div>
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" style="--ratio: 1.4144" href="img/opt/dessin/touquette-illu-1920.webp" data-original="img/Dessin/Touquette%20illu.jpg"><img width="1280" height="905" src="img/opt/dessin/touquette-illu-1280.webp" srcset="img/opt/dessin/touquette-illu-640.webp 640w, img/opt/dessin/touquette-illu-1280.webp 1280w, img/opt/dessin/touquette-illu-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Bord de mer" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 0.772" href="img/opt/dessin/meduse-1920.webp" data-original="img/Dessin/Me%CC%81duse.jpg"><img width="1280" height="1658" src="img/opt/dessin/meduse-1280.webp" srcset="img/opt/dessin/meduse-640.webp 640w, img/opt/dessin/meduse-1280.webp 1280w, img/opt/dessin/meduse-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Méduse" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1" href="img/opt/dessin/matinale-1920.webp" data-original="img/Dessin/matinale.jpg"><img width="1280" height="1280" src="img/opt/dessin/matinale-1280.webp" srcset="img/opt/dessin/matinale-640.webp 640w, img/opt/dessin/matinale-1280.webp 1280w, img/opt/dessin/matinale-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Matinale" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 0.6983" href="img/opt/dessin/ensemble-1668.webp" data-original="img/Dessin/ensemble.jpg"><img width="1280" height="1833" src="img/opt/dessin/ensemble-1280.webp" srcset="img/opt/dessin/ensemble-640.webp 640w, img/opt/dessin/ensemble-1280.webp 1280w, img/opt/dessin/ensemble-1668.webp 1668w" sizes="(max-width: 1100px) 50vw, 432px" alt="Ensemble" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 0.8" href="img/opt/dessin/dream-1080.webp" data-original="img/Dessin/dream.jpg"><img width="1080" height="1350" src="img/opt/dessin/dream-1080.webp" srcset="img/opt/dessin/dream-640.webp 640w, img/opt/dessin/dream-1080.webp 1080w" sizes="(max-width: 1100px) 50vw, 432px" alt="Dream" loading="lazy" decoding="async"></a>
+      </section>
+      <h2 class="visuellement-masque">Séries de dessins</h2>
+      <ul class="grille-projets">
+        <li class="carte">
+          <a href="en-societe.html">
+            <img width="640" height="916" src="img/opt/dessin/critique/buy-640.webp" srcset="img/opt/dessin/critique/buy-640.webp 640w, img/opt/dessin/critique/buy-1280.webp 1280w, img/opt/dessin/critique/buy-1668.webp 1668w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">En société</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="tenues.html">
+            <img width="640" height="916" src="img/opt/dessin/tenues/helena-640.webp" srcset="img/opt/dessin/tenues/helena-640.webp 640w, img/opt/dessin/tenues/helena-1280.webp 1280w, img/opt/dessin/tenues/helena-1668.webp 1668w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Tenues</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="ptites-tetes.html">
+            <img width="640" height="640" src="img/opt/dessin/maximilien-640.webp" srcset="img/opt/dessin/maximilien-640.webp 640w, img/opt/dessin/maximilien-1280.webp 1280w, img/opt/dessin/maximilien-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">P’tites têtes</span>
+          </a>
+        </li>
+      </ul>
     </div>
-</div>
-
-
-<script>
-    // Liste des images à afficher dans le carrousel
-    const images = [
-      "img/Dessin/tenues/helena.jpg",
-      "img/Dessin/tenues/jean.jpg",
-      "img/Dessin/tenues/louise.jpg",
-      "img/Dessin/tenues/richardis.jpg",
-      "img/Dessin/tenues/hugo.jpg",
-      "img/Dessin/tenues/nawell.jpg",
-      "img/Dessin/tenues/debbie.jpg",
-      "img/Dessin/tenues/lea.jpg",
-      "img/Dessin/tenues/malik.jpg"
-    ];
-  
-    let index = 0; // Image actuelle
-  
-    function changerImage() {
-      index = (index + 1) % images.length; // Passe à l'image suivante, boucle au début après la dernière
-      document.getElementById("carrousel-img").src = images[index];
-    }
-  
-    // Change d'image toutes les 3 secondes
-    setInterval(changerImage, 700);
-</script>
-
-
-
-
-
-<script>
-    // Liste des images à afficher dans le carrousel "En société"
-    const imagesSociete = [
-      "img/Dessin/critique/buy.jpg",
-      "img/Dessin/critique/drink.jpg",
-      "img/Dessin/critique/smile.jpg",
-      "img/Dessin/critique/smoke.jpg"
-    ];
-  
-    let indexSociete = 0; // Image actuelle
-  
-    function changerImageSociete() {
-      indexSociete = (indexSociete + 1) % imagesSociete.length; // Passe à l'image suivante, boucle au début après la dernière
-      document.getElementById("carrousel-img-societe").src = imagesSociete[indexSociete];
-    }
-  
-    // Change d'image toutes les 3 secondes
-    setInterval(changerImageSociete, 700);
-  </script>
-  
-  
-
-
-  <script>
-    // Liste des images à afficher dans le carrousel "En société"
-    const imagesTetes = [
-      "img/Dessin/ptites-tetes/maximilien.jpg",
-      "img/Dessin/ptites-tetes/margot.jpg",
-      "img/Dessin/ptites-tetes/fernand.jpg",
-      "img/Dessin/ptites-tetes/beatrice.jpg",
-      "img/Dessin/ptites-tetes/jan.jpg",
-      "img/Dessin/ptites-tetes/vivien.jpg", 
-      "img/Dessin/ptites-tetes/regis.jpg", 
-      "img/Dessin/ptites-tetes/andre.jpg",
-      "img/Dessin/ptites-tetes/roland.jpg", 
-      "img/Dessin/ptites-tetes/eug.jpg",
-      "img/Dessin/ptites-tetes/kant.jpg",
-      "img/Dessin/ptites-tetes/robert.jpg",
-    ];
-  
-    let indexTetes = 0; // Image actuelle
-  
-    function changerImageTetes() {
-      indexTetes = (indexTetes + 1) % imagesTetes.length; // Passe à l'image suivante, boucle au début après la dernière
-      document.getElementById("carrousel-img-tetes").src = imagesTetes[indexTetes];
-    }
-  
-    // Change d'image toutes les 3 secondes
-    setInterval(changerImageTetes, 700);
-  </script>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés · <a href="contact.html">Contact</a></footer>
+</body>
+</html>

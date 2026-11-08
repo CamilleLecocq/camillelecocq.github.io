@@ -4,45 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAM</title>
+  <meta name="description" content="Portfolio de Camille Lecocq, Propositions de couvertures de livres.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Camille Lecocq — Portfolio">
+  <meta property="og:title" content="En couverture — Camille Lecocq">
+  <meta property="og:description" content="Portfolio de Camille Lecocq, Propositions de couvertures de livres.">
+  <meta property="og:url" content="https://camillelecocq.github.io/en-couverture.html">
+  <meta property="og:image" content="https://camillelecocq.github.io/img/Design/la-disparition/mockup-couverture-oreille.jpg">
+  <meta property="og:image:alt" content="Visuel du projet « En couverture »">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="logo-moi.png">
-  <meta name="description" content="Portfolio de Camille Lecocq, Propositions de couvertures de llivres.">
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/are8zee.css">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer blocking="render"></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="a-propos.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" fill="currentColor" aria-hidden="true"><rect class="menu__barre" width="53" height="6" rx="3"/><rect class="menu__barre" y="15" width="53" height="6" rx="3"/><rect class="menu__barre" y="30" width="53" height="6" rx="3"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-
- 
-  <h1 class="portfolio-title">COUVERTURES</h1> 
-
-    <div class="en-couvertures-texte">
-      <a onclick="window.history.back();" style="cursor: pointer;">← Retour</a>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere" style="--cadrage: 50% 40%">
+        <img width="1280" height="960" class="banniere__image" fetchpriority="high" src="img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp" srcset="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp 640w, img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp 1280w, img/opt/design/la-disparition/mockup-couverture-oreille-1920.webp 1920w" sizes="(max-width: 1512px) 100vw, 1362px" alt="">
+        <h1 class="banniere__titre">EN COUVERTURE</h1>
+      </div>
+      <div class="projet__suite">
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
+        </a>
+      </div>
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" style="--ratio: 0.6293" href="img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1323.webp" data-original="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg"><img width="1280" height="2034" src="img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1280.webp" srcset="img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-640.webp 640w, img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1280.webp 1280w, img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1323.webp 1323w" sizes="(max-width: 1100px) 50vw, 432px" alt="La délicatesse" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 0.6238" href="img/opt/typo/novecento/novecento-couv-numerique-1311.webp" data-original="img/Typo/Novecento/novecento-couv-numerique.jpg"><img width="1280" height="2052" src="img/opt/typo/novecento/novecento-couv-numerique-1280.webp" srcset="img/opt/typo/novecento/novecento-couv-numerique-640.webp 640w, img/opt/typo/novecento/novecento-couv-numerique-1280.webp 1280w, img/opt/typo/novecento/novecento-couv-numerique-1311.webp 1311w" sizes="(max-width: 1100px) 50vw, 432px" alt="Novecento" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.3333" href="img/opt/design/la-disparition/mockup-couverture-oreille-1920.webp" data-original="img/Design/la-disparition/mockup-couverture-oreille.jpg"><img width="1280" height="960" src="img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp" srcset="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp 640w, img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp 1280w, img/opt/design/la-disparition/mockup-couverture-oreille-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="La disparition" loading="lazy" decoding="async"></a>
+      </section>
+      <h2 class="visuellement-masque">Couvertures</h2>
+      <ul class="grille-projets">
+        <li class="carte">
+          <a href="la-delicatesse.html">
+            <img width="640" height="1017" src="img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-640.webp" srcset="img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-640.webp 640w, img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1280.webp 1280w, img/opt/typo/la-delicatesse/la-delicatesse-couv-numerique-1323.webp 1323w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La délicatesse</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="novecento-pianiste.html">
+            <img width="640" height="1026" src="img/opt/typo/novecento/novecento-couv-numerique-640.webp" srcset="img/opt/typo/novecento/novecento-couv-numerique-640.webp 640w, img/opt/typo/novecento/novecento-couv-numerique-1280.webp 1280w, img/opt/typo/novecento/novecento-couv-numerique-1311.webp 1311w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">Novecento, pianiste</span>
+          </a>
+        </li>
+        <li class="carte">
+          <a href="la-disparition.html">
+            <img width="640" height="480" src="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp" srcset="img/opt/design/la-disparition/mockup-couverture-oreille-640.webp 640w, img/opt/design/la-disparition/mockup-couverture-oreille-1280.webp 1280w, img/opt/design/la-disparition/mockup-couverture-oreille-1920.webp 1920w" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 432px" alt="" loading="lazy" decoding="async">
+            <span class="carte__nom">La disparition</span>
+          </a>
+        </li>
+      </ul>
     </div>
-  
-
-  <div class="couvertures-livres">
-
-    <a href="la-delicatesse.html" class="couvertures">
-      <img src="img/Typo/la-delicatesse/la-delicatesse-couv-numerique.jpg" alt="La délicatesse">
-      <h2>La délicatesse</h2>
-    </a>
-    <a href="novecento-pianiste.html" class="couvertures">
-      <img src="img/Typo/Novecento/novecento-couv-numerique.jpg" alt="Novecento">
-      <h2>Novecento, pianiste</h2>
-    </a>
-    <a href="la-disparition.html" class="couvertures">
-      <img src="img/Design/la-disparition/mockup-couverture-oreille.jpg" alt="La disparition">
-      <h2>La disparition</h2>
-
-  </div>
-
-
-  </body>
-  </html>
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés · <a href="contact.html">Contact</a></footer>
+</body>
+</html>

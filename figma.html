@@ -4,142 +4,71 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KAM</title>
-  <link rel="icon" type="image/png" href="logo-moi.png">
   <meta name="description" content="Portfolio de Camille Lecocq, site internet de la marque fictive 1nutile.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Camille Lecocq — Portfolio">
+  <meta property="og:title" content="1nutile — Camille Lecocq">
+  <meta property="og:description" content="Portfolio de Camille Lecocq, site internet de la marque fictive 1nutile.">
+  <meta property="og:url" content="https://camillelecocq.github.io/figma.html">
+  <meta property="og:image" content="https://camillelecocq.github.io/img/Figma/fourchinette-index.jpg">
+  <meta property="og:image:alt" content="Visuel du projet « 1nutile »">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="logo-moi.png">
+  <link rel="preconnect" href="https://use.typekit.net" crossorigin>
+  <link rel="stylesheet" href="https://use.typekit.net/are8zee.css">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <h1><a href="index.html"><img src="logo-moi.svg" alt="Camille Lecocq"></a></h1>
-
-    <nav class="header-nav">
-      <a href="https://www.instagram.com/kam_arts5/" target="_blank">INSTAGRAM</a>
-      <a href="a-propos.html">À PROPOS</a>
+  <header class="entete conteneur">
+    <a class="entete__identite" href="index.html">
+      <span class="entete__nom">CAMILLE LECOCQ</span>
+      <span class="entete__metier">design graphique / éditorial / illustration</span>
+    </a>
+    <nav class="menu" aria-label="Menu principal">
+      <button class="menu__bouton" type="button" aria-expanded="false" aria-controls="menu-liste" aria-label="Menu">
+        <svg viewBox="0 0 53 36" width="53" height="36" fill="currentColor" aria-hidden="true"><rect class="menu__barre" width="53" height="6" rx="3"/><rect class="menu__barre" y="15" width="53" height="6" rx="3"/><rect class="menu__barre" y="30" width="53" height="6" rx="3"/></svg>
+      </button>
+      <ul class="menu__liste" id="menu-liste" hidden>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html?filtre=editions#projets">Éditions</a></li>
+        <li><a href="index.html?filtre=affiches#projets">Affiches</a></li>
+        <li><a href="index.html?filtre=photo#projets">Photo</a></li>
+        <li><a href="index.html?filtre=web#projets">Web</a></li>
+        <li><a href="index.html?filtre=packaging#projets">Packaging</a></li>
+        <li><a href="index.html?filtre=dessins#projets">Dessins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
-
-  <div class="page-projet">
-    <div class="sous-projet">
-  
-
-      <!-- Image 1 -->
-      <label for="modal1">
-        <img src="img/Figma/accueil.png" alt="Page d'accueil" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal1" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal1" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal1" class="close">&times;</label>
-          <img src="img/Figma/accueil.png" alt="Page d'accueil">
-        </div>
+  <main class="projet">
+    <div class="conteneur">
+      <div class="banniere" style="--cadrage: 50% 14%">
+        <img width="1280" height="759" class="banniere__image" fetchpriority="high" src="img/opt/figma/fourchinette-index-1280.webp" srcset="img/opt/figma/fourchinette-index-640.webp 640w, img/opt/figma/fourchinette-index-1280.webp 1280w, img/opt/figma/fourchinette-index-1920.webp 1920w" sizes="(max-width: 1512px) 100vw, 1362px" alt="">
+        <h1 class="banniere__titre">1NUTILE</h1>
       </div>
-
-      <!-- Image 2 -->
-      <label for="modal2">
-        <img src="img/Figma/grands.png" alt="Page des grands objets" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal2" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal2" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal2" class="close">&times;</label>
-          <img src="img/Figma/grands.png" alt="Page des grands objets">
+      <ul class="projet__infos">
+        <li>2024</li>
+      </ul>
+      <div class="projet__suite">
+        <div class="projet__texte">
+          <p>Prototype d’un site en ligne fait sur Figma. 1nutile est un site fictif de vente en ligne d’objets qui ne possèdent qu’un seul élément. Les objets sont classés par taille et plusieurs onglets sont accessibles : le panier du client, des renseignements sur la marque et un formulaire de contact. Le site est responsive, également adapté pour les téléphones.</p>
         </div>
+        <a class="defiler" href="#galerie" aria-label="Voir les images du projet">
+          <svg viewBox="0 0 122 93" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l58 58 58-58"/><path d="M3 32l58 58 58-58"/></svg>
+        </a>
       </div>
-
-      <!-- Image 3 -->
-      <label for="modal3">
-        <img src="img/Figma/echellotte.png" alt="Page produit Échellotte" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal3" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal3" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal3" class="close">&times;</label>
-          <img src="img/Figma/echellotte.png" alt="Page produit Échellotte">
-        </div>
-      </div>
-
-       <!-- Image 4 -->
-       <label for="modal4">
-        <img src="img/Figma/panier.png" alt="Page panier" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal4" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal4" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal4" class="close">&times;</label>
-          <img src="img/Figma/panier.png" alt="Page panier">
-        </div>
-      </div>
-
-      <!-- Image 5 -->
-      <label for="modal5">
-        <img src="img/Figma/a-propos.png" alt="Page à propos" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal5" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal5" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal5" class="close">&times;</label>
-          <img src="img/Figma/a-propos.png" alt="Page à propos">
-        </div>
-      </div>
-
-      <!-- Image 6 -->
-      <label for="modal6">
-        <img src="img/Figma/formulaire.png" alt="Page du formulaire de contact" class="horizontal">
-      </label>
-      <input type="checkbox" id="modal6" class="modal-toggle">
-
-      <div class="modal">
-        <label for="modal6" class="modal-background"></label>
-        <div class="modal-content horizontal">
-          <label for="modal6" class="close">&times;</label>
-          <img src="img/Figma/formulaire.png" alt="Page du formulaire de contact">
-        </div>
-      </div>
-      
+      <section class="galerie" id="galerie" aria-label="Images du projet">
+        <a class="galerie__item" style="--ratio: 1.6842" href="img/opt/figma/accueil-1920.webp" data-original="img/Figma/accueil.png"><img width="1280" height="760" src="img/opt/figma/accueil-1280.webp" srcset="img/opt/figma/accueil-640.webp 640w, img/opt/figma/accueil-1280.webp 1280w, img/opt/figma/accueil-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page d'accueil" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.6798" href="img/opt/figma/grands-1920.webp" data-original="img/Figma/grands.png"><img width="1280" height="762" src="img/opt/figma/grands-1280.webp" srcset="img/opt/figma/grands-640.webp 640w, img/opt/figma/grands-1280.webp 1280w, img/opt/figma/grands-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page des grands objets" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.6842" href="img/opt/figma/echellotte-1920.webp" data-original="img/Figma/echellotte.png"><img width="1280" height="760" src="img/opt/figma/echellotte-1280.webp" srcset="img/opt/figma/echellotte-640.webp 640w, img/opt/figma/echellotte-1280.webp 1280w, img/opt/figma/echellotte-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page produit Échellotte" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.6864" href="img/opt/figma/panier-1920.webp" data-original="img/Figma/panier.png"><img width="1280" height="759" src="img/opt/figma/panier-1280.webp" srcset="img/opt/figma/panier-640.webp 640w, img/opt/figma/panier-1280.webp 1280w, img/opt/figma/panier-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page panier" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.682" href="img/opt/figma/a-propos-1920.webp" data-original="img/Figma/a-propos.png"><img width="1280" height="761" src="img/opt/figma/a-propos-1280.webp" srcset="img/opt/figma/a-propos-640.webp 640w, img/opt/figma/a-propos-1280.webp 1280w, img/opt/figma/a-propos-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page à propos" loading="lazy" decoding="async"></a>
+        <a class="galerie__item" style="--ratio: 1.6842" href="img/opt/figma/formulaire-1920.webp" data-original="img/Figma/formulaire.png"><img width="1280" height="760" src="img/opt/figma/formulaire-1280.webp" srcset="img/opt/figma/formulaire-640.webp 640w, img/opt/figma/formulaire-1280.webp 1280w, img/opt/figma/formulaire-1920.webp 1920w" sizes="(max-width: 1100px) 50vw, 432px" alt="Page du formulaire de contact" loading="lazy" decoding="async"></a>
+      </section>
     </div>
-
-    <div class="description">
-      <a onclick="window.history.back();" style="cursor: pointer;">← Retour</a>
-      <h2>1NUTILE</h2>
-      <h3>2024</h3>
-      <p>Prototype d’un site en ligne fait sur Figma. 1nutile est un site fictif de vente en ligne d’objets qui ne possèdent qu’un seul élément. Les objets sont classés par taille et plusieurs onglets sont accessibles : le panier du client, des renseignements sur la marque et un formulaire de contact. Le site est responsive, également adapté pour les téléphones.</p>
-
-    </div>
-  </div>
-
-  <script>
-    // Sélectionnez l'élément qui doit être défilé
-    const sousProjet = document.querySelector('.sous-projet');
-    
-    // Sélectionnez le texte "Défiler pour voir la suite"
-    const infoDefilement = document.querySelector('.info-défilement');
-    
-    // Variable pour savoir si l'utilisateur a défilé ou pas
-    let isScrolled = false;
-    
-    // Écoutez l'événement de défilement sur `.sous-projet`
-    sousProjet.addEventListener('scroll', function() {
-      // Si le défilement est supérieur à 10 pixels, cacher l'info
-      if (sousProjet.scrollTop > 10 && !isScrolled) {
-        infoDefilement.style.opacity = '0'; // Masquer le texte
-        isScrolled = true; // Marquer comme ayant été défilé
-      } else if (sousProjet.scrollTop === 0) {
-        // Si on revient tout en haut, réafficher le texte
-        infoDefilement.style.opacity = '1';
-        isScrolled = false; // Réinitialiser l'état
-      }
-    });
-  </script>
-
+  </main>
+  <footer class="pied conteneur">Camille Lecocq - Tous droits réservés · <a href="contact.html">Contact</a></footer>
 </body>
 </html>
