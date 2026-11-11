@@ -1591,6 +1591,34 @@ function initVoisins() {
 
 
 /* ==========================================================================
+   Lien « Retour » des pages projet : revient à la page précédente du site
+   ========================================================================== */
+
+// Le lien mène à la grille des projets (sans script, ou arrivée directe depuis un autre site).
+// Venue d'une page du site : on recule dans l'historique, la page précédente revient telle
+// qu'on l'a laissée (filtre choisi, position dans la grille).
+function initRetour() {
+  const lien = document.querySelector('.retour');
+  if (!lien) return;
+
+  lien.addEventListener('click', (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    let depuisLeSite = false;
+    try {
+      depuisLeSite = Boolean(document.referrer) && new URL(document.referrer).origin === location.origin;
+    } catch (erreur) {
+      depuisLeSite = false;
+    }
+    if (!depuisLeSite || history.length < 2) return;
+
+    event.preventDefault();
+    history.back();
+  });
+}
+
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
@@ -1600,6 +1628,7 @@ document.addEventListener('touchstart', () => {}, { passive: true });
 initEvitement();
 initMenu();
 initVoisins();
+initRetour();
 initTrainee();
 initLecteurs(); // avant les galeries : la vidéo est enveloppée dans son lecteur avant d'être mesurée
 initGaleries();

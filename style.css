@@ -685,8 +685,17 @@ html {
    7. Page Contact
    ========================================================================== */
 
+/* Page courte : la page occupe au moins tout l'écran et le pied se pose en bas, comme ailleurs */
+body:has(> main.contact) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
 .contact {
   /* 126 sous le métier ; 139 entre les libellés et le pied de page */
+  flex: 1 0 auto; /* prend la hauteur libre : le pied reste collé au bas de l'écran */
   margin-top: calc(126 * var(--k));
   padding-bottom: calc(139 * var(--k));
   text-align: center;
@@ -861,6 +870,22 @@ html {
   animation-delay: 0.7s;
 }
 
+/* Haut de l'enveloppe : son vert apparaît en fondu à la fin du tracé du mail (0,55 s + 1,1 s) */
+.contact__icone .icone__rabat {
+  animation: icone-trace 1.1s var(--courbe-douce) 0.55s both,
+    icone-remplissage 0.4s ease 1.65s both;
+}
+
+@keyframes icone-remplissage {
+  from {
+    fill-opacity: 0;
+  }
+
+  to {
+    fill-opacity: 1;
+  }
+}
+
 /* Point plein d'Instagram : fondu à la fin de son tracé (0,4 s + 1,1 s) */
 .contact__icone circle[fill] {
   animation: icone-point 0.4s ease 1.5s both;
@@ -900,6 +925,7 @@ html {
 }
 
 .icone__rabat {
+  fill: var(--vert-clair); /* haut de l'enveloppe rempli de vert */
   transform-box: view-box;
   transform-origin: 41.5px 6px;
   transition: transform 0.4s var(--courbe-rebond);
@@ -1539,6 +1565,45 @@ html {
   /* 101 sous le bas du métier (qui finit à 148) ; 92 entre le bas de la page et le pied */
   margin-top: calc(101 * var(--k));
   padding-bottom: calc(92 * var(--k));
+}
+
+/* --- Lien « Retour » : posé dans l'espace au-dessus du bandeau, sans décaler la page --- */
+
+.projet > .conteneur {
+  position: relative;
+}
+
+.retour {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: max(4px, calc(30 * var(--k)));
+  color: var(--vert-clair);
+  font-size: var(--taille-pied);
+  line-height: var(--interligne);
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.retour__fleche {
+  display: inline-block;
+  transition: transform 0.2s var(--courbe-douce);
+}
+
+@media (hover: hover) {
+  .retour:hover {
+    color: var(--rouge);
+  }
+
+  .retour:hover .retour__fleche {
+    transform: translateX(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .retour__fleche {
+    transition: none;
+  }
 }
 
 /* --- Bandeau 1362 × 315 : l'image remplit le cadre, le titre déborde par le bas --- */
