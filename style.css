@@ -35,7 +35,7 @@
   /* Polices : Apparat Semi Cond Heavy (Adobe Fonts, kit are8zee chargé dans le <head>
      de chaque page) pour les titres ; Arial pour le texte en attendant BC Novatica CYR */
   --police-titre: "apparat-semicond", Arial, "Helvetica Neue", Helvetica, sans-serif;
-  --police-texte: font-family: "bc-novatica-cyr", Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police-texte: "bc-novatica-cyr", Arial, "Helvetica Neue", Helvetica, sans-serif;
 
   /* Unité d'échelle : 1px à partir de 1512 px de large, proportionnelle en dessous */
   --k: min(1px, 100vw / 1512);
